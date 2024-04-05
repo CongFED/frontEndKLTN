@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaEarthAmericas } from "react-icons/fa6";
 import { FaUserFriends } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -19,14 +19,21 @@ import CustomVideo from "../../CustomVideo/CustomVideo";
 import { useNavigate } from "react-router-dom";
 interface Props {
   data: any;
+  cmtid: string;
 }
 interface ResponseData {
   data: Comment[];
   success: boolean;
   message: string;
 }
-const CardPost = ({ data }: Props) => {
+const CardPost = ({ data, cmtid }: Props) => {
   const navigate = useNavigate();
+  const wowRef = useRef<HTMLDivElement>(null);
+  const scrollToWow = () => {
+    if (wowRef.current) {
+      wowRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   const [images, setImages] = useState(data.images);
   const [videos, setVideos] = useState(data.videos);
   const token = useRecoilValue(tokenState);
@@ -50,6 +57,7 @@ const CardPost = ({ data }: Props) => {
   const { info, isLoading, isError, error } = useSelector(
     (state: RootState) => state.info
   );
+  const commentIdLo = localStorage.getItem("cmtId");
   console.log(info, data);
   const dataAddCmt = useSelector((state: RootState) => state.addCmt.dataAddCmt);
   const handleSeeMore = () => {
@@ -57,6 +65,11 @@ const CardPost = ({ data }: Props) => {
   };
   const handleSeeLess = () => {
     setVisibleComments(2);
+  };
+  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === "Enter") {
+      handleAddPostBig();
+    }
   };
   useEffect(() => {
     if (dataAddCmt?.data.success == true) {
@@ -190,6 +203,7 @@ const CardPost = ({ data }: Props) => {
       .then((response) => {
         // Cập nhật dữ liệu vào state
         if (response.status === 200) {
+          // scrollToWow();
           setLoadCmt1(true);
           setData(response.data);
         }
@@ -216,8 +230,11 @@ const CardPost = ({ data }: Props) => {
   };
   useEffect(() => {
     loadData();
-    // loadDataUserCmt();
   }, []);
+
+  useEffect(() => {
+    scrollToWow(); // Scroll sau khi dữ liệu đã được tải
+  }, [dataCmt]);
 
   return (
     <div
@@ -390,6 +407,7 @@ const CardPost = ({ data }: Props) => {
               value={Content}
               className={`${isInputFocused ? "inputCmt1" : "inputCmt"}`}
               onFocus={handleFocus}
+              onKeyDown={handleKey}
             ></textarea>
             <div className={`${isInputFocused ? "iconCmt1" : "iconCmt"}`}>
               {" "}
@@ -449,12 +467,23 @@ const CardPost = ({ data }: Props) => {
                     alt="avatar"
                     className="h-[30px] w-[30px] rounded-[50%]"
                   />
-                  <div className="flex flex-col text-left ml-3 bg-[#f0f2f5] p-2 rounded-xl">
-                    <span className="text-[12px] font-bold">
-                      {item.fullName}
-                    </span>
-                    <span className="text-[12px]"> {item.content}</span>
-                  </div>
+                  {cmtid == item.id ? (
+                    <div className="flex flex-col text-left ml-3 bg-[#b7b7b7] p-2 rounded-xl">
+                      <span className="text-[12px] font-bold ">
+                        {item.fullName}
+                      </span>
+                      <span className="text-[12px]" ref={wowRef}>
+                        {item.content}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col text-left ml-3 bg-[#f0f2f5] p-2 rounded-xl">
+                      <span className="text-[12px] font-bold">
+                        {item.fullName}
+                      </span>
+                      <span className="text-[12px]"> {item.content}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="flex px-12 cursor-pointer">
                   <span

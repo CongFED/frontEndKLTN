@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { fetchPost } from "../../../redux/features/post/postSlice";
@@ -6,7 +6,8 @@ import { tokenState } from "../../recoil/initState";
 import Skeleton from "react-loading-skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { ChatContext } from "../../context/ChatContext";
 // import { Skeleton } from "react-loading-skeleton";
 import { CiMap } from "react-icons/ci";
 interface Comment {
@@ -20,21 +21,42 @@ interface Comment {
   islike: boolean;
   videos: { link: string; createDate: string }[]; //
 }
+interface Info {
+  content: string;
+  images: { linkImage: string; createDate: string }[]; // Đặt kiểu cho mảng images
+  linkImage?: string;
+  createDate: string;
+  userId: string;
+  id: string;
+  countLike: any;
+  islike: boolean;
+  firebaseData: [];
+  address: string;
+}
 interface ResponseData {
   data: Comment[];
+  success: boolean;
+  message: string;
+}
+interface ResponseDataInfo {
+  data: Info[];
   success: boolean;
   message: string;
 }
 const PersonalFriend = () => {
   const { id } = useParams();
   console.log(id);
-  const [loadInfo, setLoadCmt1] = useState(false);
-  const [loadSearch, setLoadSearch] = useState(false);
+  const navigate = useNavigate();
+  const [, setLoadCmt1] = useState(false);
   const [loadSearch1, setLoadSearch1] = useState(false);
   const [loadSearch2, setLoadSearch2] = useState(false);
   const [loadData, setLoadData] = useState(false);
   const token = useRecoilValue(tokenState);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<ResponseDataInfo>({
+    data: [],
+    success: false,
+    message: "",
+  });
   const [dataPost, setDataPost] = useState<ResponseData>({
     data: [],
     success: false,
@@ -150,7 +172,9 @@ const PersonalFriend = () => {
     }
   };
   const [sb, setSb] = useState(false);
-  console.log(data);
+
+  console.log(data.data.firebaseData); // Truy cập thuộc tính "firebaseData"
+
   const handleConfirm = async () => {
     setAuthToken(token);
     try {
@@ -193,7 +217,12 @@ const PersonalFriend = () => {
     loadDataInfo();
     // loadDataUserCmt();
   }, []);
-  const handleMessage = () => {};
+  const { dispatch } = useContext(ChatContext);
+  const handleMessage = () => {
+    console.log(data.data.firebaseData);
+    dispatch({ type: "CHANGE_USER", payload: data.data.firebaseData });
+    navigate("/chat");
+  };
   return (
     <>
       <div className="insta-clone">

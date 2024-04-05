@@ -15,6 +15,8 @@ interface Comment {
   userNotify: any;
   islike: boolean;
   videos: { link: string; createDate: string }[]; //
+  postId: string;
+  commentId: string;
 }
 interface ResponseData {
   data: Comment[];
@@ -68,7 +70,15 @@ const Notifications = () => {
     // Clear interval khi component bị unmount để tránh memory leak
     return () => clearInterval(intervalId);
   }, []);
-
+  const handleGetPostNoti = (postId: string, commentId: string) => {
+    if (commentId !== undefined) {
+      localStorage.setItem("cmtId", commentId);
+      navigate(`/post/${postId}/${commentId}`);
+    } else {
+      localStorage.setItem("cmtId", "sss");
+      navigate(`/post/${postId}`);
+    }
+  };
   return (
     <div className="flex flex-row">
       <div className="  ">
@@ -113,7 +123,7 @@ const Notifications = () => {
                 </div>
                 <>
                   {data.data.length == 0 ? (
-                    <div className="mt-6  w-[700px] h-[100px] flex justify-center items-center">
+                    <div className="mt-6  w-[600px] h-[100px] flex justify-center items-center">
                       <div className="cursor-pointer">
                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                       </div>
@@ -123,19 +133,25 @@ const Notifications = () => {
                       {data.data.map((item: Comment, index: number) => (
                         <div
                           id="notification-card-1"
-                          className="mt-3 bg-verylightgb rounded-md flex justify-between p-3 "
+                          className="mt-3 bg-verylightgb rounded-md flex justify-between p-3  w-[600px] cursor-pointer "
+                          onClick={() => {
+                            handleGetPostNoti(item?.postId, item?.commentId);
+                          }}
                         >
                           <img
                             src={item.image}
                             alt="notification user avatar"
                             className="w-12 h-12 rounded-full"
                           />
-                          <div className="ml-2 text-sm flex-auto">
-                            <a href="#" className="font-bold hover:text-blue">
+                          <div className=" text-sm flex-auto mx-6 text-left">
+                            <a
+                              href="#"
+                              className="font-bold hover:text-blue text-left"
+                            >
                               {item.content}
                             </a>
 
-                            <p className="text-gb mt-1 text-left text-[#fff]">
+                            <p className="text-gb mt-1 text-left text-[#b6b5b5]">
                               1m ago
                             </p>
                           </div>

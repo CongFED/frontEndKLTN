@@ -9,6 +9,7 @@ import Chat from "../pages/Chat/Chat";
 import PersonalFriend from "../pages/PersonalFriend/PersonalFriend";
 import ListFriend from "../pages/ListFriend/ListFriend";
 import Notifications from "../pages/Notifications/Notifications";
+import PagePostSimp from "../pages/PagePostSimp/PagePostSimp";
 const publicRoutes = [
     {
       path: "/",
@@ -55,6 +56,18 @@ const publicRoutes = [
     {
       path: "/notification",
       component: Notifications,
+      layout: Public,
+      sidebar: null,
+    },
+    {
+      path: "/post/:id/:cmtid",
+      component: PagePostSimp,
+      layout: Public,
+      sidebar: null,
+    },
+    {
+      path: "/post/:id",
+      component: PagePostSimp,
       layout: Public,
       sidebar: null,
     },

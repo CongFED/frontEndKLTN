@@ -117,6 +117,7 @@ const Chat = () => {
   }, [currentUser.data.firebaseData.uid]);
   console.log(chats);
   const handleSelect1 = (u: any) => {
+    console.log(u);
     dispatch({ type: "CHANGE_USER", payload: u });
   };
   const TransTime = (time: any) => {

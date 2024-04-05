@@ -156,12 +156,15 @@ const RightChat = () => {
   // const [calleeId, setCalleeId] = useState(name);
   const zeroCloudInstance = useRef<ZegoUIKitPrebuilt | null>(null);
   async function init() {
-    const userId = name2;
     const userName = removeSpaces(removeVietnameseDiacritics(username2));
+    const userId =
+      removeSpaces(removeVietnameseDiacritics(username2)).slice(1, 5) +
+      "_" +
+      name;
 
     const appID = 2006450489; // fill your appID here
     const serverSecret = "86689832e7ca0c38051798682eac4a50"; // fill your serverSecret here
-    console.log(userId, userName);
+    console.log("ban dau", userId, userName);
     const KitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,
@@ -184,9 +187,9 @@ const RightChat = () => {
     const callee =
       removeSpaces(removeVietnameseDiacritics(username)).slice(1, 5) +
       "_" +
-      name;
+      name2;
     const usercallee = removeSpaces(removeVietnameseDiacritics(username));
-    console.log(callee, usercallee);
+    console.log("xu ly", callee, usercallee);
     if (!callee) {
       alert("userID cannot be empty!!");
       return;

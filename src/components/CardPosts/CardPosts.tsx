@@ -45,7 +45,7 @@ const CardPosts = ({ data, isLoading }: Props) => {
                   //  />
                   <>
                     {index.idShare == undefined ? (
-                      <CardPost data={index} />
+                      <CardPost data={index} cmtid="" />
                     ) : (
                       <CardPostShare data={index} />
                     )}

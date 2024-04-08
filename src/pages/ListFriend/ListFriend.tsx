@@ -132,7 +132,7 @@ const ListFriend = () => {
       <div className="flex flex-row">
         <div className="  ">
           <div className="w-[80vw] py-6 pl-[150px] ">
-            <div className="flex justify-between ">
+            <div className="flex justify-between mb-6 ">
               <div className=" flex justify-start items-center">
                 <img
                   src="https://snapgram-sand.vercel.app/assets/icons/people.svg"
@@ -152,7 +152,7 @@ const ListFriend = () => {
                 </h2>
               </div>
             </div>
-            <div className=" mt-2 grid grid-cols-4 ">
+            <div className=" mt-2 grid grid-cols-4">
               {load == false ? (
                 <>
                   {myArray.slice(0, 10).map((item, index) => (
@@ -183,7 +183,7 @@ const ListFriend = () => {
                       </div>
                     </div>
                   ) : (
-                    <div className="mt-6">
+                    <>
                       {data.data.map((item: Comment, index: number) => (
                         <div className="card mb-8">
                           <div className="tools">
@@ -238,7 +238,7 @@ const ListFriend = () => {
                           </div>
                         </div>
                       ))}
-                    </div>
+                    </>
                   )}
                 </>
               )}

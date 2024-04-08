@@ -112,7 +112,43 @@ const PagePostSimp = () => {
   return (
     <>
       {loadData == false ? (
-        <>s</>
+        <div className="flex ">
+          <div className="w-[80vw] flex justify-center  items-center">
+            {" "}
+            <div className=" h-[600px] w-[500px]  ml-[0%] bg-white  rounded-[10px]">
+              <div className="py-4 px-4 flex justify-between items-center">
+                <div className="flex items-center">
+                  <Skeleton className="h-[45px] w-[45px] rounded-[50%]" />
+                  <div className=" ml-4 text-left">
+                    <Skeleton className="h-[10px] w-[70px]" />
+                    <div className="flex justify-start items-center ">
+                      <Skeleton className="h-[10px] w-[50px]" />
+                      <>
+                        <Skeleton className="ml-2 h-[13px] w-[13px] rounded-[50%]" />
+                      </>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-[25px] p-2 ">
+                  <Skeleton className="h-[30px] w-[30px] rounded-[50%]" />
+                </div>
+              </div>
+              <Skeleton className=" h-[380px] w-[500px] mr-[30%] ml-[0%]" />
+              <div className="px-2 py-2">
+                <div className="flex justify-start items-center">
+                  <Skeleton className="h-[45px] w-[90px] rounded-[30px]" />{" "}
+                  <Skeleton className="h-[45px] w-[90px] rounded-[30px] ml-2" />{" "}
+                </div>
+              </div>
+              <div className="px-2 py-2">
+                <div className="flex justify-start items-center">
+                  <Skeleton className="h-[35px] w-[35px] rounded-[50%]" />
+                  <Skeleton className="h-[30px] w-[420px] rounded-[30px] ml-2" />{" "}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="flex flex-row">
           <div className="  ">

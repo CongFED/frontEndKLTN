@@ -133,7 +133,7 @@ const Notifications = () => {
                       {data.data.map((item: Comment, index: number) => (
                         <div
                           id="notification-card-1"
-                          className="mt-3 bg-verylightgb rounded-md flex justify-between p-3  w-[600px] cursor-pointer "
+                          className="mt-3 bg-verylightgb  flex justify-between p-3  w-[600px] cursor-pointer hover:bg-[#f2f2f2] rounded-[10px]"
                           onClick={() => {
                             handleGetPostNoti(item?.postId, item?.commentId);
                           }}

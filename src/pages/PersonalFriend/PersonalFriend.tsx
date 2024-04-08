@@ -74,7 +74,6 @@ const PersonalFriend = () => {
           setLoadSearch1(false);
           setLoadSearch2(false);
           setData(response.data);
-          setLoadData(true);
         }
       })
       .catch((error) => {
@@ -225,10 +224,10 @@ const PersonalFriend = () => {
   };
   return (
     <>
-      <div className="insta-clone">
+      <div className="insta-clone w-full">
         {/* <!--body start-->
     <!--profile data--> */}
-        <div className=" h-auto px-48">
+        <div className=" h-auto px-36">
           <div className="flex md:flex-row-reverse flex-wrap">
             <div className="w-full md:w-3/4 p-4 text-center">
               <div className="text-left pl-4 pt-3 flex items-center">
@@ -458,7 +457,7 @@ const PersonalFriend = () => {
               </div>
             </div>
 
-            <div className="w-full md:w-1/4 p-4 text-center">
+            <div className="w-full md:w-[20%] p-4 text-center">
               <div className="w-full relative text-center mt-8">
                 {loadData == false ? (
                   <Skeleton className="h-40 w-40 rounded-full" />
@@ -474,12 +473,73 @@ const PersonalFriend = () => {
           </div>
           {/* 
       
-
+                
           {/* <hr className="border-gray-500 mt-6" /> */}
-          <hr className="border-gray-500 w-20 border-t-1 ml-64 border-gray-800" />
+          <div className="grid grid-cols-6 mt-16 px-4  ml-36">
+            <div className="flex-1 text-center px-4 py-2 m-2">
+              <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
+                <img
+                  className="object-cover w-full h-full"
+                  src="https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80"
+                />
+              </div>
+              <h1 className="pt-16 text-base font-semibold text-gray-900">
+                Fun
+              </h1>
+            </div>
+
+            <div className="flex-1 text-center px-4 py-2 m-2">
+              <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
+                <img
+                  className="object-cover w-full h-full"
+                  src="https://images.unsplash.com/photo-1456415333674-42b11b9f5b7b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80"
+                />
+              </div>
+              <h1 className="pt-16 text-base font-semibold text-gray-900">
+                Travel
+              </h1>
+            </div>
+
+            <div className="flex-1 text-center px-4 py-2 m-2">
+              <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
+                <img
+                  className="object-cover w-full h-full"
+                  src="https://images.unsplash.com/photo-1494972308805-463bc619d34e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1052&q=80"
+                />
+              </div>
+              <h1 className="pt-16 text-base font-semibold text-gray-900">
+                Food
+              </h1>
+            </div>
+
+            <div className="flex-1 text-center px-4 py-2 m-2">
+              <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
+                <img
+                  className="object-cover w-full h-full"
+                  src="https://images.unsplash.com/photo-1516834474-48c0abc2a902?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1053&q=80"
+                />
+              </div>
+              <h1 className="pt-16 text-base font-semibold text-gray-900">
+                Sketch
+              </h1>
+            </div>
+
+            <div className="flex-1 text-center px-4 py-2 m-2">
+              <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
+                <img
+                  className="object-cover w-full h-full"
+                  src="https://images.unsplash.com/photo-1444021465936-c6ca81d39b84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80"
+                />
+              </div>
+              <h1 className="pt-16 text-base font-semibold text-gray-900">
+                My Work
+              </h1>
+            </div>
+          </div>
+          {/* <hr className="border-gray-500 w-20 border-t-1 ml-64 border-gray-800 " /> */}
 
           {/* <!--post icon and title--> */}
-          <div className="flex flex-row mt-4 justify-center mr-16">
+          <div className="flex flex-row mt-4 justify-center mr-16 w-full">
             <div className="flex text-gray-700 text-center py-2 m-2 pr-5">
               <div className="flex inline-flex">
                 <button
@@ -583,7 +643,7 @@ const PersonalFriend = () => {
 
           {/* <!--post images--> */}
 
-          <div className="flex pt-4">
+          <div className="grid grid-cols-3 pt-4">
             {loadData == false ? (
               <div className="flex">
                 <Skeleton className="h-[160px] w-[320px] flex-1 text-center px-4 py-2 m-2" />
@@ -595,16 +655,20 @@ const PersonalFriend = () => {
                 {dataPost.data.map((item: Comment, index: number) => (
                   <div className="flex-1 text-center px-4 py-2 m-2">
                     {item.images.length > 0 ? (
-                      <img
-                        className="w-full"
-                        src={
-                          item.images && item.images.length > 0
-                            ? item.images[0].linkImage
-                            : ""
-                        }
-                      />
+                      <div className="img-container cursor-pointer">
+                        <img
+                          src={
+                            item.images && item.images.length > 0
+                              ? item.images[0].linkImage
+                              : ""
+                          }
+                          onClick={() => {
+                            navigate(`/post/${item.id}`);
+                          }}
+                        />
+                      </div>
                     ) : (
-                      <div className="custom-video-container">
+                      <div className="custom-video-container  w-[320px] h-[200px] cursor-pointer">
                         <video
                           src={
                             item.videos && item.videos.length > 0

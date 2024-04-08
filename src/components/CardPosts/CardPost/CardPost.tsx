@@ -17,6 +17,7 @@ import { addCmt } from "../../../redux/features/Add-Cmt/addCmtAPI";
 import { IoTrashBinOutline } from "react-icons/io5";
 import CustomVideo from "../../CustomVideo/CustomVideo";
 import { useNavigate } from "react-router-dom";
+import ShareLayout from "../../shareLayout/shareLayout";
 interface Props {
   data: any;
   cmtid: string;
@@ -37,7 +38,7 @@ const CardPost = ({ data, cmtid }: Props) => {
   const [images, setImages] = useState(data.images);
   const [videos, setVideos] = useState(data.videos);
   const token = useRecoilValue(tokenState);
-  const [like, setLike] = useRecoilState(ReloadLike);
+  // const [like, setLike] = useRecoilState(ReloadLike);
   const [toggleEmj, setToggleEmj] = useState(true);
   const [Content, setContent] = useState("");
   const [ContentChild, setContentChild] = useState("");
@@ -49,6 +50,8 @@ const CardPost = ({ data, cmtid }: Props) => {
   const [emo, setEmo] = useState(true);
   const [visibleComments, setVisibleComments] = useState(0);
   const [countData, setCountData] = useState(data.countLike);
+  const [loadShare, setLoadShare] = useState(false);
+  const [like, setLike] = useState(data.islike);
   const [dataCmt, setData] = useState<ResponseData>({
     data: [],
     success: false,
@@ -87,15 +90,49 @@ const CardPost = ({ data, cmtid }: Props) => {
     setAuthToken(token);
     try {
       const id = data.id;
+      if (like == false) {
+        console.log(data.countLike);
+        setCountData(countData + 1);
+        setLike(true);
+      }
+      if (like == true) {
+        console.log(data.countLike);
+        setCountData(countData - 1);
+        setLike(false);
+      }
+      // setLike(!like);
+      // setCountData(data.countLike + 1);
       await api
         .post(`https://www.socialnetwork.somee.com/api/like/${id}`)
         .then((response) => {
           // Cập nhật dữ liệu vào state
+          console.log(response);
+          if (response.status == 200) {
+            // dispatch(fetchPost());
+            // setLike(like + 1);
 
-          if (response.status === 200) {
-            dispatch(fetchPost());
-            setLike(like + 1);
-            setCountData(data.countLike + 1);
+            try {
+              api
+                .get(
+                  `https://www.socialnetwork.somee.com/api/like/likeonpost/${id}`
+                )
+                .then((response) => {
+                  // Cập nhật dữ liệu vào state
+                  console.log(response.data.data.length);
+                  setCountData(response.data.data.length);
+                  // if (response.status !== 200) {
+                  //   // dispatch(fetchPost());
+                  //   // setLike(like + 1);
+                  //   setCountData(data.countLike - 1);
+                  // }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            } catch (e) {
+              console.log(e);
+            }
+            // setCountData(data.countLike - 1);
           }
         })
         .catch((error: any) => {
@@ -231,7 +268,9 @@ const CardPost = ({ data, cmtid }: Props) => {
   useEffect(() => {
     loadData();
   }, []);
-
+  const handleShare = () => {
+    setLoadShare(true);
+  };
   useEffect(() => {
     scrollToWow(); // Scroll sau khi dữ liệu đã được tải
   }, [dataCmt]);
@@ -359,7 +398,7 @@ const CardPost = ({ data, cmtid }: Props) => {
       <div className="px-2 py-2">
         <div className="flex justify-start items-center">
           <button className="buttonTym" onClick={handleLike}>
-            {data.islike == false ? (
+            {like == false ? (
               <svg
                 className="empty"
                 xmlns="http://www.w3.org/2000/svg"
@@ -382,14 +421,14 @@ const CardPost = ({ data, cmtid }: Props) => {
                 <path d="M16.5 3C19.538 3 22 5.5 22 9c0 7-7.5 11-10 12.5C9.5 20 2 16 2 9c0-3.5 2.5-6 5.5-6C9.36 3 11 4 12 5c1-1 2.64-2 4.5-2z"></path>
               </svg>
             )}
-            {data.countLike} Like
+            {countData} Like
           </button>
-          <button className="buttonTym ml-3">
+          <div className="buttonTym ml-3" onClick={handleShare}>
             <div className="text-[#456fe6]">
               <IoShareSocialOutline />
             </div>{" "}
             Share
-          </button>
+          </div>
         </div>
       </div>
       <div className="px-6 py-2">
@@ -629,6 +668,7 @@ const CardPost = ({ data, cmtid }: Props) => {
           <Picker onEmojiSelect={emo == true ? addEmoji : addEmojiChild} />
         </div>
       </div>
+      {loadShare && <ShareLayout PostId={data.id} />}
     </div>
   );
 };

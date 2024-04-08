@@ -10,6 +10,7 @@ import { CiMap } from "react-icons/ci";
 import CustomVideo from "../../components/CustomVideo/CustomVideo";
 import { fetchInfo } from "../../redux/features/info/infoSlice";
 import Logo2 from "../../assets/LogoLoad.png";
+import { useNavigate } from "react-router-dom";
 // import { Skeleton } from "react-loading-skeleton";
 
 interface Comment {
@@ -30,7 +31,7 @@ interface ResponseData {
 }
 const Personal = () => {
   const token = useRecoilValue(tokenState);
-
+  const navigate = useNavigate();
   const [loadData, setLoadData] = useState(false);
   const [lengthFriend, setLengthFriend] = useState(0);
   const [lengthPost, setLengthPost] = useState(0);
@@ -91,10 +92,10 @@ const Personal = () => {
   }, []);
   return (
     <>
-      <div className="insta-clone">
+      <div className="insta-clone w-full">
         {/* <!--body start-->
     <!--profile data--> */}
-        <div className=" h-auto px-48">
+        <div className=" h-auto px-36 ">
           <div className="flex md:flex-row-reverse flex-wrap">
             <div className="w-full md:w-3/4 p-4 text-center">
               <div className="text-left pl-4 pt-3 flex items-center">
@@ -184,7 +185,7 @@ const Personal = () => {
               </div>
             </div>
 
-            <div className="w-full md:w-1/4 p-4 text-center">
+            <div className="w-full md:w-[20%] p-4 text-center">
               <div className="w-full relative text-center mt-8">
                 <button
                   className="flex rounded-full"
@@ -208,9 +209,9 @@ const Personal = () => {
           {/* 
       <!--status show icon--> */}
 
-          {/* <div className="inline-flex ml-36 mt-16">
+          <div className="grid grid-cols-6 ml-36 mt-16">
             <div className="flex-1 text-center px-4 py-2 m-2">
-              <div className="relative shadow-xl mx-auto h-24 w-24 -my-12 border-white rounded-full overflow-hidden border-4">
+              <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
                 <img
                   className="object-cover w-full h-full"
                   src="https://images.unsplash.com/photo-1502164980785-f8aa41d53611?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80"
@@ -222,7 +223,7 @@ const Personal = () => {
             </div>
 
             <div className="flex-1 text-center px-4 py-2 m-2">
-              <div className="relative shadow-xl mx-auto h-24 w-24 -my-12 border-white rounded-full overflow-hidden border-4">
+              <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
                 <img
                   className="object-cover w-full h-full"
                   src="https://images.unsplash.com/photo-1456415333674-42b11b9f5b7b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80"
@@ -234,7 +235,7 @@ const Personal = () => {
             </div>
 
             <div className="flex-1 text-center px-4 py-2 m-2">
-              <div className="relative shadow-xl mx-auto h-24 w-24 -my-12 border-white rounded-full overflow-hidden border-4">
+              <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
                 <img
                   className="object-cover w-full h-full"
                   src="https://images.unsplash.com/photo-1494972308805-463bc619d34e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1052&q=80"
@@ -246,7 +247,7 @@ const Personal = () => {
             </div>
 
             <div className="flex-1 text-center px-4 py-2 m-2">
-              <div className="relative shadow-xl mx-auto h-24 w-24 -my-12 border-white rounded-full overflow-hidden border-4">
+              <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
                 <img
                   className="object-cover w-full h-full"
                   src="https://images.unsplash.com/photo-1516834474-48c0abc2a902?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1053&q=80"
@@ -258,7 +259,7 @@ const Personal = () => {
             </div>
 
             <div className="flex-1 text-center px-4 py-2 m-2">
-              <div className="relative shadow-xl mx-auto h-24 w-24 -my-12 border-white rounded-full overflow-hidden border-4">
+              <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
                 <img
                   className="object-cover w-full h-full"
                   src="https://images.unsplash.com/photo-1444021465936-c6ca81d39b84?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80"
@@ -268,10 +269,10 @@ const Personal = () => {
                 My Work
               </h1>
             </div>
-          </div> */}
+          </div>
 
           {/* <hr className="border-gray-500 mt-6" /> */}
-          <hr className="border-gray-500 w-20 border-t-1 ml-64 border-gray-800" />
+          {/* <hr className="border-gray-500 w-20 border-t-1 ml-64 border-gray-800" /> */}
 
           {/* <!--post icon and title--> */}
           <div className="flex flex-row mt-4 justify-center mr-16">
@@ -378,7 +379,7 @@ const Personal = () => {
 
           {/* <!--post images--> */}
 
-          <div className="flex pt-4">
+          <div className="grid grid-cols-3 pt-4  w-full">
             {loadData == false ? (
               <div className="flex">
                 <Skeleton className="h-[160px] w-[320px] flex-1 text-center px-4 py-2 m-2" />
@@ -387,19 +388,23 @@ const Personal = () => {
               </div>
             ) : (
               <>
-                {dataPost.data.map((item: Comment, index: number) => (
+                {dataPost.data.map((item: Comment) => (
                   <div className="flex-1 text-center px-4 py-2 m-2">
                     {item.images.length > 0 ? (
-                      <img
-                        className="w-full"
-                        src={
-                          item.images && item.images.length > 0
-                            ? item.images[0].linkImage
-                            : ""
-                        }
-                      />
+                      <div className="img-container cursor-pointer">
+                        <img
+                          src={
+                            item.images && item.images.length > 0
+                              ? item.images[0].linkImage
+                              : ""
+                          }
+                          onClick={() => {
+                            navigate(`/post/${item.id}`);
+                          }}
+                        />
+                      </div>
                     ) : (
-                      <div className="custom-video-container">
+                      <div className="custom-video-container w-[320px] h-[200px] cursor-pointer">
                         <video
                           src={
                             item.videos && item.videos.length > 0
@@ -407,6 +412,9 @@ const Personal = () => {
                               : ""
                           }
                           className="custom-video"
+                          onClick={() => {
+                            navigate(`/post/${item.id}`);
+                          }}
                         />
                         <button className="buttonVideo play-pause-button">
                           <svg

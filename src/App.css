@@ -89,16 +89,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 7px 8px 7px 8px;
-  box-shadow: rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-  background-color: #e8e8e8;
+  padding: 5px 10px 5px 10px;
+  background-color: #f2f2f2;
   /* border-color: #ffe2e2; */
   border-style: solid;
   /* border-width: 9px; */
   border-radius: 35px;
   font-size: 15px;
-  font-weight: 900;
-  color: rgb(134, 124, 124);
+  font-weight: 600;
+  color: black;
   font-family: monospace;
   transition: transform 400ms cubic-bezier(.68,-0.55,.27,2.5), 
   border-color 400ms ease-in-out,
@@ -209,6 +208,19 @@
   outline: none;
   transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
   box-shadow: 0px 0px 20px -18px;
+  text-align: start;
+  overflow-y: hidden;
+  padding-bottom: 20px;
+}
+.inputCmt2 {
+  width: 100%;
+
+  height: 100px;
+  padding: 10px;
+  
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+ 
   text-align: start;
   overflow-y: hidden;
   padding-bottom: 20px;
@@ -1409,4 +1421,102 @@ label{
   transform: scale(var(--nav-active-scale));
   visibility: visible;
   opacity: 1;
+}
+
+
+.img-container {
+  width: 320px; /* Đặt kích thước ảnh cố định */
+  height: 200px; /* Đặt kích thước ảnh cố định */
+  overflow: hidden; /* Ẩn bất kỳ nội dung nào vượt ra khỏi khu vực */
+}
+
+.img-container img {
+  width: 100%; /* Ảnh sẽ được mở rộng để đầy kích thước của khu vực chứa */
+  height: 100%; /* Ảnh sẽ được mở rộng để đầy kích thước của khu vực chứa */
+  object-fit: cover; /* Ảnh sẽ được tự động điều chỉnh kích thước để phù hợp với khu vực mà không bị méo */
+}
+
+.sCsSbKP9yxvw4LQAeaTz {
+  background-color: transparent !important;
+}
+
+.pVo6XoSfywa4eLk9ef2S{
+  background-color: transparent !important;
+}
+
+.ji5jASszKFf2CGCmbxEh {
+  padding-left: 50px !important;
+  padding-right: 50px !important;
+  border-radius: 10px !important;
+  width: 98% !important; 
+}
+
+
+
+
+
+/*Like*/
+
+.BtnLike {
+  width: 140px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: none;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.089);
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.leftContainer1 {
+  width: 60%;
+  height: 100%;
+  background-color: #0060ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.leftContainer1 .like1 {
+  color: white;
+  font-weight: 600;
+}
+
+.likeCount1 {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0060ff;
+  font-weight: 600;
+  position: relative;
+  background-color: white;
+}
+
+.likeCount1::before {
+  height: 8px;
+  width: 8px;
+  position: absolute;
+  content: "";
+  background-color: rgb(255, 255, 255);
+  transform: rotate(45deg);
+  left: -4px;
+}
+
+.BtnLike:hover .leftContainer1 {
+  background-color: #1d4292;
+}
+
+.BtnLike:active .leftContainer1 {
+  background-color: #072b7a;
+}
+
+.BtnLike:active .leftContainer1 svg {
+  transform: scale(1.15);
+  transform-origin: top;
 }

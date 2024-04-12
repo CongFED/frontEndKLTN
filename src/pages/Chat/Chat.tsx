@@ -38,7 +38,6 @@ const Chat = () => {
     try {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
-        console.log(123);
         setUser(doc.data());
       });
     } catch (error) {
@@ -57,7 +56,6 @@ const Chat = () => {
       currentUser.data.firebaseData.uid > user.Uid
         ? currentUser.data.firebaseData.uid + user.Uid
         : user.Uid + currentUser.data.firebaseData.uid;
-    console.log(combinedId, user.Uid);
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
 

@@ -1293,7 +1293,7 @@ line {
   transition: var(--burger-line-transition);
 }
 label{
-  padding-top: 10px !important;
+  /* padding-top: 10px !important; */
   padding-bottom: 10px !important;
 }
 .x5n08af {

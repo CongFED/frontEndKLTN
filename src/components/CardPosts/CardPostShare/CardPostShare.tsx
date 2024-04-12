@@ -6,7 +6,7 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import { api, setAuthToken } from "../../../utils/setAuthToken";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { fetchPost } from "../../../redux/features/post/postSlice";
-import { ReloadLike, tokenState } from "../../../recoil/initState";
+import { ReloadLike, tokenState, ShareS } from "../../../recoil/initState";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { HiOutlineMicrophone } from "react-icons/hi2";
@@ -16,6 +16,7 @@ import Picker from "@emoji-mart/react";
 import { addCmt } from "../../../redux/features/Add-Cmt/addCmtAPI";
 import { IoTrashBinOutline } from "react-icons/io5";
 import CustomVideo from "../../CustomVideo/CustomVideo";
+import ShareLayout from "../../shareLayout/shareLayout";
 interface Props {
   data: any;
 }
@@ -28,19 +29,29 @@ const CardPostShare = ({ data }: Props) => {
   const [images, setImages] = useState(data.images);
   const [videos, setVideos] = useState(data.videos);
   const token = useRecoilValue(tokenState);
-  const [like, setLike] = useRecoilState(ReloadLike);
   const [toggleEmj, setToggleEmj] = useState(true);
   const [Content, setContent] = useState("");
   const [ContentChild, setContentChild] = useState("");
   const [loadCmt1, setLoadCmt1] = useState(false);
+  const [loadCmt2, setLoadCmt2] = useState(false);
   const [loadCmt, setLoadCmt] = useState(false);
+  const [IdShare, setIdShare] = useState("");
+  const [loadShare, setLoadShare] = useRecoilState(ShareS);
   const [loadCmtChild, setLoadCmtChild] = useState(false);
   const [toggleCmt, setToggleCmt] = useState("");
   const [toggleLoad, setToggleLoad] = useState("");
   const [emo, setEmo] = useState(true);
   const [visibleComments, setVisibleComments] = useState(0);
   const [countData, setCountData] = useState(data.countLike);
+  const [like, setLike] = useState(data.islike);
+  const [countDataShare, setCountDataShare] = useState(data.countLikeShare);
+  const [likeShar, setLikeShare] = useState(data.islikeShare);
   const [dataCmt, setData] = useState<ResponseData>({
+    data: [],
+    success: false,
+    message: "",
+  });
+  const [dataCmtHShare, setDataShare] = useState<ResponseData>({
     data: [],
     success: false,
     message: "",
@@ -67,20 +78,110 @@ const CardPostShare = ({ data }: Props) => {
     }
   }, [dataAddCmt]);
   const [postId, setPostId] = useState(data.id);
+  const [postIdShare, setPostIdShare] = useState(data.idShare);
   const dispatch = useDispatch();
   const handleLike = async () => {
     setAuthToken(token);
     try {
       const id = data.id;
+      if (like == false) {
+        console.log(data.countLike);
+        setCountData(countData + 1);
+        setLike(true);
+      }
+      if (like == true) {
+        console.log(data.countLike);
+        setCountData(countData - 1);
+        setLike(false);
+      }
+      // setLike(!like);
+      // setCountData(data.countLike + 1);
       await api
         .post(`https://www.socialnetwork.somee.com/api/like/${id}`)
         .then((response) => {
           // Cập nhật dữ liệu vào state
           console.log(response);
-          if (response.status === 200) {
-            dispatch(fetchPost());
-            setLike(like + 1);
-            setCountData(data.countLike + 1);
+          if (response.status == 200) {
+            // dispatch(fetchPost());
+            // setLike(like + 1);
+
+            try {
+              api
+                .get(
+                  `https://www.socialnetwork.somee.com/api/like/likeonpost/${id}`
+                )
+                .then((response) => {
+                  // Cập nhật dữ liệu vào state
+                  console.log(response.data.data.length);
+                  setCountData(response.data.data.length);
+                  // if (response.status !== 200) {
+                  //   // dispatch(fetchPost());
+                  //   // setLike(like + 1);
+                  //   setCountData(data.countLike - 1);
+                  // }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            } catch (e) {
+              console.log(e);
+            }
+            // setCountData(data.countLike - 1);
+          }
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.error("Login failed", error);
+    }
+  };
+  const handleLikeShare = async () => {
+    setAuthToken(token);
+    try {
+      const id = data.idShare;
+      if (likeShar == false) {
+        console.log(data.countLikeShare);
+        setCountDataShare(countDataShare + 1);
+        setLikeShare(true);
+      }
+      if (likeShar == true) {
+        setCountDataShare(countDataShare - 1);
+        setLikeShare(false);
+      }
+      // setLike(!like);
+      // setCountData(data.countLike + 1);
+      await api
+        .post(`https://www.socialnetwork.somee.com/api/like/${id}`)
+        .then((response) => {
+          // Cập nhật dữ liệu vào state
+          console.log(response);
+          if (response.status == 200) {
+            // dispatch(fetchPost());
+            // setLike(like + 1);
+
+            try {
+              api
+                .get(
+                  `https://www.socialnetwork.somee.com/api/like/likeonpost/${id}`
+                )
+                .then((response) => {
+                  // Cập nhật dữ liệu vào state
+                  console.log(response.data.data.length);
+                  setCountDataShare(response.data.data.length);
+                  // if (response.status !== 200) {
+                  //   // dispatch(fetchPost());
+                  //   // setLike(like + 1);
+                  //   setCountData(data.countLike - 1);
+                  // }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            } catch (e) {
+              console.log(e);
+            }
+            // setCountData(data.countLike - 1);
           }
         })
         .catch((error: any) => {
@@ -162,6 +263,36 @@ const CardPostShare = ({ data }: Props) => {
       console.error("Add sai!", error);
     }
   };
+  const handleAddPostBigShare = async () => {
+    setLoadCmt(true);
+    try {
+      // const data =;
+
+      addCmt(dispatch, {
+        Content: Content,
+        postId: postIdShare,
+        userId: info.data.userId,
+      });
+    } catch (error) {
+      console.error("Add sai!", error);
+    }
+  };
+  const handleAddPostSmallShare = async (pId: string) => {
+    setLoadCmtChild(true);
+    setToggleLoad(pId);
+    try {
+      // const data =;
+
+      addCmt(dispatch, {
+        Content: ContentChild,
+        postId: postIdShare,
+        userId: info.data.userId,
+        parentId: pId,
+      });
+    } catch (error) {
+      console.error("Add sai!", error);
+    }
+  };
   const handleAddPostSmall = async (pId: string) => {
     setLoadCmtChild(true);
     setToggleLoad(pId);
@@ -178,8 +309,27 @@ const CardPostShare = ({ data }: Props) => {
       console.error("Add sai!", error);
     }
   };
-  console.log(data);
+
   const loadData = async () => {
+    // Gọi API để lấy dữ liệu
+    const id = data.id;
+    await api
+      .get<ResponseData>(
+        `https://www.socialnetwork.somee.com/api/cmt/getcmtPost/${data.id}`
+      )
+      .then((response) => {
+        // Cập nhật dữ liệu vào state
+
+        if (response.status === 200) {
+          setLoadCmt1(true);
+          setData(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+  const loadDataShare = async () => {
     // Gọi API để lấy dữ liệu
     const id = data.id;
     await api
@@ -188,9 +338,10 @@ const CardPostShare = ({ data }: Props) => {
       )
       .then((response) => {
         // Cập nhật dữ liệu vào state
+
         if (response.status === 200) {
-          setLoadCmt1(true);
-          setData(response.data);
+          setLoadCmt2(true);
+          setDataShare(response.data);
         }
       })
       .catch((error) => {
@@ -214,11 +365,17 @@ const CardPostShare = ({ data }: Props) => {
       })
       .catch((err) => console.log(err));
   };
+  const handleShare = () => {
+    setIdShare(data.id);
+    setLoadShare(true);
+  };
   useEffect(() => {
     loadData();
+    loadDataShare();
     // loadDataUserCmt();
   }, []);
   const [toggleShare, setToggleShare] = useState(false);
+  console.log(data, dataCmt);
   return (
     <>
       <div
@@ -236,8 +393,10 @@ const CardPostShare = ({ data }: Props) => {
               <span className="text-[18px] font-[500] ">
                 {data.fullNameShare}
               </span>
-              <div className="flex justify-center items-center">
-                <span className="text-light-3 text-[12px] mr-2">2 hours</span>
+              <div className="flex justify-start items-center text-left">
+                <span className="text-light-3 text-[12px] mr-2 text-left">
+                  2 hours
+                </span>
                 <>
                   {data.levelViewShare == 1 ? (
                     <div className="text-light-3 ">
@@ -260,89 +419,143 @@ const CardPostShare = ({ data }: Props) => {
         </div>
         <div className="pb-4 px-4 flex justify-between items-center">
           <div className="flex items-center">
-            <span className="text-light-3 text-[15px] mr-2">
-              {data.content}
+            <span className="text-[#101010] text-[15px] mr-4">
+              {data.contentShare}
             </span>
           </div>
         </div>
-        <div>
-          <div>
-            <>
-              {images.length === 2 ? (
-                <div className="flex">
-                  {images?.map((index, item) => (
-                    <img
-                      key={index}
-                      src={images[item]?.linkImage}
-                      alt=""
-                      className="max-h-[300px] w-[50%] mx-[2px]"
-                    />
-                  ))}
-                </div>
-              ) : images.length === 3 ? (
-                <div className="flex">
-                  {images?.map((index, item) => (
-                    <img
-                      key={index}
-                      src={images[item]?.linkImage}
-                      alt=""
-                      className="max-h-[300px] w-[50%] mx-[2px]"
-                    />
-                  ))}
-                </div>
-              ) : images.length === 1 && videos.length === 1 ? (
-                <div className="flex flex-col">
-                  {images?.map((index, item) => (
-                    <img
-                      key={index}
-                      src={images[item]?.linkImage}
-                      alt=""
-                      className=" w-[100%]"
-                    />
-                  ))}
-                  {videos?.map((index, item) => (
-                    <div className="mt-2 p-3">
-                      {" "}
-                      <div className=" border-[5px] border-[#456fe6] border-solid">
-                        <CustomVideo src={videos[item]?.link} />
+        <div
+          className="p-2 cursor-pointer"
+          onClick={() => setToggleShare(true)}
+        >
+          <div className="rounded-b-[10px] border-[1px] border-solid border-[#f2f2f2]">
+            <div
+              className=" bg-white  mb-5 overflowY-auto"
+              style={{
+                overflowY: "auto",
+                maxHeight: "600px",
+              }}
+            >
+              <div>
+                <div>
+                  <>
+                    {images.length === 2 ? (
+                      <div className="flex">
+                        {images?.map((index, item) => (
+                          <img
+                            key={index}
+                            src={images[item]?.linkImage}
+                            alt=""
+                            className="max-h-[300px] w-[50%] mx-[2px]"
+                          />
+                        ))}
                       </div>
-                    </div>
-                  ))}
-                </div>
-              ) : images.length === 1 ? (
-                <div className="flex">
-                  {images?.map((index, item) => (
-                    <img
-                      key={index}
-                      src={images[item]?.linkImage}
-                      alt=""
-                      className=" w-[100%]"
-                    />
-                  ))}
-                </div>
-              ) : (
-                <>
-                  {videos?.map((index, item) => (
-                    <div className="">
-                      <CustomVideo src={videos[item]?.link} />
-                    </div>
-                    // <video
-                    //   key={index}
+                    ) : images.length === 3 ? (
+                      <div className="flex">
+                        {images?.map((index, item) => (
+                          <img
+                            key={index}
+                            src={images[item]?.linkImage}
+                            alt=""
+                            className="max-h-[300px] w-[50%] mx-[2px]"
+                          />
+                        ))}
+                      </div>
+                    ) : images.length === 1 && videos.length === 1 ? (
+                      <div className="flex flex-col">
+                        {images?.map((index, item) => (
+                          <img
+                            key={index}
+                            src={images[item]?.linkImage}
+                            alt=""
+                            className=" w-[100%]"
+                          />
+                        ))}
+                        {videos?.map((index, item) => (
+                          <div className="mt-2 p-3">
+                            {" "}
+                            <div className=" border-[5px] border-[#456fe6] border-solid">
+                              <CustomVideo src={videos[item]?.link} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : images.length === 1 ? (
+                      <div className="flex">
+                        {images?.map((index, item) => (
+                          <img
+                            key={index}
+                            src={images[item]?.linkImage}
+                            alt=""
+                            className=" w-[100%]"
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <>
+                        {videos?.map((index, item) => (
+                          <div className="">
+                            <CustomVideo src={videos[item]?.link} />
+                          </div>
+                          // <video
+                          //   key={index}
 
-                    //   controls
-                    //   preload="auto"
-                    //   className="w-[100%]"
-                    // ></video>
-                  ))}
-                </>
-              )}
-            </>
+                          //   controls
+                          //   preload="auto"
+                          //   className="w-[100%]"
+                          // ></video>
+                        ))}
+                      </>
+                    )}
+                  </>
+                </div>
+              </div>
+              <div className="py-2 px-4 flex justify-between items-center rounded-t-[10px] mt-2">
+                <div className="flex items-center">
+                  <img
+                    src={data.avatarUrl}
+                    alt="avatar"
+                    className="h-[40px] w-[40px] rounded-[50%]"
+                  />
+                  <div className=" ml-4 text-left">
+                    <span className="text-[16px] font-[500] ">
+                      {data.fullName}
+                    </span>
+                    <div className="flex justify-start items-center">
+                      <span className="text-light-3 text-[12px] mr-2">
+                        2 hours
+                      </span>
+                      <>
+                        {data.levelView == 1 ? (
+                          <div className="text-light-3 ">
+                            {" "}
+                            <FaEarthAmericas />
+                          </div>
+                        ) : (
+                          <div className="text-light-3">
+                            {" "}
+                            <FaUserFriends />
+                          </div>
+                        )}
+                      </>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="px-4 flex justify-between items-center">
+                <div className="flex items-center">
+                  <span className="text-[#101010] text-[15px] mr-4">
+                    {data.content}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="px-2 py-2">
           <div className="flex justify-start items-center">
-            <button className="buttonTym" onClick={handleLike}>
-              {data.islike == false ? (
+            <button className="buttonTym" onClick={handleLikeShare}>
+              {likeShar == false ? (
                 <svg
                   className="empty"
                   xmlns="http://www.w3.org/2000/svg"
@@ -365,9 +578,9 @@ const CardPostShare = ({ data }: Props) => {
                   <path d="M16.5 3C19.538 3 22 5.5 22 9c0 7-7.5 11-10 12.5C9.5 20 2 16 2 9c0-3.5 2.5-6 5.5-6C9.36 3 11 4 12 5c1-1 2.64-2 4.5-2z"></path>
                 </svg>
               )}
-              {data.countLike} Like
+              {countDataShare} Like
             </button>
-            <button className="buttonTym ml-3">
+            <button className="buttonTym ml-3" onClick={handleShare}>
               <div className="text-[#456fe6]">
                 <IoShareSocialOutline />
               </div>{" "}
@@ -409,7 +622,7 @@ const CardPostShare = ({ data }: Props) => {
                 </div>
                 <div
                   className="cursor-pointer mr-1 bg-white p-2 rounded-[50%] hover:bg-[#456fe6] hover:text-white duration-500"
-                  onClick={handleAddPostBig}
+                  onClick={handleAddPostBigShare}
                 >
                   <IoIosSend />{" "}
                 </div>
@@ -418,7 +631,7 @@ const CardPostShare = ({ data }: Props) => {
           </div>
         </div>
         <div>
-          {loadCmt1 == false ? (
+          {loadCmt2 == false ? (
             <div className="flex justify-center items-center">
               {" "}
               <div className="loaderCmt1 "></div>
@@ -441,7 +654,7 @@ const CardPostShare = ({ data }: Props) => {
         <div className="px-6 py-2">
           <div className="mb-2">
             <>
-              {dataCmt.data.map((item: Comment, index: number) => (
+              {dataCmtHShare.data.map((item: Comment, index: number) => (
                 <>
                   <div
                     className="flex justify-start items-top mb-1"
@@ -574,7 +787,7 @@ const CardPostShare = ({ data }: Props) => {
                             </div>
                             <div
                               className="cursor-pointer mr-1 bg-white p-2 rounded-[50%] hover:bg-[#456fe6] hover:text-white duration-500"
-                              onClick={() => handleAddPostSmall(item.id)}
+                              onClick={() => handleAddPostSmallShare(item.id)}
                             >
                               <IoIosSend />{" "}
                             </div>
@@ -656,7 +869,7 @@ const CardPostShare = ({ data }: Props) => {
                     <span className="text-[18px] font-[500] ">
                       {data.fullName}
                     </span>
-                    <div className="flex justify-center items-center">
+                    <div className="flex justify-start items-center">
                       <span className="text-light-3 text-[12px] mr-2">
                         2 hours
                       </span>
@@ -682,7 +895,7 @@ const CardPostShare = ({ data }: Props) => {
               </div>
               <div className="pb-4 px-4 flex justify-between items-center">
                 <div className="flex items-center">
-                  <span className="text-light-3 text-[15px] mr-2">
+                  <span className="text-[#101010] text-[15px] mr-4">
                     {data.content}
                   </span>
                 </div>
@@ -764,7 +977,7 @@ const CardPostShare = ({ data }: Props) => {
               <div className="px-2 py-2">
                 <div className="flex justify-start items-center">
                   <button className="buttonTym" onClick={handleLike}>
-                    {data.islike == false ? (
+                    {like == false ? (
                       <svg
                         className="empty"
                         xmlns="http://www.w3.org/2000/svg"
@@ -787,9 +1000,9 @@ const CardPostShare = ({ data }: Props) => {
                         <path d="M16.5 3C19.538 3 22 5.5 22 9c0 7-7.5 11-10 12.5C9.5 20 2 16 2 9c0-3.5 2.5-6 5.5-6C9.36 3 11 4 12 5c1-1 2.64-2 4.5-2z"></path>
                       </svg>
                     )}
-                    {data.countLike} Like
+                    {countData} Like
                   </button>
-                  <button className="buttonTym ml-3">
+                  <button className="buttonTym ml-3" onClick={handleShare}>
                     <div className="text-[#456fe6]">
                       <IoShareSocialOutline />
                     </div>{" "}
@@ -1046,6 +1259,7 @@ const CardPostShare = ({ data }: Props) => {
           </div>
         </div>
       )}
+      {loadShare && IdShare === data.id && <ShareLayout PostId={data.id} />}
     </>
   );
 };

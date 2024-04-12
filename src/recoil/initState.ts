@@ -55,6 +55,10 @@ export const SearChChat = atom({
   key: "SearChChat",
   default: "false",
 });
+export const ShareS = atom({
+  key: "Shares",
+  default: false,
+});
 // export const newinitState = selector({
 //   key: "newInitState",
 //   get: ({ get }) => {

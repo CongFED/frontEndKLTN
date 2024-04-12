@@ -9,7 +9,6 @@ const api = axios.create({
 
 // Hàm này sẽ thêm token vào header nếu token tồn tại
 const setAuthToken = (token: any) => {
-  console.log(`Bearer ${token}`);
   if (token) {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   } else {

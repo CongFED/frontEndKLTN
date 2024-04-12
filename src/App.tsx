@@ -24,8 +24,9 @@ import Personal from "./pages/Personal/Personal";
 // import { successToast } from "./utils/getToast";
 function App() {
   const [loading, setLoading] = useState(true);
-  const currentUser = useSelector((state: RootState) => state.user.currentUser);
-
+  const { info, isLoading, isError, error } = useSelector(
+    (state: RootState) => state.info
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchInfo());

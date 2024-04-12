@@ -6,7 +6,7 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import { api, setAuthToken } from "../../../utils/setAuthToken";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { fetchPost } from "../../../redux/features/post/postSlice";
-import { ReloadLike, tokenState } from "../../../recoil/initState";
+import { ReloadLike, tokenState, ShareS } from "../../../recoil/initState";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { HiOutlineMicrophone } from "react-icons/hi2";
@@ -50,7 +50,9 @@ const CardPost = ({ data, cmtid }: Props) => {
   const [emo, setEmo] = useState(true);
   const [visibleComments, setVisibleComments] = useState(0);
   const [countData, setCountData] = useState(data.countLike);
-  const [loadShare, setLoadShare] = useState(false);
+  const [IdShare, setIdShare] = useState("");
+  const [loadShare, setLoadShare] = useRecoilState(ShareS);
+  console.log(loadShare);
   const [like, setLike] = useState(data.islike);
   const [dataCmt, setData] = useState<ResponseData>({
     data: [],
@@ -269,6 +271,7 @@ const CardPost = ({ data, cmtid }: Props) => {
     loadData();
   }, []);
   const handleShare = () => {
+    setIdShare(data.id);
     setLoadShare(true);
   };
   useEffect(() => {
@@ -318,7 +321,9 @@ const CardPost = ({ data, cmtid }: Props) => {
       </div>
       <div className="pb-4 px-4 flex justify-between items-center">
         <div className="flex items-center">
-          <span className="text-light-3 text-[15px] mr-2">{data.content}</span>
+          <span className="text-[#101010] text-[15px] mr-2">
+            {data.content}
+          </span>
         </div>
       </div>
       <div>
@@ -668,7 +673,7 @@ const CardPost = ({ data, cmtid }: Props) => {
           <Picker onEmojiSelect={emo == true ? addEmoji : addEmojiChild} />
         </div>
       </div>
-      {loadShare && <ShareLayout PostId={data.id} />}
+      {loadShare && IdShare === data.id && <ShareLayout PostId={data.id} />}
     </div>
   );
 };

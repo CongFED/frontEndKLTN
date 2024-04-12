@@ -10,6 +10,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ChatContext } from "../../context/ChatContext";
 // import { Skeleton } from "react-loading-skeleton";
 import { CiMap } from "react-icons/ci";
+import {
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase";
 interface Comment {
   content: string;
   images: { linkImage: string; createDate: string }[]; // Đặt kiểu cho mảng images
@@ -45,7 +53,7 @@ interface ResponseDataInfo {
 }
 const PersonalFriend = () => {
   const { id } = useParams();
-  console.log(id);
+  const currentUser = useSelector((state: RootState) => state.info.info);
   const navigate = useNavigate();
   const [, setLoadCmt1] = useState(false);
   const [loadSearch1, setLoadSearch1] = useState(false);
@@ -87,7 +95,7 @@ const PersonalFriend = () => {
       const response = await api.post(
         `https://www.socialnetwork.somee.com/api/Friend/send/${id}`
       );
-      console.log(response);
+
       if (response.status == 200) {
         loadDataInfo();
       }
@@ -95,17 +103,14 @@ const PersonalFriend = () => {
       console.error("Login failed", error);
     }
   };
+
   const handleAcceptF = async (idfriend: any) => {
-    // setLoadSearch1(true);
-    // setAuthToken(token);
     try {
       const id = idfriend;
       console.log(1);
       const response = await api.post(
         `https://www.socialnetwork.somee.com/api/Friend/accept/${id}`
       );
-      console.log(2);
-      console.log(response);
       if (response.status == 200) {
         loadDataInfo();
       }
@@ -114,8 +119,6 @@ const PersonalFriend = () => {
     }
   };
   const handleUpLevelF1 = async (idfriend: any) => {
-    // setLoadSearch1(true);
-    // setAuthToken(token);
     try {
       const response = await api.post(
         `https://www.socialnetwork.somee.com/api/Friend/updateFriendLevel`,
@@ -172,7 +175,7 @@ const PersonalFriend = () => {
   };
   const [sb, setSb] = useState(false);
 
-  console.log(data.data.firebaseData); // Truy cập thuộc tính "firebaseData"
+  // Truy cập thuộc tính "firebaseData"
 
   const handleConfirm = async () => {
     setAuthToken(token);
@@ -201,7 +204,7 @@ const PersonalFriend = () => {
         const response = await api.get<ResponseData>(
           `https://www.socialnetwork.somee.com/api/post/user/${id}`
         );
-        console.log(response);
+
         // setLengthPost(response.data.data.length);
         // setTotal(response.data.data.length);
         setDataPost(response.data);
@@ -217,11 +220,63 @@ const PersonalFriend = () => {
     // loadDataUserCmt();
   }, []);
   const { dispatch } = useContext(ChatContext);
-  const handleMessage = () => {
-    console.log(data.data.firebaseData);
+  const handleMessage = async () => {
+    const combinedId =
+      currentUser.data.firebaseData.uid > data.data.firebaseData.uid
+        ? currentUser.data.firebaseData.uid + data.data.firebaseData.uid
+        : data.data.firebaseData.uid + currentUser.data.firebaseData.uid;
+    try {
+      const res = await getDoc(doc(db, "chats", combinedId));
+      console.log(combinedId);
+      if (!res.exists()) {
+        await setDoc(doc(db, "chats", combinedId), { messages: [] });
+        console.log(
+          "u:",
+          data.data.firebaseData.uid,
+          "di:",
+          data.data.firebaseData.displayName,
+          "pho:",
+          data.data.firebaseData.photoURL
+        );
+
+        await updateDoc(
+          doc(db, "userChats", currentUser.data.firebaseData.uid),
+          {
+            [combinedId + ".userInfo"]: {
+              uid: data.data.firebaseData.uid,
+              displayName: data.data.firebaseData.displayName,
+              photoURL: data.data.firebaseData.photoURL,
+            },
+            [combinedId + ".date"]: serverTimestamp(),
+          }
+        );
+        console.log(
+          "u:",
+          currentUser.data.firebaseData.uid,
+          "di:",
+          currentUser.data.firebaseData.displayName,
+          "pho:",
+          currentUser.data.firebaseData.photoURL
+        );
+        await updateDoc(doc(db, "userChats", data.data.firebaseData.uid), {
+          [combinedId + ".userInfo"]: {
+            uid: currentUser.data.firebaseData.uid,
+            displayName: currentUser.data.firebaseData.displayName,
+            photoURL: currentUser.data.firebaseData.photoURL,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
+
+        console.log(456);
+      }
+    } catch (error) {
+      console.log("Loi r");
+    }
     dispatch({ type: "CHANGE_USER", payload: data.data.firebaseData });
     navigate("/chat");
   };
+  console.log(data.data, currentUser.data);
+
   return (
     <>
       <div className="insta-clone w-full">

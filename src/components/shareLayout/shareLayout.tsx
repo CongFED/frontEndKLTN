@@ -9,6 +9,9 @@ import type { MenuProps } from "antd";
 import { Button, Dropdown, Menu } from "antd";
 import Picker from "@emoji-mart/react";
 import { api } from "../../utils/setAuthToken";
+import { useRecoilState } from "recoil";
+import { ShareS } from "../../recoil/initState";
+import toast from "react-hot-toast";
 interface Props {
   PostId: string;
 }
@@ -17,7 +20,7 @@ const ShareLayout = ({ PostId }: Props) => {
     (state: RootState) => state.info
   );
   console.log(PostId);
-
+  const [loadShare, setLoadShare] = useRecoilState(ShareS);
   const [toggleEmj, setToggleEmj] = useState(true);
   const [Content, setContent] = useState("");
   const items: MenuProps["items"] = [
@@ -70,15 +73,25 @@ const ShareLayout = ({ PostId }: Props) => {
       // setCountData(data.countLike + 1);
 
       await api
-        .post("https://www.socialnetwork.somee.com/api/post/share", {
-          PostId: PostId,
-          LevelView: selectedItem?.key,
-          content: Content,
-        })
+        .post(
+          "https://www.socialnetwork.somee.com/api/post/share",
+          {
+            PostId: PostId,
+            LevelView: selectedItem?.key,
+            content: Content,
+          },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
         .then((response) => {
           // Cập nhật dữ liệu vào state
           console.log(response);
           if (response.status == 200) {
+            toast.success("Chia sẻ bài Post thành công!");
+            setLoadShare(false);
             // dispatch(fetchPost());
             // setLike(like + 1);
             // setCountData(data.countLike - 1);
@@ -109,14 +122,14 @@ const ShareLayout = ({ PostId }: Props) => {
       }}
       className="flex-col"
     >
-      <div className="relative rounded-t-[10px] w-[500px] h-[50px] border-solid border-b-[1px] border-[#f0f2f5] bg-white flex justify-center items-center">
+      <div className="opacity-100 relative rounded-t-[10px] w-[500px] h-[50px] border-solid border-b-[1px] border-[#f0f2f5] bg-white flex justify-center items-center">
         <div className=" ">
           <span className="font-bold text-[20px]">Chia sẻ</span>
         </div>
         <div className="absolute " style={{ top: 3, right: 10 }}>
           <div
             className="text-[25px] p-2 cursor-pointer hover:bg-[#f2f2f2] rounded-[50%] duration-500"
-            // onClick={() => setToggleShare(false)}
+            onClick={() => setLoadShare(false)}
           >
             <IoMdClose />
           </div>

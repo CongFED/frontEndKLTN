@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 import { RootState } from "../../redux/store";
 import toast, { Toaster } from "react-hot-toast";
 import { api } from "../../utils/setAuthToken";
-
+import { fetchInfo } from "../../redux/features/info/infoSlice";
 const AddInfo = () => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -128,6 +128,8 @@ const AddInfo = () => {
       localStorage.setItem("hasInfor", "true");
       setTimeout(() => {
         toast.dismiss(); // Ẩn toast
+
+        dispatch(fetchInfo());
 
         navigate("/");
       }, 1000);

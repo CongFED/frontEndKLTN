@@ -17,7 +17,7 @@ import Dropzone from "react-dropzone";
 import Picker from "@emoji-mart/react";
 import { addInfo, addPost } from "../../redux/features/Add-Post/addPostAPI";
 import { useDropzone } from "react-dropzone";
-
+import { IoIosSend, IoMdClose } from "react-icons/io";
 interface UploadedFile {
   file: File;
   preview: string;
@@ -78,10 +78,11 @@ const AddPost = () => {
       const formData = new FormData();
       formData.append("Content", Content);
       formData.append("LevelVieW", isChecked);
-
+      console.log(uploadedFiles);
       if (uploadedFiles) {
-        formData.append("File", uploadedFiles[0]?.file);
-        formData.append("File", uploadedFiles[1]?.file);
+        uploadedFiles.map((item, index) => {
+          formData.append("File", uploadedFiles[index]?.file);
+        });
       }
 
       addPost(dispatch, formData);
@@ -97,6 +98,7 @@ const AddPost = () => {
     (state: RootState) => state.addPost.isFetching
   );
   useEffect(() => {
+    console.log(dataAddPost);
     if (dataAddPost?.success === true) {
       setIsLoading(false);
       toast.success("Thêm post thành công!");
@@ -109,6 +111,11 @@ const AddPost = () => {
       toast.error("Thêm post thất bại!");
     }
   }, [dataAddPost, error, isFetching]);
+  const removeImage = (indexToRemove: number) => {
+    setUploadedFiles((prevState) =>
+      prevState.filter((_, index) => index !== indexToRemove)
+    );
+  };
   return (
     <>
       <div className="flex flex-row">
@@ -223,12 +230,19 @@ const AddPost = () => {
                     class="custum-file-upload w-[100%]  h-[320px] flex"
                   >
                     {uploadedFiles.map((uploadedFile, index) => (
-                      <div key={index}>
+                      <div key={index} className="relative">
                         <img
                           src={uploadedFile.preview}
                           alt="Uploaded Image"
-                          className="max-w-[200px] max-h-[200px] rounded-[10px]"
+                          className="max-w-[200px] max-h-[200px] rounded-[10px] cursor-pointer"
+                          {...getRootProps()}
                         />
+                        <button
+                          className="absolute top-[-10px] right-[-10px] p-2  rounded-full bg-gray-300 transition duration-300"
+                          onClick={() => removeImage(index)}
+                        >
+                          <IoMdClose />
+                        </button>
                         {uploadedFile.file.name}
                       </div>
                     ))}

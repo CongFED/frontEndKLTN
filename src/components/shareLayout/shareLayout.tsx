@@ -91,7 +91,7 @@ const ShareLayout = ({ PostId }: Props) => {
           console.log(response);
           if (response.status == 200) {
             toast.success("Chia sẻ bài Post thành công!");
-            setLoadShare(false);
+            setLoadShare("0");
             // dispatch(fetchPost());
             // setLike(like + 1);
             // setCountData(data.countLike - 1);
@@ -129,7 +129,7 @@ const ShareLayout = ({ PostId }: Props) => {
         <div className="absolute " style={{ top: 3, right: 10 }}>
           <div
             className="text-[25px] p-2 cursor-pointer hover:bg-[#f2f2f2] rounded-[50%] duration-500"
-            onClick={() => setLoadShare(false)}
+            onClick={() => setLoadShare("0")}
           >
             <IoMdClose />
           </div>

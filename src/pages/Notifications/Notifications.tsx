@@ -39,7 +39,6 @@ const Notifications = () => {
 
   const loadData = async () => {
     // Gọi API để lấy dữ liệu
-
     await api
       .get<ResponseData>(
         `https://www.socialnetwork.somee.com/api/Notify/getNotifies`
@@ -59,15 +58,37 @@ const Notifications = () => {
         console.error("Error fetching data:", error);
       });
   };
+  const loadDataF = async () => {
+    // Gọi API để lấy dữ liệu
+
+    await api
+      .get<ResponseData>(
+        `https://www.socialnetwork.somee.com/api/Notify/getAcceptFriendNotifies`
+      )
+      .then((response) => {
+        // Cập nhật dữ liệu vào state
+        if (response.status === 200) {
+          console.log(response);
+          // setLoadCmt1(true);
+          // setLoad(true);
+          // setLoadSearch1(false);
+          // setLoadSearch2(false);
+          // setData(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
   useEffect(() => {
     loadData(); // Gọi fetchData khi component được mount
-
+    loadDataF();
     // Thiết lập interval để gọi fetchData mỗi giây
     const intervalId = setInterval(() => {
       loadData();
     }, 1000);
 
-    // Clear interval khi component bị unmount để tránh memory leak
+    // // Clear interval khi component bị unmount để tránh memory leak
     return () => clearInterval(intervalId);
   }, []);
   const handleGetPostNoti = (postId: string, commentId: string) => {

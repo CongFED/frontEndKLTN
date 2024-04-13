@@ -252,6 +252,14 @@
   justify-content: flex-end;
   align-items: center;
 }
+.iconCmt2 {
+  position: absolute;
+   top: 30px;
+    right: 10px;
+    display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
 .iconCmtCh {
   position: absolute;
    bottom: 10px;

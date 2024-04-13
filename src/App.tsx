@@ -13,7 +13,6 @@ import Logo from "../src/assets/LogoSN.png";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../src/redux/store";
 import VerifyCode from "./pages/VerifyCode/VerifyCode";
-import { fetchInfo } from "./redux/features/info/infoSlice";
 import AddInfo from "./pages/AddInfo/AddInfo";
 import { Toaster } from "react-hot-toast";
 import BadNotFound from "./components/BadNotFound/BadNotFound";
@@ -27,10 +26,6 @@ function App() {
   const { info, isLoading, isError, error } = useSelector(
     (state: RootState) => state.info
   );
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchInfo());
-  }, []);
   useEffect(() => {
     setTimeout(() => {
       setLoading(false); // Kết thúc trạng thái loading

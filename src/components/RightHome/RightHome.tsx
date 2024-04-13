@@ -14,7 +14,6 @@ const RightHome = ({ data }: Props) => {
       setLoad(true);
     }
   }, [data]);
-  console.log(data.data);
   return (
     <div className=" py-6  ">
       <h2

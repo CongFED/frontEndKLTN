@@ -30,6 +30,10 @@ interface ResponseData {
   message: string;
 }
 const Personal = () => {
+  const { info, isLoading, isError, error } = useSelector(
+    (state: RootState) => state.info
+  );
+  console.log(info);
   const token = useRecoilValue(tokenState);
   const navigate = useNavigate();
   const [loadData, setLoadData] = useState(false);
@@ -40,14 +44,6 @@ const Personal = () => {
     success: false,
     message: "",
   });
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchInfo());
-  }, []);
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
-  console.log(info);
 
   const loadDataFriend = async () => {
     // Gọi API để lấy dữ liệu
@@ -103,7 +99,7 @@ const Personal = () => {
                   <Skeleton className="h-[20px] w-[80px] mr-2" />
                 ) : (
                   <span className="text-base text-gray-700 text-2xl mr-2">
-                    {info.data.nickname || "User"}
+                    {info.data.nickname}
                   </span>
                 )}
 
@@ -159,7 +155,7 @@ const Personal = () => {
                   <Skeleton className="h-[15px] w-[50px] " />
                 ) : (
                   <span className="text-lg font-bold text-gray-700 mr-2">
-                    {info.data.fullName || "User"}
+                    {info.data.fullName}
                   </span>
                 )}
               </div>

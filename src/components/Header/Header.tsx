@@ -14,36 +14,20 @@ import {
   CiVideoOn,
   CiLogout,
 } from "react-icons/ci";
-
-import { login } from "../../redux/features/login/loginAPI";
 import { GoHome } from "react-icons/go";
 import ButtonHeader from "../Button/ButtonHeader";
 import { IoLogOutOutline } from "react-icons/io5";
-import getInfo from "../../redux/features/info/getInfoAPI";
 import { Link } from "react-router-dom";
-import {
-  logoutSuccess,
-  setCurrentUser,
-} from "../../redux/features/login/loginSlice";
+import { logoutSuccess } from "../../redux/features/login/loginSlice";
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { info, isLoading, isError, error } = useSelector(
     (state: RootState) => state.info
   );
-  useEffect(() => {
-    dispatch(fetchInfo());
-  }, []);
   // useEffect(() => {
-  //   getInfo().then(({ data, error }) => {
-  //     if (error) {
-  //       navigate("/bad-not-found");
-  //     } else {
-  //       // Xử lý dữ liệu ở đây nếu cần
-  //       console.log(data);
-  //     }
-  //   });
-  // }, [navigate]);
+  //   dispatch(fetchInfo());
+  // }, []);
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("hasInfor");

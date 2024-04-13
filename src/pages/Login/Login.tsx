@@ -20,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import API from "../../services/API";
 import { login } from "../../redux/features/login/loginAPI";
+import { fetchInfo } from "../../redux/features/info/infoSlice";
 
 const Login = () => {
   const history = useNavigate();
@@ -98,12 +99,14 @@ const Login = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const isFetching = useSelector((state: RootState) => state.user.isFetching);
   useEffect(() => {
+    console.log(currentUser);
     if (currentUser?.data.success === true) {
       console.log(currentUser);
       toast.success("Đăng nhập thành công!");
       setToken(currentUser?.data?.data?.jwtToken);
       localStorage.setItem("token", currentUser?.data?.data?.jwtToken);
       localStorage.setItem("hasInfor", currentUser?.data?.data?.hasInfor);
+      dispatch(fetchInfo());
       // Ẩn toast
       if (currentUser?.data?.data?.hasInfor == false) {
         navigate("/add-info");
@@ -131,7 +134,16 @@ const Login = () => {
       console.error("Login failed", error);
     }
   };
-
+  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === "Enter") {
+      handleLogin();
+    }
+  };
+  const handleKeyRe = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === "Enter") {
+      handleRegister();
+    }
+  };
   const [trans, setTrans] = useState(true);
   const [comFirmPass, setComFirmPass] = useState(true);
 
@@ -176,6 +188,7 @@ const Login = () => {
                     id="password"
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
+                    onKeyDown={handleKey}
                   />
                   <div className="flex  justify-between">
                     <span className="forgot-password">
@@ -197,6 +210,7 @@ const Login = () => {
                   <div
                     className="login-button flex justify-center"
                     onClick={handleLogin}
+
                     // disabled={isFetching}
                   >
                     {isLoading ? <div className="loader"></div> : "Sign in"}
@@ -260,6 +274,7 @@ const Login = () => {
                   name="password"
                   id="password"
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleKeyRe}
                   placeholder="Password"
                 />
                 <input
@@ -301,7 +316,6 @@ const Login = () => {
                 <button
                   className="login-button flex justify-center"
                   onClick={handleRegister}
-                  disabled={isFetching}
                 >
                   {isLoading ? <div className="loader"></div> : "Sign up"}
                 </button>

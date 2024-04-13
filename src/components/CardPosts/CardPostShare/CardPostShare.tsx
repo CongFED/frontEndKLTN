@@ -85,12 +85,10 @@ const CardPostShare = ({ data }: Props) => {
     try {
       const id = data.id;
       if (like == false) {
-        console.log(data.countLike);
         setCountData(countData + 1);
         setLike(true);
       }
       if (like == true) {
-        console.log(data.countLike);
         setCountData(countData - 1);
         setLike(false);
       }
@@ -100,7 +98,7 @@ const CardPostShare = ({ data }: Props) => {
         .post(`https://www.socialnetwork.somee.com/api/like/${id}`)
         .then((response) => {
           // Cập nhật dữ liệu vào state
-          console.log(response);
+
           if (response.status == 200) {
             // dispatch(fetchPost());
             // setLike(like + 1);
@@ -112,7 +110,7 @@ const CardPostShare = ({ data }: Props) => {
                 )
                 .then((response) => {
                   // Cập nhật dữ liệu vào state
-                  console.log(response.data.data.length);
+
                   setCountData(response.data.data.length);
                   // if (response.status !== 200) {
                   //   // dispatch(fetchPost());
@@ -141,7 +139,6 @@ const CardPostShare = ({ data }: Props) => {
     try {
       const id = data.idShare;
       if (likeShar == false) {
-        console.log(data.countLikeShare);
         setCountDataShare(countDataShare + 1);
         setLikeShare(true);
       }
@@ -155,7 +152,7 @@ const CardPostShare = ({ data }: Props) => {
         .post(`https://www.socialnetwork.somee.com/api/like/${id}`)
         .then((response) => {
           // Cập nhật dữ liệu vào state
-          console.log(response);
+
           if (response.status == 200) {
             // dispatch(fetchPost());
             // setLike(like + 1);
@@ -167,7 +164,7 @@ const CardPostShare = ({ data }: Props) => {
                 )
                 .then((response) => {
                   // Cập nhật dữ liệu vào state
-                  console.log(response.data.data.length);
+
                   setCountDataShare(response.data.data.length);
                   // if (response.status !== 200) {
                   //   // dispatch(fetchPost());
@@ -375,7 +372,7 @@ const CardPostShare = ({ data }: Props) => {
     // loadDataUserCmt();
   }, []);
   const [toggleShare, setToggleShare] = useState(false);
-  console.log(data, dataCmt);
+
   return (
     <>
       <div

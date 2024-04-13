@@ -5,7 +5,7 @@ interface Props {
 }
 const CardFriend = ({ data }: Props) => {
   const navigate = useNavigate();
-  console.log(data);
+
   return (
     <div className="p-1 border-[2px] border-solid border-white rounded-[10px] mb-3">
       <div className="w-[118px] bg-white flex justify-center items-center rounded-[8px] py-8 ">

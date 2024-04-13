@@ -18,6 +18,9 @@ import { IoTrashBinOutline } from "react-icons/io5";
 import CustomVideo from "../../CustomVideo/CustomVideo";
 import { useNavigate } from "react-router-dom";
 import ShareLayout from "../../shareLayout/shareLayout";
+import { MdOutlineEdit } from "react-icons/md";
+import toast from "react-hot-toast";
+import EditPost from "../../EditPost/EditPost";
 interface Props {
   data: any;
   cmtid: string;
@@ -51,8 +54,8 @@ const CardPost = ({ data, cmtid }: Props) => {
   const [visibleComments, setVisibleComments] = useState(0);
   const [countData, setCountData] = useState(data.countLike);
   const [IdShare, setIdShare] = useState("");
+  const [IdEdit, setIdEdit] = useState("");
   const [loadShare, setLoadShare] = useRecoilState(ShareS);
-  console.log(loadShare);
   const [like, setLike] = useState(data.islike);
   const [dataCmt, setData] = useState<ResponseData>({
     data: [],
@@ -63,7 +66,6 @@ const CardPost = ({ data, cmtid }: Props) => {
     (state: RootState) => state.info
   );
   const commentIdLo = localStorage.getItem("cmtId");
-  console.log(info, data);
   const dataAddCmt = useSelector((state: RootState) => state.addCmt.dataAddCmt);
   const handleSeeMore = () => {
     setVisibleComments(visibleComments + 2);
@@ -92,23 +94,21 @@ const CardPost = ({ data, cmtid }: Props) => {
     setAuthToken(token);
     try {
       const id = data.id;
-      if (like == false) {
-        console.log(data.countLike);
-        setCountData(countData + 1);
-        setLike(true);
-      }
-      if (like == true) {
-        console.log(data.countLike);
-        setCountData(countData - 1);
-        setLike(false);
-      }
+      // if (like == false) {
+      //   setCountData(countData + 1);
+      //   setLike(true);
+      // }
+      // if (like == true) {
+      //   setCountData(countData - 1);
+      //   setLike(false);
+      // }
       // setLike(!like);
       // setCountData(data.countLike + 1);
       await api
         .post(`https://www.socialnetwork.somee.com/api/like/${id}`)
         .then((response) => {
           // Cập nhật dữ liệu vào state
-          console.log(response);
+
           if (response.status == 200) {
             // dispatch(fetchPost());
             // setLike(like + 1);
@@ -120,8 +120,17 @@ const CardPost = ({ data, cmtid }: Props) => {
                 )
                 .then((response) => {
                   // Cập nhật dữ liệu vào state
-                  console.log(response.data.data.length);
-                  setCountData(response.data.data.length);
+                  if (like == false) {
+                    // setCountData(countData + 1);
+                    setLike(true);
+                    setCountData(response.data.data.length);
+                  }
+                  if (like == true) {
+                    // setCountData(countData - 1);
+                    setLike(false);
+                    setCountData(response.data.data.length);
+                  }
+                  //  setCountData(response.data.data.length);
                   // if (response.status !== 200) {
                   //   // dispatch(fetchPost());
                   //   // setLike(like + 1);
@@ -144,6 +153,36 @@ const CardPost = ({ data, cmtid }: Props) => {
       console.error("Login failed", error);
     }
   };
+  useEffect(() => {
+    const fetchLike = async () => {
+      setAuthToken(token);
+      try {
+        const id = data.id;
+
+        try {
+          const response = await api.get(
+            `https://www.socialnetwork.somee.com/api/like/likeonpost/${id}`
+          );
+
+          setCountData(response.data.data.length);
+        } catch (error) {
+          console.log(error);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    // Call fetchLike initially
+    fetchLike();
+
+    // Call fetchLike every 2 seconds
+    const interval = setInterval(fetchLike, 2000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
+
   const handleVoiceClick = () => {
     const recognition = new ((window as any).SpeechRecognition ||
       (window as any).webkitSpeechRecognition)();
@@ -267,12 +306,28 @@ const CardPost = ({ data, cmtid }: Props) => {
       })
       .catch((err) => console.log(err));
   };
+  const hanldDltPost = async () => {
+    setAuthToken(token);
+    return api
+      .delete(`https://www.socialnetwork.somee.com/api/post/${postId}`)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 204) {
+          toast.error("Đã xóa bài viết");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   useEffect(() => {
     loadData();
   }, []);
   const handleShare = () => {
     setIdShare(data.id);
-    setLoadShare(true);
+    setLoadShare("1");
+  };
+  const handleEdit = () => {
+    setIdEdit(data.id);
+    setLoadShare("2");
   };
   useEffect(() => {
     scrollToWow(); // Scroll sau khi dữ liệu đã được tải
@@ -315,9 +370,25 @@ const CardPost = ({ data, cmtid }: Props) => {
             </div>
           </div>
         </div>
-        <div className="text-[25px] p-2 cursor-pointer hover:bg-[#f2f2f2] rounded-[50%] duration-500">
-          <IoMdClose />
-        </div>
+        <>
+          {info?.data?.userId === data.userId ? (
+            <div className="flex">
+              <div className="text-[25px] p-2 cursor-pointer hover:bg-[#f2f2f2] rounded-[50%] duration-500">
+                <div onClick={handleEdit}>
+                  {" "}
+                  <MdOutlineEdit />
+                </div>
+              </div>
+              <div className="text-[25px] p-2 cursor-pointer hover:bg-[#f2f2f2] rounded-[50%] duration-500">
+                <div onClick={hanldDltPost}>
+                  <IoMdClose />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
+        </>
       </div>
       <div className="pb-4 px-4 flex justify-between items-center">
         <div className="flex items-center">
@@ -673,7 +744,10 @@ const CardPost = ({ data, cmtid }: Props) => {
           <Picker onEmojiSelect={emo == true ? addEmoji : addEmojiChild} />
         </div>
       </div>
-      {loadShare && IdShare === data.id && <ShareLayout PostId={data.id} />}
+      {loadShare === "1" && IdShare === data.id && (
+        <ShareLayout PostId={data.id} />
+      )}
+      {loadShare === "2" && IdEdit === data.id && <EditPost data={data} />}
     </div>
   );
 };

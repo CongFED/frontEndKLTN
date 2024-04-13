@@ -7,10 +7,9 @@ import { Empty } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 interface Props {
   data: any;
-  isLoading: any;
 }
 
-const CardPosts = ({ data, isLoading }: Props) => {
+const CardPosts = ({ data }: Props) => {
   const [load, setLoad] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -18,8 +17,8 @@ const CardPosts = ({ data, isLoading }: Props) => {
     if (data.success == true) {
       setLoad(true);
     }
-  }, [isLoading, data]);
-  console.log(data.data);
+  }, [data]);
+  console.log(data);
   return (
     <div className="w-[70%] py-6  ">
       <>

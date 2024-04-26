@@ -279,11 +279,11 @@ const PersonalFriend = () => {
 
   return (
     <>
-      <div className="insta-clone w-full">
+      <div className="insta-clone w-full  relative  top-[50px]">
         {/* <!--body start-->
     <!--profile data--> */}
         <div className=" h-auto px-36">
-          <div className="flex md:flex-row-reverse flex-wrap">
+          <div className="flex md:flex-row-reverse flex-wrap ml-36">
             <div className="w-full md:w-3/4 p-4 text-center">
               <div className="text-left pl-4 pt-3 flex items-center">
                 {loadData == false ? (

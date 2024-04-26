@@ -1,0 +1,75 @@
+import React, { useState } from "react";
+import { BsEmojiSmile } from "react-icons/bs";
+import { FaUserFriends } from "react-icons/fa";
+import { FaEarthAmericas } from "react-icons/fa6";
+import { IoIosSend } from "react-icons/io";
+import CustomVideo from "../CustomVideo/CustomVideo";
+import CustomVideoReels from "../CustomVideo/CustomVideoReels";
+interface Props {
+  data: any;
+}
+const CardReelsSimple = ({ data }: Props) => {
+  console.log(data);
+  const [videos, setVideos] = useState(data.videos);
+  return (
+    <div
+      className="w-[500px] h-auto bg-white  mb-10 rounded-[10px] flex flex-col-reverse "
+      style={{ position: "relative" }}
+    >
+      <div>
+        <div>
+          <>
+            <>
+              <div className="h-[650px] flex justify-center items-center bg-black rounded-[10px] relative">
+                <CustomVideoReels src={videos[0]?.link} />
+                <div className="flex flex-col absolute bottom-0 left-1">
+                  <div className="py-4 px-4 flex justify-between items-center text-white">
+                    <div className="flex items-center ">
+                      <img
+                        src={data.avatarUrl}
+                        alt="avatar"
+                        className="h-[45px] w-[45px] rounded-[50%]"
+                      />
+                      <div className=" ml-4 text-left">
+                        <span className="text-[18px] font-[500]">
+                          {data.fullName}
+                        </span>
+                        <div className="flex justify-start items-center ">
+                          <span className="text-white text-[12px] mr-2 ">
+                            2 hours
+                          </span>
+                          <>
+                            {data.levelView == 1 ? (
+                              <div className="text-white ">
+                                {" "}
+                                <FaEarthAmericas />
+                              </div>
+                            ) : (
+                              <div className="text-white">
+                                {" "}
+                                <FaUserFriends />
+                              </div>
+                            )}
+                          </>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pb-4 px-6 flex justify-between items-center">
+                    <div className="flex items-center">
+                      <span className="text-white text-[15px] ">
+                        {data.content}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          </>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CardReelsSimple;

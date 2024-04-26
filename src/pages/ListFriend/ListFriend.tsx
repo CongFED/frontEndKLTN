@@ -129,10 +129,10 @@ const ListFriend = () => {
   console.log(data);
   return (
     <>
-      <div className="flex flex-row">
+      <div className="flex flex-row relative left-[23rem] top-[50px]">
         <div className="  ">
-          <div className="w-[80vw] py-6 pl-[150px] ">
-            <div className="flex justify-between mb-6 ">
+          <div className="w-[75vw] py-6 px-6 ">
+            <div className="flex justify-between bg-white py-2 px-2 rounded-lg mb-10">
               <div className=" flex justify-start items-center">
                 <img
                   src="https://snapgram-sand.vercel.app/assets/icons/people.svg"

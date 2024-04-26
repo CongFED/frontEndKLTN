@@ -88,11 +88,11 @@ const Personal = () => {
   }, []);
   return (
     <>
-      <div className="insta-clone w-full">
+      <div className="insta-clone w-full relative  top-[50px] bg-linear-gradient(98.63deg, #f9a225 0%, #f95f35 100%)">
         {/* <!--body start-->
     <!--profile data--> */}
         <div className=" h-auto px-36 ">
-          <div className="flex md:flex-row-reverse flex-wrap">
+          <div className="flex md:flex-row-reverse flex-wrap ml-36">
             <div className="w-full md:w-3/4 p-4 text-center">
               <div className="text-left pl-4 pt-3 flex items-center">
                 {loadData == false ? (
@@ -204,8 +204,80 @@ const Personal = () => {
           </div>
           {/* 
       <!--status show icon--> */}
+          {/* <div className="flex-auto w-[60%] absolute left-[20%] top-14 bg-gray-100 rounded-xl">
+            <div className="w-[80%] mx-auto">
+              <div>
+                <div className="relative py-4">
+                  <img
+                    className="h-96 w-full rounded-md"
+                    src={info.data.background || Logo2}
+                    alt="profilePic"
+                  ></img>
+                  <div className="absolute bottom-10 left-6">
+                    <img
+                      className="h-28 w-28 rounded-full"
+                      src={info.data.image || Logo2}
+                      alt="avatart"
+                    />
+                    <p className="py-2 font-roboto font-medium text-sm text-white no-underline tracking-normal leading-none">
+                      {info.data.fullName}
+                    </p>
+                    <p className="py-2 font-roboto font-medium text-sm text-white no-underline tracking-normal leading-none">
+                      @{info.data.nickname}
+                    </p>
+                  </div>
+                  <div className="flex flex-col absolute right-6 bottom-10">
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="#fff"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                        />
+                      </svg>
 
-          <div className="grid grid-cols-6 ml-36 mt-16">
+                      <span className="ml-2 py-2 font-roboto font-medium text-sm text-white no-underline tracking-normal leading-none">
+                        From {info.data.provinces}
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="#fff"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819"
+                        />
+                      </svg>
+
+                      <span className="ml-2 py-2 font-roboto font-medium text-sm text-white no-underline tracking-normal leading-none">
+                        Lives in {info.data.workPlace}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> */}
+          {/* <div className="grid grid-cols-6 ml-36 mt-16">
             <div className="flex-1 text-center px-4 py-2 m-2">
               <div className="relative shadow-xl mx-auto h-20 w-20 -my-12 border-white rounded-full overflow-hidden border-4">
                 <img
@@ -265,13 +337,13 @@ const Personal = () => {
                 My Work
               </h1>
             </div>
-          </div>
+          </div> */}
 
           {/* <hr className="border-gray-500 mt-6" /> */}
           {/* <hr className="border-gray-500 w-20 border-t-1 ml-64 border-gray-800" /> */}
 
           {/* <!--post icon and title--> */}
-          <div className="flex flex-row mt-4 justify-center mr-16">
+          {/* <div className="flex flex-row mt-4 justify-center mr-16">
             <div className="flex text-gray-700 text-center py-2 m-2 pr-5">
               <div className="flex inline-flex">
                 <button
@@ -371,7 +443,7 @@ const Personal = () => {
                 </h3>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* <!--post images--> */}
 

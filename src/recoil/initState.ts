@@ -60,6 +60,14 @@ export const ShareS = atom({
   key: "Shares",
   default: "0",
 });
+export const ViewHome = atom({
+  key: "ViewHome",
+  default: true,
+});
+export const isChatR = atom({
+  key: "isChatR",
+  default: true,
+});
 // export const newinitState = selector({
 //   key: "newInitState",
 //   get: ({ get }) => {

@@ -21,6 +21,7 @@ import ShareLayout from "../../shareLayout/shareLayout";
 import { MdOutlineEdit } from "react-icons/md";
 import toast from "react-hot-toast";
 import EditPost from "../../EditPost/EditPost";
+import LazyLoadImg from "../../common/LazyLoadImg/LazyLoadImg";
 interface Props {
   data: any;
   cmtid: string;
@@ -332,7 +333,22 @@ const CardPost = ({ data, cmtid }: Props) => {
   useEffect(() => {
     scrollToWow(); // Scroll sau khi dữ liệu đã được tải
   }, [dataCmt]);
+  const imgRef = useRef();
+  useEffect(() => {
+    const img = imgRef.current;
+    // if (!img) return;
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        console.log(entries[0].isIntersecting);
+        img.setAttribute("src", img.alt);
+      }
+    });
+    if (img) observer.observe(img);
 
+    return () => {
+      if (img) observer.unobserve(img);
+    };
+  }, []);
   return (
     <div
       className="w-[500px] h-auto bg-white  mb-10 rounded-[10px]"
@@ -403,10 +419,9 @@ const CardPost = ({ data, cmtid }: Props) => {
             {images.length === 2 ? (
               <div className="flex">
                 {images?.map((index, item) => (
-                  <img
-                    key={index}
-                    src={images[item]?.linkImage}
-                    alt=""
+                  <LazyLoadImg
+                    index={index}
+                    images={images[item]?.linkImage}
                     className="max-h-[300px] w-[50%] mx-[2px]"
                   />
                 ))}
@@ -414,10 +429,9 @@ const CardPost = ({ data, cmtid }: Props) => {
             ) : images.length === 3 ? (
               <div className="flex">
                 {images?.map((index, item) => (
-                  <img
-                    key={index}
-                    src={images[item]?.linkImage}
-                    alt=""
+                  <LazyLoadImg
+                    index={index}
+                    images={images[item]?.linkImage}
                     className="max-h-[300px] w-[50%] mx-[2px]"
                   />
                 ))}
@@ -425,11 +439,10 @@ const CardPost = ({ data, cmtid }: Props) => {
             ) : images.length === 1 && videos.length === 1 ? (
               <div className="flex flex-col">
                 {images?.map((index, item) => (
-                  <img
-                    key={index}
-                    src={images[item]?.linkImage}
-                    alt=""
-                    className=" w-[100%]"
+                  <LazyLoadImg
+                    index={index}
+                    images={images[item]?.linkImage}
+                    className="w-[100%]"
                   />
                 ))}
                 {videos?.map((index, item) => (
@@ -444,11 +457,10 @@ const CardPost = ({ data, cmtid }: Props) => {
             ) : images.length === 1 ? (
               <div className="flex">
                 {images?.map((index, item) => (
-                  <img
-                    key={index}
-                    src={images[item]?.linkImage}
-                    alt=""
-                    className=" w-[100%]"
+                  <LazyLoadImg
+                    index={index}
+                    images={images[item]?.linkImage}
+                    className="w-[100%]"
                   />
                 ))}
               </div>
@@ -732,11 +744,11 @@ const CardPost = ({ data, cmtid }: Props) => {
         </div>
       </div>
       <div
-        className="w-full"
+        className="w-full z-10"
         style={{
           display: toggleEmj ? "none" : "block",
           position: "fixed",
-          right: 0,
+          right: 300,
           top: 0,
         }}
       >

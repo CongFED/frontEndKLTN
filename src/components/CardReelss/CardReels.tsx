@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import CardPost from "./CardPost/CardPost";
-import CardPostShare from "./CardPostShare/CardPostShare";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Empty } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
+import CardReelsSimple from "./CardReelsSimple";
 interface Props {
   data: any;
 }
-
-const CardPosts = ({ data }: Props) => {
+const CardReels = ({ data }: Props) => {
   const [load, setLoad] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -69,13 +67,9 @@ const CardPosts = ({ data }: Props) => {
             ) : (
               <>
                 {/* map data và render các CardPost hoặc CardPostShare */}
-                {data?.data?.map((item, index) => (
+                {data?.data?.map((item: any, index: number) => (
                   <React.Fragment key={index}>
-                    {item.idShare === undefined ? (
-                      <CardPost data={item} cmtid="" />
-                    ) : (
-                      <CardPostShare data={item} />
-                    )}
+                    <CardReelsSimple data={item} />
                   </React.Fragment>
                 ))}
               </>
@@ -87,4 +81,4 @@ const CardPosts = ({ data }: Props) => {
   );
 };
 
-export default CardPosts;
+export default CardReels;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   Navigate,
   Route,
@@ -9,16 +9,18 @@ import "./App.css";
 import Login from "./pages/Login/Login";
 import { publicRoutes } from "./routes";
 import Logo2 from "../src/assets/LogoLoad.png";
-import Logo from "../src/assets/LogoSN.png";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../src/redux/store";
-import VerifyCode from "./pages/VerifyCode/VerifyCode";
-import AddInfo from "./pages/AddInfo/AddInfo";
 import { Toaster } from "react-hot-toast";
 import BadNotFound from "./components/BadNotFound/BadNotFound";
-import Chat from "./pages/Chat/Chat";
-import Register from "./pages/Register/Register";
+import React from "react";
+import PersonalPage from "./pages/PersonalPage";
 import Personal from "./pages/Personal/Personal";
+import PersonalFriend from "./pages/PersonalFriend/PersonalFriend";
+const Register = React.lazy(() => import("./pages/Register/Register"));
+const Chat = React.lazy(() => import("./pages/Chat/Chat"));
+const VerifyCode = React.lazy(() => import("./pages/VerifyCode/VerifyCode"));
+const AddInfo = React.lazy(() => import("./pages/AddInfo/AddInfo"));
 // import { Toaster } from "react-hot-toast";
 // import { successToast } from "./utils/getToast";
 function App() {
@@ -58,45 +60,63 @@ function App() {
         </div>
       ) : (
         <>
-          <Router>
-            <div className="App ">
-              <Routes>
-                <Route
-                  path="/login"
-                  element={<Login />}
-                  //  element={currentUser ? <Navigate to="/" /> : <Login />}
-                />
-                <Route
-                  path="/register"
-                  element={<Register />}
-                  //  element={currentUser ? <Navigate to="/" /> : <Login />}
-                />
-                <Route path="/verify" element={<VerifyCode />} />
+          <Suspense>
+            {" "}
+            <Router>
+              <div className="App ">
+                <Routes>
+                  <Route
+                    path="/login"
+                    element={<Login />}
+                    //  element={currentUser ? <Navigate to="/" /> : <Login />}
+                  />
+                  <Route
+                    path="/register"
+                    element={<Register />}
+                    //  element={currentUser ? <Navigate to="/" /> : <Login />}
+                  />
+                  <Route path="/verify" element={<VerifyCode />} />
+                  <Route
+                    path="personal"
+                    element={
+                      <PersonalPage>
+                        <Personal />
+                      </PersonalPage>
+                    }
+                  />
+                  <Route
+                    path="/personal-user/:id"
+                    element={
+                      <PersonalPage>
+                        <PersonalFriend />
+                      </PersonalPage>
+                    }
+                  />
+                  <Route path="/chat" element={<Chat />} />
+                  <Route path="/add-info" element={<AddInfo />} />
+                  <Route path="/bad-not-found" element={<BadNotFound />} />
 
-                <Route path="/chat" element={<Chat />} />
-                <Route path="/add-info" element={<AddInfo />} />
-                <Route path="/bad-not-found" element={<BadNotFound />} />
+                  {publicRoutes.map((publicRoute, index) => {
+                    const Layout = publicRoute.layout;
 
-                {publicRoutes.map((publicRoute, index) => {
-                  const Layout = publicRoute.layout;
+                    const Page = publicRoute.component;
 
-                  const Page = publicRoute.component;
-
-                  return (
-                    <Route
-                      key={index}
-                      path={publicRoute.path}
-                      element={
-                        <Layout>
-                          <Page />
-                        </Layout>
-                      }
-                    />
-                  );
-                })}
-              </Routes>{" "}
-            </div>
-          </Router>
+                    return (
+                      <Route
+                        key={index}
+                        path={publicRoute.path}
+                        element={
+                          <Layout>
+                            <Page />
+                          </Layout>
+                        }
+                      />
+                    );
+                  })}
+                </Routes>{" "}
+              </div>
+            </Router>{" "}
+          </Suspense>
         </>
       )}
       <Toaster />

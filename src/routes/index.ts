@@ -1,15 +1,15 @@
-
-import AddPost from "../pages/AddPost/AddPost";
+import React from "react";
 import Home from "../pages/Home/Home";
-import Public from "../pages/Public";
-import CallGroup from "../pages/CallGroup/CallGroup";
-import Search from "../pages/Search/Search";
-import Personal from "../pages/Personal/Personal";
-import Chat from "../pages/Chat/Chat";
-import PersonalFriend from "../pages/PersonalFriend/PersonalFriend";
-import ListFriend from "../pages/ListFriend/ListFriend";
-import Notifications from "../pages/Notifications/Notifications";
-import PagePostSimp from "../pages/PagePostSimp/PagePostSimp";
+const AddPost = React.lazy(() => import("../pages/AddPost/AddPost"))
+const AddReels = React.lazy(() => import("../pages/AddReels/AddReels"))
+const Public = React.lazy(() => import("../pages/Public"))
+const CallGroup = React.lazy(() => import("../pages/CallGroup/CallGroup"))
+const Search = React.lazy(() => import("../pages/Search/Search"))
+const Personal = React.lazy(() => import("../pages/Personal/Personal"))
+const PersonalFriend = React.lazy(() => import("../pages/PersonalFriend/PersonalFriend"))
+const ListFriend = React.lazy(() => import("../pages/ListFriend/ListFriend"))
+const Notifications = React.lazy(() => import("../pages/Notifications/Notifications"))
+const PagePostSimp = React.lazy(() => import("../pages/PagePostSimp/PagePostSimp"))
 const publicRoutes = [
     {
       path: "/",
@@ -30,23 +30,23 @@ const publicRoutes = [
       sidebar: null,
     },
     {
-      path: "/search",
+      path: "/search/:fullName",
       component: Search,
       layout: Public,
       sidebar: null,
     },
-    {
-      path: "/personal",
-      component: Personal,
-      layout: Public,
-      sidebar: null,
-    },
-    {
-      path: "/personal-user/:id",
-      component: PersonalFriend,
-      layout: Public,
-      sidebar: null,
-    },
+    // {
+    //   path: "/personal",
+    //   component: Personal,
+    //   layout: Public,
+    //   sidebar: null,
+    // },
+    // {
+    //   path: "/personal-user/:id",
+    //   component: PersonalFriend,
+    //   layout: Public,
+    //   sidebar: null,
+    // },
     {
       path: "/list-friend",
       component: ListFriend,
@@ -71,5 +71,12 @@ const publicRoutes = [
       layout: Public,
       sidebar: null,
     },
+    {
+      path: "/create-reels",
+      component: AddReels,
+      layout: Public,
+      sidebar: null,
+    },
+    
 ]
 export { publicRoutes };

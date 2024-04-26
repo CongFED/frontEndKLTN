@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState, memo, ReactNode } from "react";
-import Header from "../components/Header/Header";
+import React, { useEffect, memo, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderTop from "../components/Header/HeaderTop";
+
 interface IProps {
   children: ReactNode;
 }
-const Public: React.FC<IProps> = ({ children }) => {
+const PersonalPage: React.FC<IProps> = ({ children }) => {
   const history = useNavigate();
   // const { setUser } = ChatState();
 
@@ -27,10 +27,9 @@ const Public: React.FC<IProps> = ({ children }) => {
     >
       <HeaderTop />
 
-      <Header />
       <>{children}</>
     </div>
   );
 };
 
-export default memo(Public);
+export default memo(PersonalPage);

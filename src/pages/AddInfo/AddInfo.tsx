@@ -10,10 +10,13 @@ import { addInfo } from "../../redux/features/Add-Info/addInfoAPI";
 import { useNavigate } from "react-router";
 import { RootState } from "../../redux/store";
 import toast, { Toaster } from "react-hot-toast";
-import { api } from "../../utils/setAuthToken";
+import { api, setAuthToken } from "../../utils/setAuthToken";
 import { fetchInfo } from "../../redux/features/info/infoSlice";
+import { useRecoilValue } from "recoil";
+import { tokenState } from "../../recoil/initState";
 const AddInfo = () => {
   const navigate = useNavigate();
+  const token = useRecoilValue(tokenState);
   useEffect(() => {
     const hasInfor = localStorage.getItem("hasInfor");
     if (hasInfor == "true") {
@@ -154,7 +157,7 @@ const AddInfo = () => {
   console.log(selectedDistrict1);
   const loadDataProvide = async () => {
     // Gọi API để lấy dữ liệu
-
+    setAuthToken(token);
     await api
       .get(`https://www.socialnetwork.somee.com/api/Provinces/getAllProvinces`)
       .then((response) => {
@@ -165,7 +168,7 @@ const AddInfo = () => {
         }
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.log("Error fetching data:", error);
       });
   };
   const loadDataDistrict = async () => {

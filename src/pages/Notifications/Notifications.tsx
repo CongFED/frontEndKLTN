@@ -101,32 +101,12 @@ const Notifications = () => {
     }
   };
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row top-[50px] relative left-[23rem] ">
       <div className="  ">
-        <div className="w-[80vw] py-4 pl-[150px] ">
-          <div className="flex justify-between ">
-            <div className=" flex justify-start items-center">
-              <img
-                src="https://snapgram-sand.vercel.app/assets/icons/people.svg"
-                alt=""
-              />
-              <h2
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "700",
-                  lineHeight: "140%",
-                  letterSpacing: "-0.05em",
-                  color: "#456fe6",
-                  marginLeft: "10px",
-                }}
-              >
-                Notifications
-              </h2>
-            </div>
-          </div>
+        <div className="w-[75vw] py-4 ">
           <div>
             <div className="lg:bg-verylightgb lg:flex lg:align-middle lg:flex-col">
-              <div className="xs:mx-3 bg-white lg:mx-auto lg:mt-16 lg:rounded-xl lg:p-8  ">
+              <div className="xs:mx-3 bg-white w-[80%] lg:mx-auto lg:mt-16 lg:rounded-xl lg:p-8  ">
                 <div className="xs:mt-2 flex justify-between">
                   <h1 className="text-xl font-bold">
                     Notifications
@@ -154,7 +134,7 @@ const Notifications = () => {
                       {data.data.map((item: Comment, index: number) => (
                         <div
                           id="notification-card-1"
-                          className="mt-3 bg-verylightgb  flex justify-between p-3  w-[600px] cursor-pointer hover:bg-[#f2f2f2] rounded-[10px]"
+                          className="mt-3 bg-verylightgb  flex justify-between p-3  w-[100%] cursor-pointer hover:bg-[#f2f2f2] rounded-[10px]"
                           onClick={() => {
                             handleGetPostNoti(item?.postId, item?.commentId);
                           }}

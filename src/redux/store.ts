@@ -6,6 +6,7 @@ import addInfoSlice from "./features/Add-Info/addInfoSlice"
 import getInfoSlice from "./features/info/infoSlice"
 import addPostSlice from "./features/Add-Post/addPostSlice"
 import getPostSlice from "./features/post/postSlice"
+import addReelsSlice from "./features/Add-Reels/addReelsSlice";
 import addCmtSlice from "./features/Add-Cmt/addCmtSlice";
 import friendSlice from "./features/Not-Friend/friendSlice";
 import storage from "redux-persist/lib/storage";
@@ -25,7 +26,7 @@ const persistConfig = {
   version: 1,
   storage,
   stateReconciler: autoMergeLevel2,
-  whitelist: ["info", "post", "getFrined"],
+  whitelist: ["info"],
 };
 
 const rootReducer = combineReducers({  
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   addPost:addPostSlice,
   addInfo:addInfoSlice,
  addCmt:addCmtSlice,
+ addReels:addReelsSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

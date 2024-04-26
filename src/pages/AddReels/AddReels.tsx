@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../redux/store";
@@ -12,30 +12,45 @@ import { BsEmojiSmile } from "react-icons/bs";
 import addPosts from "../../assets/add-post.svg";
 import { MdOutlineClose } from "react-icons/md";
 import { HiOutlineMicrophone } from "react-icons/hi2";
-import ButtonHeader from "../../components/Button/ButtonHeader";
-import Dropzone from "react-dropzone";
 import Picker from "@emoji-mart/react";
 import { addInfo, addPost } from "../../redux/features/Add-Post/addPostAPI";
+import { addReels } from "../../redux/features/Add-Reels/addReelsAPI";
 import { useDropzone } from "react-dropzone";
 import { IoIosSend, IoMdClose } from "react-icons/io";
+import { Button, Dropdown, Menu } from "antd";
+import { addReelss } from "./../../redux/features/Add-Reels/addReelsAPI";
+import { Checkbox } from "antd";
+import type { CheckboxProps } from "antd";
 interface UploadedFile {
   file: File;
   preview: string;
 }
-const AddPost = () => {
+const AddReels = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [toggleEmj, setToggleEmj] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   //
+  //   const onDrop = useCallback((acceptedFiles: File[]) => {
+  //     const filesWithPreview = acceptedFiles.map((file) => ({
+  //       file,
+  //       preview: URL.createObjectURL(file),
+  //     }));
+  //     setUploadedFiles((prevState) => [...prevState, ...filesWithPreview]);
+  //   }, []);
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const filesWithPreview = acceptedFiles.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-    }));
-    setUploadedFiles((prevState) => [...prevState, ...filesWithPreview]);
+    // Chỉ lấy tệp đầu tiên từ danh sách acceptedFiles
+    const file = acceptedFiles[0];
+    if (file) {
+      const fileWithPreview = {
+        file,
+        preview: URL.createObjectURL(file),
+      };
+      setUploadedFiles([fileWithPreview]);
+    }
   }, []);
+
   const handleCancle = () => {
     setContent("");
     setUploadedFiles([]);
@@ -46,6 +61,11 @@ const AddPost = () => {
   const [isChecked, setIsChecked] = useState("1");
   const [Content, setContent] = useState("");
   const [isImage, setIsImage] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("");
+  const [audioSrc, setAudioSrc] = useState("");
+  const [audioID, setAudioID] = useState("");
+  const [disableVoice, setDisableVoice] = useState(true);
+  const [audio, setAudio] = useState([]);
   // const [File, setSelectedFile] = useState<File | null>(null);
   const [VideoFile, setVideoFile] = useState<File | null>(null);
   const handleVoiceClick = () => {
@@ -78,28 +98,44 @@ const AddPost = () => {
       const formData = new FormData();
       formData.append("Content", Content);
       formData.append("LevelVieW", isChecked);
-      console.log(uploadedFiles);
+      formData.append("audioId", audioID);
+      formData.append("DisableVoice", disableVoice);
+      console.log(uploadedFiles[0]?.file.type);
       if (uploadedFiles) {
-        uploadedFiles.map((item, index) => {
-          formData.append("File", uploadedFiles[index]?.file);
-        });
+        // uploadedFiles.map((item, index) => {
+        formData.append("File", uploadedFiles[0]?.file);
+        // });
       }
 
-      addPost(dispatch, formData);
+      addReelss(dispatch, formData, uploadedFiles[0]?.file.type);
     } catch (error) {
       console.error("Add sai!", error);
     }
   };
-  const error = useSelector((state) => state.addPost.error);
-  const dataAddPost = useSelector(
-    (state: RootState) => state.addPost.dataAddPost
+  const error = useSelector((state: RootState) => state.addReels.errorReels);
+  const dataAddReels = useSelector(
+    (state: RootState) => state.addReels.dataAddReels
   );
   const isFetching = useSelector(
     (state: RootState) => state.addPost.isFetching
   );
   useEffect(() => {
-    console.log(dataAddPost);
-    if (dataAddPost?.success === true) {
+    const fetchAudio = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        setAuthToken(token);
+        const res = await api.get(API.GET_AUDIO);
+        setAudio(res.data.data);
+        console.log(res);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchAudio();
+  }, []);
+  useEffect(() => {
+    console.log(dataAddReels);
+    if (dataAddReels?.success === true) {
       setIsLoading(false);
       toast.success("Thêm post thành công!");
       setContent("");
@@ -110,12 +146,43 @@ const AddPost = () => {
       console.log(error);
       toast.error("Thêm post thất bại!");
     }
-  }, [dataAddPost, error, isFetching]);
+  }, [dataAddReels, isFetching]);
   const removeImage = (indexToRemove: number) => {
     setUploadedFiles((prevState) =>
       prevState.filter((_, index) => index !== indexToRemove)
     );
   };
+
+  const handleMenuClick = (item: any) => {
+    console.log(item);
+    setSelectedItem(item.id);
+    setAudioSrc(item.link);
+    setAudioID(item.id);
+  };
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  // Sử dụng useEffect để theo dõi thay đổi của audioSrc và tự động phát lại âm thanh
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.src = audioSrc;
+      audioRef.current.play();
+    }
+  }, [audioSrc]);
+
+  const handlePlayPause = () => {
+    if (audioRef.current) {
+      if (audioRef.current.paused) {
+        audioRef.current.play();
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  };
+  const onChange: CheckboxProps["onChange"] = (e) => {
+    setDisableVoice(e.target.checked);
+    console.log(`checked = ${e.target.checked}`);
+  };
+  console.log(uploadedFiles[0]?.file.type);
   return (
     <>
       <div className="flex flex-row relative left-[15rem] top-[50px]">
@@ -134,7 +201,7 @@ const AddPost = () => {
                     marginLeft: "10px",
                   }}
                 >
-                  Create Post
+                  Create Reels
                 </h2>
               </div>
               <div className="flex justify-start items-center">
@@ -165,12 +232,22 @@ const AddPost = () => {
               <label className="text-[#456fe6] font-medium">Caption</label>
               <textarea
                 onChange={(e) => setContent(e.target.value)}
-                value={Content}
                 placeholder="What are you thinking?     "
-                className="w-[100%]  h-[80px] mt-2 rounded-md  outline-[#6eb7ed] px-6 py-2"
+                value={Content}
+                className="w-[100%]  h-[80px] mt-2 rounded-md  outline-[#6eb7ed] px-6 py-1"
                 //   onChange={(e) => setAddress(e.target.value)}
               />
             </div>
+            <div className="hidden">
+              <h2>{selectedItem}</h2>
+              <div onClick={handlePlayPause}>
+                <audio ref={audioRef} controls>
+                  <source src={audioSrc} type="audio/mpeg" />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            </div>
+
             <div className="flex justify-end items-center">
               {" "}
               <div
@@ -187,8 +264,40 @@ const AddPost = () => {
                 <HiOutlineMicrophone />{" "}
               </div>
             </div>
+
+            <div className="mt-[25px]  " style={{ textAlign: "left" }}>
+              <label className="text-[#456fe6] font-medium mr-2">Audio</label>
+              <Dropdown
+                overlay={
+                  <Menu>
+                    {audio.map((item: any, index: number) => (
+                      <Menu.Item
+                        key={item.key}
+                        onClick={() => handleMenuClick(item)}
+                      >
+                        {item.id}
+                      </Menu.Item>
+                    ))}
+                  </Menu>
+                }
+                placement="bottomLeft"
+                arrow={{ pointAtCenter: true }}
+              >
+                <Button>
+                  {selectedItem === "" ? "Chọn bài hát" : selectedItem}
+                </Button>
+              </Dropdown>
+            </div>
+            <div className="mt-[25px]  " style={{ textAlign: "left" }}>
+              <label className="text-[#456fe6] font-medium mr-2">
+                {" "}
+                Disable Voice
+              </label>
+              <Checkbox onChange={onChange}></Checkbox>
+            </div>
+
             <div className="mt-[22px] " style={{ textAlign: "left" }}>
-              <label className="text-[#456fe6] font-medium">Add Post</label>
+              <label className="text-[#456fe6] font-medium">Add Reels</label>
               {uploadedFiles.length < 1 && (
                 <label
                   for="file"
@@ -232,7 +341,7 @@ const AddPost = () => {
                   >
                     {uploadedFiles.map((uploadedFile, index) => (
                       <div key={index} className="relative">
-                        {uploadedFiles[index]?.file.type === "video/mp4" ? (
+                        {uploadedFiles[0]?.file.type === "video/mp4" ? (
                           <video
                             src={uploadedFile.preview}
                             className="max-w-[200px] max-h-[200px] rounded-[10px] cursor-pointer"
@@ -246,6 +355,7 @@ const AddPost = () => {
                             {...getRootProps()}
                           />
                         )}
+
                         <button
                           className="absolute top-[-10px] right-[-10px] p-2  rounded-full bg-gray-300 transition duration-300"
                           onClick={() => removeImage(index)}
@@ -295,10 +405,7 @@ const AddPost = () => {
             </div>
           </div>
         </div>
-        <div
-          className=" bg-black"
-          style={{ display: toggleEmj ? "none" : "block" }}
-        >
+        <div className=" " style={{ display: toggleEmj ? "none" : "block" }}>
           <div className="emoji">
             <Picker onEmojiSelect={addEmoji} />
           </div>
@@ -307,4 +414,4 @@ const AddPost = () => {
     </>
   );
 };
-export default AddPost;
+export default AddReels;

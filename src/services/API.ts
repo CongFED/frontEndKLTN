@@ -17,7 +17,11 @@ const API = {
   UPDATE_INFO: DOMAIN + "/api/infor/update",
   POST_COMMENT: DOMAIN + "/api/cmt/create",
   GET_ALL_FRIEND: DOMAIN + "/api/Friend/getAll",
-  GET_NOT_FRIEND: DOMAIN + "/api/Friend/getAllNotFriend"
+  GET_NOT_FRIEND: DOMAIN + "/api/Friend/getAllNotFriend",
+  GET_AUDIO: DOMAIN + "/api/audio",
+  POST_REELS_IMAGE: DOMAIN + "/api/real/MergeImageWithAudio",
+  POST_REELS_VIDEO: DOMAIN + "/api/real/MergeVideoWithAudio",
+  GET_ALL_REELS: DOMAIN + "/api/real"
   // POST_LIKE:DOMAIN + "api/like/{id}"
 };
 export default API;

@@ -59,9 +59,9 @@ const CallGroup = () => {
   return (
     <div
       // ref={elementRef}
-      className=""
+      className="relative left-[23rem]"
       ref={myMeeting}
-      style={{ width: "100vw", height: "100vh" }}
+      style={{ width: "75vw", height: "100vh" }}
     ></div>
   );
 };

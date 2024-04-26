@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { fetchPost } from "../../../redux/features/post/postSlice";
 import { tokenState } from "../../recoil/initState";
 import Skeleton from "react-loading-skeleton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 interface ResponseData {
   data: Comment[];
   success: boolean;
@@ -13,10 +13,12 @@ interface ResponseData {
 const Search = () => {
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
-  const [fullName, setFullName] = useState("");
+  // const [fullName, setFullName] = useState("");
   const [loadSearch, setLoadSearch] = useState(false);
   const [loadSearch1, setLoadSearch1] = useState(false);
   const [loadSearch2, setLoadSearch2] = useState(false);
+  const { fullName } = useParams();
+  console.log(fullName);
   const [dataCmt, setData] = useState<ResponseData>({
     data: [],
     success: false,
@@ -44,28 +46,31 @@ const Search = () => {
       })
       .catch((err) => console.log(err));
   };
-  const hanldDltCmtChild = async () => {
-    setLoadSearch(true);
-    setAuthToken(token);
-    // const postId = idPost;
-    // const userId = id;
+  useEffect(() => {
+    const hanldDltCmtChild = async () => {
+      setLoadSearch(true);
+      setAuthToken(token);
+      // const postId = idPost;
+      // const userId = id;
 
-    return api
-      .get<ResponseData>(
-        `https://www.socialnetwork.somee.com/api/infor/searchuser`,
-        {
-          params: { fullname: fullName }, // Use params to send data in the query string
-        }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          setData(res.data);
-          console.log(res.data);
-          setLoadSearch(false);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
+      return api
+        .get<ResponseData>(
+          `https://www.socialnetwork.somee.com/api/infor/searchuser`,
+          {
+            params: { fullname: fullName }, // Use params to send data in the query string
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            setData(res.data);
+            console.log(res.data);
+            setLoadSearch(false);
+          }
+        })
+        .catch((err) => console.log(err));
+    };
+    hanldDltCmtChild();
+  }, [fullName]);
   console.log(dataCmt);
   const handleAddF = async (idfriend: any) => {
     setAuthToken(token);
@@ -118,10 +123,10 @@ const Search = () => {
   };
   return (
     <>
-      <div className="flex flex-row">
+      <div className="flex flex-row left-[23rem] top-[50px] relative">
         <div className="  overflow-y-auto ">
-          <div className="w-[80vw] py-6 pl-[150px]">
-            <div className="flex justify-between">
+          <div className="w-[75vw] py-6 px-2">
+            <div className="flex justify-between bg-white py-2 px-2 rounded-lg">
               <div className=" flex justify-start items-center">
                 <h2
                   style={{
@@ -138,7 +143,7 @@ const Search = () => {
               </div>
             </div>
 
-            <div
+            {/* <div
               className="mt-[25px] flex justify-center items-center"
               style={{ textAlign: "left" }}
             >
@@ -166,7 +171,7 @@ const Search = () => {
                   </svg>
                 </span>
               </button>
-            </div>
+            </div> */}
             <>
               {loadSearch == false ? (
                 <>

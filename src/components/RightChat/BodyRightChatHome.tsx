@@ -19,7 +19,7 @@ const BodyRightChatHome = () => {
     };
   }, [data.chatId]);
   return (
-    <div className=" p-4 flex-1 overflow-y-auto  max-h-[21rem] w-full">
+    <div className=" p-4 flex-1 overflow-y-auto  max-h-[21rem] w-full min-h-[21rem]">
       {messages.map((m, index) => (
         <MessageChatHome message={m} key={index} />
       ))}

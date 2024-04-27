@@ -114,13 +114,7 @@ const Header = () => {
             <img src={LogoF} alt="" className="tab-img12" />
             <p className=" text-[14px]  font-[600]">List friend</p>
           </Link>
-          <Link
-            to="/list-friend"
-            className="w-full  h-[50px]  flex justify-start items-center  mb-2 hover:bg-slate-50  px-2"
-          >
-            <img src={LogoP} alt="" className="tab-img12" />
-            <p className=" text-[14px]  font-[600]">Send a friend request</p>
-          </Link>
+
           <Link
             to="/notification"
             className={`w-full  h-[50px]  flex justify-start items-center  mb-2 hover:bg-slate-50  px-2 ${

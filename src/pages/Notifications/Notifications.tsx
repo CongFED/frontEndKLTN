@@ -124,7 +124,7 @@ const Notifications = () => {
                 </div>
                 <>
                   {data.data.length == 0 ? (
-                    <div className="mt-6  w-[600px] h-[100px] flex justify-center items-center">
+                    <div className="mt-6  w-[100%] h-[100px] flex justify-center items-center">
                       <div className="cursor-pointer">
                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                       </div>

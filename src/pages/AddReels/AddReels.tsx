@@ -155,7 +155,7 @@ const AddReels = () => {
 
   const handleMenuClick = (item: any) => {
     console.log(item);
-    setSelectedItem(item.id);
+    setSelectedItem(item.name);
     setAudioSrc(item.link);
     setAudioID(item.id);
   };
@@ -275,7 +275,7 @@ const AddReels = () => {
                         key={item.key}
                         onClick={() => handleMenuClick(item)}
                       >
-                        {item.id}
+                        {item.name}
                       </Menu.Item>
                     ))}
                   </Menu>

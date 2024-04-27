@@ -1,5 +1,5 @@
 ::selection {
-  background-color: coral; /* Đây là một màu ví dụ, bạn có thể thay đổi thành màu mong muốn */
+  background-color: #456fe6; /* Đây là một màu ví dụ, bạn có thể thay đổi thành màu mong muốn */
   color: #ffffff; /* Màu chữ khi bôi đen văn bản */
 }
 .App {
@@ -1464,7 +1464,7 @@ label{
 
 
 .img-container {
-  width: 320px; /* Đặt kích thước ảnh cố định */
+  width: 30%; /* Đặt kích thước ảnh cố định */
   height: 200px; /* Đặt kích thước ảnh cố định */
   overflow: hidden; /* Ẩn bất kỳ nội dung nào vượt ra khỏi khu vực */
 }
@@ -1901,4 +1901,20 @@ button svg {
 .wrapper1 .instagram:hover .tooltip::before {
   background: #e4405f;
   color: #fff;
+}
+.infoForm{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.infoInput{
+  border: none;
+  outline: none;
+  background-color: var(--inputColor);
+  border-radius: 8px;
+  padding: 20px;
+  flex:1;
 }

@@ -86,7 +86,7 @@ const VerifyCode: FC<Props> = () => {
   //
   return (
     <div className="w-full h-[100vh] flex justify-center items-center flex-col ">
-      <div className="container flex justify-center items-center">
+      <div className="container2 flex justify-center items-center">
         <div>
           <h1 className="title text-white">Nhập OTP</h1>
           <form id="otp-form">

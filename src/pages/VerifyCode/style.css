@@ -1,7 +1,15 @@
-.container1 {
+.container {
   background-color: rgb(19, 25, 28);
   width: 90%;
   max-width: 500px;
+  padding: 50px 20px;
+  text-align: center;
+  height: 100%;
+}
+.container2 {
+  background-color: rgb(19, 25, 28);
+  width: 100%;
+ 
   padding: 50px 20px;
   text-align: center;
   height: 100%;

@@ -12,33 +12,38 @@ import { RootState } from "../../redux/store";
 import toast, { Toaster } from "react-hot-toast";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import { fetchInfo } from "../../redux/features/info/infoSlice";
-import { useRecoilValue } from "recoil";
-import { tokenState } from "../../recoil/initState";
-const AddInfo = () => {
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  isLoadmodalOpened,
+  ismodalOpened,
+  tokenState,
+} from "../../recoil/initState";
+import { IoMdClose } from "react-icons/io";
+import API from "../../services/API";
+interface Props {
+  info: any;
+}
+const EditInfo = ({ info }: Props) => {
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
-  useEffect(() => {
-    const hasInfor = localStorage.getItem("hasInfor");
-    if (hasInfor == "true") {
-      // Kiểm tra nếu hasInfor không tồn tại hoặc có giá trị rỗng
-      navigate("/");
-    }
-  }, []);
+
+  console.log(info);
   const [isLoading, setIsLoading] = useState(false);
-  const [FullName, setFullName] = useState("");
-  const [NickName, setNickName] = useState("");
-  const [Career, setCareer] = useState("");
-  const [WorkPlace, setWorkPlace] = useState("");
-  const [DateOfBirth, setDateOfBirth] = useState("");
-  const [PhoneNumber, setPhoneNumber] = useState("");
+  const [FullName, setFullName] = useState(info?.data?.fullName);
+  const [NickName, setNickName] = useState(info?.data?.nickname);
+  const [Career, setCareer] = useState(info?.data?.career);
+  const [WorkPlace, setWorkPlace] = useState(info?.data?.workPlace);
+  const [DateOfBirth, setDateOfBirth] = useState(info?.data?.dateOfBirth);
+  const [PhoneNumber, setPhoneNumber] = useState(info?.data?.phoneNumber);
   const [File, setSelectedFile] = useState<File | null>(null);
   const [FileBackground, setSelectedFileBackground] = useState<File | null>(
     null
   );
-  const [Gender, setGender] = useState(false);
-  const [value, setValue] = useState(false);
+  const [Gender, setGender] = useState(info?.data?.gender);
+  const [value, setValue] = useState(info?.data?.gender);
   const [Address, setAddress] = useState("");
   const dispatch = useDispatch();
+  const [modalOpened, setModalOpened] = useRecoilState(ismodalOpened);
   // const onHandleFormSubmit = (data: TFormValues) => {
   //   onHandleNext();
   // };
@@ -80,36 +85,52 @@ const AddInfo = () => {
   const idToken = decodeToken(tokenDecode);
   const UserId = idToken.payload.id;
   //
+  const [Loamodal, setLoadModalOpened] = useRecoilState(isLoadmodalOpened);
   const handleLUpdate = async () => {
     setIsLoading(true);
     try {
-      if (File) {
-        // Tạo formData để chứa dữ liệu và file
-        const File1 = new FormData();
-        File1.append("File", File);
-        if (FileBackground) {
-          const File2 = new FormData();
-          File2.append("File", FileBackground);
-          const data = {
-            UserId: UserId,
-            FullName: FullName,
-            WorkPlace: WorkPlace,
-            Gender: Gender,
+      // Tạo formData để chứa dữ liệu và file
+      const File1 = new FormData();
+      File1.append("File", File);
 
-            PhoneNumber: PhoneNumber,
-            File: File,
-            Direction: Address,
-            DateOfBirth: DateOfBirth,
-            Wards: nameWa,
-            Districts: nameDi,
-            Provinces: nameCi,
-            FileBackground: FileBackground,
-            Career: Career,
-            Nickname: NickName,
-          };
-          console.log(data);
-          addInfo(dispatch, data);
-        }
+      const File2 = new FormData();
+      File2.append("File", FileBackground);
+      const data = {
+        UserId: UserId,
+        FullName: FullName,
+        WorkPlace: WorkPlace,
+        Gender: Gender,
+
+        PhoneNumber: PhoneNumber,
+        File: File,
+        Direction: Address,
+        DateOfBirth: DateOfBirth,
+        Wards: nameWa,
+        Districts: nameDi,
+        Provinces: nameCi,
+        FileBackground: FileBackground,
+        Career: Career,
+        Nickname: NickName,
+      };
+      console.log(data);
+
+      setAuthToken(token);
+      console.log(data);
+
+      try {
+        const res = await api.post(API.EDIT_INFO, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        console.log(res);
+        setLoadModalOpened(false);
+        dispatch(fetchInfo());
+        setModalOpened(true);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
       }
     } catch (error) {
       console.error("Add sai!", error);
@@ -124,25 +145,26 @@ const AddInfo = () => {
   const isFetching = useSelector(
     (state: RootState) => state.addInfo.isFetching
   );
-  useEffect(() => {
-    if (dataAddInfo?.data.success === true) {
-      toast.success("Thêm thông tin thành công!");
-      console.log(dataAddInfo);
-      localStorage.setItem("hasInfor", "true");
-      dispatch(fetchInfo());
-      // setTimeout(() => {
-      toast.dismiss(); // Ẩn toast
+  // useEffect(() => {
+  //   if (dataAddInfo?.data.success === true) {
+  //     toast.success("Thêm thông tin thành công!");
+  //     console.log(dataAddInfo);
+  //     localStorage.setItem("hasInfor", "true");
+  //     dispatch(fetchInfo());
+  //     // setTimeout(() => {
+  //     toast.dismiss(); // Ẩn toast
+  //     if (currentUser1.success == 200) {
+  //       navigate("/");
+  //     }
 
-      navigate("/");
-
-      // }, 1000);
-    }
-    if (error == true && isFetching == false) {
-      setIsLoading(false);
-      console.log(error);
-      toast.error("Thêm thông tin thất bại!");
-    }
-  }, [dataAddInfo, error, isFetching]);
+  //     // }, 1000);
+  //   }
+  //   if (error == true && isFetching == false) {
+  //     setIsLoading(false);
+  //     console.log(error);
+  //     toast.error("Thêm thông tin thất bại!");
+  //   }
+  // }, [dataAddInfo, error, isFetching]);
   const [dataProvide, setDataProvide] = useState([]);
   const [dataDistrict, setDataDistrict] = useState([]);
   const [dataWard, setDataWard] = useState([]);
@@ -151,9 +173,9 @@ const AddInfo = () => {
   const [selectedDistrict1, setSelectedDistrict1] = useState("01");
   const [selectedWard, setSelectedWard] = useState("01");
 
-  const [nameCi, setNameCi] = useState("");
-  const [nameDi, setNameDi] = useState("");
-  const [nameWa, setNameWa] = useState("");
+  const [nameCi, setNameCi] = useState(info?.data?.provinces);
+  const [nameDi, setNameDi] = useState(info?.data?.districts);
+  const [nameWa, setNameWa] = useState(info?.data?.wards);
   console.log(selectedDistrict1);
   const loadDataProvide = async () => {
     // Gọi API để lấy dữ liệu
@@ -222,12 +244,33 @@ const AddInfo = () => {
   return (
     <div
       className=" w-[auto] bg-[#e2e8f0] h-[100vh] flex justify-center items-center"
-      style={{ overflow: "hidden" }}
+      style={{
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        background: "rgba(158, 158, 158, 0.5)",
+        width: "100%",
+        height: "100%",
+        zIndex: 999,
+        display: "flex",
+        transition: "width 0.3s ease, height 0.3s ease",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
-      <div className=" h-[90%] w-[65%] flex ">
+      <div className=" h-[90%] w-[95%] flex justify-center">
+        <div className="absolute " style={{ top: 3, right: 10 }}>
+          <div
+            className="text-[25px] p-2 cursor-pointer hover:bg-[#f2f2f2] rounded-[50%] duration-500"
+            onClick={() => setModalOpened(true)}
+          >
+            <IoMdClose />
+          </div>
+        </div>
         <form className="flex flex-col bg-white  p-4 shadow-sm h-[100%] w-[70%] rounded-l-[10px]">
           <h2 className="text-[#56fe6] font-bold text-[30px]">
-            Add Information
+            Edit Information
           </h2>
           <div className="w-full  py-1 mt-1   flex px-[20px] justify-start items-center">
             <p className="border-[1px] border-solid border-[#6eb7ed] py-[5px] px-[12px] mr-2 rounded-full font-bold text-[#6eb7ed]">
@@ -242,6 +285,7 @@ const AddInfo = () => {
                 placeholder="Your name"
                 className="w-full  rounded-md border-[#cdcdcd] border-solid border-[1px] outline-[#6eb7ed] px-2 py-1"
                 type="text"
+                value={FullName}
                 onChange={(e) => setFullName(e.target.value)}
               />
             </div>
@@ -251,6 +295,7 @@ const AddInfo = () => {
                 placeholder="Your Nickname"
                 className="w-full  rounded-md border-[#cdcdcd] border-solid border-[1px]  outline-[#6eb7ed] px-2 py-1"
                 type="text"
+                value={NickName}
                 onChange={(e) => setNickName(e.target.value)}
               />
             </div>
@@ -260,6 +305,7 @@ const AddInfo = () => {
                 placeholder="Your WorkPlace"
                 className="w-full  rounded-md border-[#cdcdcd] border-solid border-[1px]  outline-[#6eb7ed] px-2 py-1"
                 type="text"
+                value={WorkPlace}
                 onChange={(e) => setWorkPlace(e.target.value)}
               />
             </div>
@@ -281,6 +327,7 @@ const AddInfo = () => {
                 placeholder="Your Career"
                 className="w-full  rounded-md border-[#cdcdcd] border-solid border-[1px]  outline-[#6eb7ed] px-2 py-1"
                 type="text"
+                value={Career}
                 onChange={(e) => setCareer(e.target.value)}
               />
             </div>
@@ -291,6 +338,7 @@ const AddInfo = () => {
                   type="number"
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   min={0}
+                  value={PhoneNumber}
                   placeholder="+1 (555) 000-000"
                   className="w-full pl-[1em] pr-3 py-1 appearance-none bg-transparent outline-none border focus:border-[#6eb7ed] shadow-sm rounded-md "
                 />
@@ -478,13 +526,10 @@ const AddInfo = () => {
             </div>
           </div>
         </form>
-        <div className="bg-[#456fe6] h-[100%] w-[30%] rounded-r-[10px] flex justify-center items-center">
-          <img src={ImageMain2} alt="" />
-        </div>
       </div>
       <Toaster />
     </div>
   );
 };
 
-export default AddInfo;
+export default EditInfo;

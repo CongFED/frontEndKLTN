@@ -10,9 +10,10 @@ import { Button, Dropdown, Menu } from "antd";
 import Picker from "@emoji-mart/react";
 import { api } from "../../utils/setAuthToken";
 import { useRecoilState } from "recoil";
-import { ShareS } from "../../recoil/initState";
+import { ShareS, isUpdatePost } from "../../recoil/initState";
 import toast from "react-hot-toast";
 import { useDropzone } from "react-dropzone";
+
 interface UploadedFile {
   file: File;
   preview: string;
@@ -100,6 +101,7 @@ const EditPost = ({ data }: Props) => {
   const handleBlur = () => {
     setToggleEmj(!toggleEmj);
   };
+  const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
   const handlePost = async () => {
     setLoad(false);
     try {
@@ -130,8 +132,10 @@ const EditPost = ({ data }: Props) => {
         })
         .then((response) => {
           // Cập nhật dữ liệu vào state
+          setSsUpdatePost(false);
           setLoad(true);
           setLoadShare("0");
+
           console.log(response);
         })
         .catch((error) => {
@@ -141,6 +145,7 @@ const EditPost = ({ data }: Props) => {
       console.error("Add sai!", error);
     }
   };
+
   return (
     <div
       style={{
@@ -153,7 +158,7 @@ const EditPost = ({ data }: Props) => {
         height: "100%",
         zIndex: 999,
         display: "flex",
-
+        transition: "width 0.3s ease, height 0.3s ease",
         justifyContent: "center",
         alignItems: "center",
       }}

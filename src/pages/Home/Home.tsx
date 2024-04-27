@@ -2,11 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import { RootState } from "../../redux/store";
-import { tokenState, ReloadLike, ViewHome } from "../../recoil/initState";
-import { useRecoilValue } from "recoil";
+import {
+  tokenState,
+  ReloadLike,
+  ViewHome,
+  isUpdatePost,
+} from "../../recoil/initState";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import API from "../../services/API";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { fetchPost, reloadPost } from "../../redux/features/post/postSlice";
 import CardPosts from "../../components/CardPosts/CardPosts";
@@ -21,6 +26,9 @@ const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const currentUser1 = useSelector((state: RootState) => state.info.info);
+  const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
+  console.log(currentUser1, currentUser);
   const ReloadLike1 = useRecoilValue(ReloadLike);
   const ViewHomeR = useRecoilValue(ViewHome);
   const [lastFetchTime, setLastFetchTime] = useState(0);
@@ -50,6 +58,17 @@ const Home = () => {
   useEffect(() => {
     // Gọi hàm getPost mỗi giây và cập nhật dữ liệu vào state
     // const interval = setInterval(() => {
+    if (isUpdatePostR == false) {
+      getPost(numberPost).then((data) => setPost(data));
+      setSsUpdatePost(true);
+    }
+    // }, 1000);
+
+    // return () => clearInterval(interval); // Clear interval khi component unmount
+  }, [isUpdatePostR]);
+  useEffect(() => {
+    // Gọi hàm getPost mỗi giây và cập nhật dữ liệu vào state
+    // const interval = setInterval(() => {
     getReels().then((data) => setReels(data));
     // }, 1000);
 
@@ -59,8 +78,11 @@ const Home = () => {
     dispatch(fetchFriend());
   }, [dispatch]);
   useEffect(() => {
-    setLoadChat(false);
-  }, [reels]);
+    console.log(currentUser1.success);
+    if (currentUser1.success !== undefined) {
+      setLoadChat(false);
+    }
+  }, [currentUser1.success]);
   // useEffect(() => {
   //   const currentTime = Date.now();
   //   if (currentTime - lastFetchTime > 1000) {
@@ -71,9 +93,7 @@ const Home = () => {
   // const { post, isLoading, isError, error } = useSelector(
   //   (state: RootState) => state.post
   // );
-  const { friend, isLoadingfriend, isErrorfriend, errorfriend } = useSelector(
-    (state: RootState) => state.getFrined
-  );
+
   // console.log(post);
 
   const [isEndOfPage, setIsEndOfPage] = useState(false);

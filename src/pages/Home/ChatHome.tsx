@@ -23,9 +23,12 @@ import SearChChat, { isChatR } from "../../recoil/initState";
 import { useRecoilState } from "recoil";
 import BodyChatHome from "./BodyChatHome";
 import { FiSearch } from "react-icons/fi";
-import { UilEdit } from "@iconscout/react-unicons";
+
 const ChatHome = () => {
-  const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  // const currentUser1 = useSelector(
+  //   (state: RootState) => state.user.currentUser
+  // );
+  const currentUser = useSelector((state: RootState) => state.info.info);
   const navigate = useNavigate();
   console.log(currentUser);
 

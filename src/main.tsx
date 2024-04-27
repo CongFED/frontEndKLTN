@@ -22,9 +22,7 @@ root.render(
         <ChatContextProvider>
           <Provider store={store}>
             <RecoilRoot>
-              <MantineProvider>
-                <App />
-              </MantineProvider>
+              <App />
             </RecoilRoot>
           </Provider>
         </ChatContextProvider>

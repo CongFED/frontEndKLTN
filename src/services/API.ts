@@ -7,6 +7,7 @@ const API = {
   VERIFY_PIN: DOMAIN + "/api/auth/VerifyPin",
   RESEND_MAIL: DOMAIN + "/api/auth/ReSendMail",
   ADD_INFO: DOMAIN + "/api/infor/create",
+  EDIT_INFO: DOMAIN + "/api/infor/update",
   GET_ALL_POST: DOMAIN + "/api/post",
   GET_ID_POST: DOMAIN + "/api/post/:id",
   POST_IMAGE: DOMAIN + "/api/post/upload",

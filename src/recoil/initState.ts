@@ -68,6 +68,18 @@ export const isChatR = atom({
   key: "isChatR",
   default: true,
 });
+export const isUpdatePost = atom({
+  key: "isUpdatePost",
+  default: true,
+});
+export const ismodalOpened = atom({
+  key: "ismodalOpened",
+  default: true,
+});
+export const isLoadmodalOpened = atom({
+  key: "isLoadmodalOpened",
+  default: true,
+});
 // export const newinitState = selector({
 //   key: "newInitState",
 //   get: ({ get }) => {

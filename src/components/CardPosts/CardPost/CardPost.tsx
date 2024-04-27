@@ -6,7 +6,12 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import { api, setAuthToken } from "../../../utils/setAuthToken";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { fetchPost } from "../../../redux/features/post/postSlice";
-import { ReloadLike, tokenState, ShareS } from "../../../recoil/initState";
+import {
+  ReloadLike,
+  tokenState,
+  ShareS,
+  isUpdatePost,
+} from "../../../recoil/initState";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { HiOutlineMicrophone } from "react-icons/hi2";
@@ -307,13 +312,16 @@ const CardPost = ({ data, cmtid }: Props) => {
       })
       .catch((err) => console.log(err));
   };
+  const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
   const hanldDltPost = async () => {
     setAuthToken(token);
+    console.log(data.id);
     return api
-      .delete(`https://www.socialnetwork.somee.com/api/post/${postId}`)
+      .delete(`https://www.socialnetwork.somee.com/api/post/${data.id}}`)
       .then((res) => {
         console.log(res);
         if (res.status === 204) {
+          setSsUpdatePost(false);
           toast.error("Đã xóa bài viết");
         }
       })

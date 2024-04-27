@@ -106,11 +106,12 @@ const Login = () => {
       setToken(currentUser?.data?.data?.jwtToken);
       localStorage.setItem("token", currentUser?.data?.data?.jwtToken);
       localStorage.setItem("hasInfor", currentUser?.data?.data?.hasInfor);
-      dispatch(fetchInfo());
+
       // Ẩn toast
       if (currentUser?.data?.data?.hasInfor == false) {
         navigate("/add-info");
       } else {
+        dispatch(fetchInfo());
         navigate("/");
       }
     }

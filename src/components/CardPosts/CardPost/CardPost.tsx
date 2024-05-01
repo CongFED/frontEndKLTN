@@ -317,7 +317,7 @@ const CardPost = ({ data, cmtid }: Props) => {
     setAuthToken(token);
     console.log(data.id);
     return api
-      .delete(`https://www.socialnetwork.somee.com/api/post/${data.id}}`)
+      .delete(`https://www.socialnetwork.somee.com/api/post/${postId}`)
       .then((res) => {
         console.log(res);
         if (res.status === 204) {

@@ -44,7 +44,7 @@ const Home = () => {
       navigate("/add-info");
     }
   }, []);
-  const [numberPost, setNumberPost] = useState(2);
+  const [numberPost, setNumberPost] = useState(5);
   const [post, setPost] = useState([]);
   const [reels, setReels] = useState([]);
   useEffect(() => {
@@ -80,6 +80,7 @@ const Home = () => {
   useEffect(() => {
     console.log(currentUser1.success);
     if (currentUser1.success !== undefined) {
+      console.log(currentUser1.success);
       setLoadChat(false);
     }
   }, [currentUser1.success]);

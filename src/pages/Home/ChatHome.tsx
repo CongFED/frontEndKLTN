@@ -230,60 +230,61 @@ const ChatHome = () => {
         </div>
         {isModeChat === true ? (
           <div className="contacts py-2 flex-1">
-            {Object.entries(chats)
-              ?.sort((a, b) => b[1].date - a[1].date)
-              .map((chat: any) => {
-                if (
-                  chat[1].userInfo &&
-                  chat[1].userInfo.displayName &&
-                  chat[1].userInfo.photoURL
-                ) {
-                  return (
-                    <div
-                      className="flex justify-between items-center p-3 hover:bg-slate-50 rounded-lg relative cursor-pointer bg-white"
-                      key={chat[0]}
-                      onClick={() => handleSelect1(chat[1].userInfo)}
-                    >
-                      <div className="w-12 h-12 relative flex flex-shrink-0">
-                        <img
-                          className="shadow-md rounded-full w-full h-full object-cover"
-                          src={chat[1].userInfo.photoURL}
-                          alt=""
-                        />
-                      </div>
-                      <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block text-left text-black text-[14px]">
-                        <p>{chat[1].userInfo.displayName}</p>
-                        <div className="flex items-center text-[12px] text-gray-500">
-                          <div className="min-w-0">
-                            {chat[1].lastMessage?.text === undefined ? (
-                              <p className="truncate">Tin nhắn mới</p>
-                            ) : (
+            {chats &&
+              Object.entries(chats)
+                ?.sort((a, b) => b[1].date - a[1].date)
+                .map((chat: any) => {
+                  if (
+                    chat[1].userInfo &&
+                    chat[1].userInfo.displayName &&
+                    chat[1].userInfo.photoURL
+                  ) {
+                    return (
+                      <div
+                        className="flex justify-between items-center p-3 hover:bg-slate-50 rounded-lg relative cursor-pointer bg-white"
+                        key={chat[0]}
+                        onClick={() => handleSelect1(chat[1].userInfo)}
+                      >
+                        <div className="w-12 h-12 relative flex flex-shrink-0">
+                          <img
+                            className="shadow-md rounded-full w-full h-full object-cover"
+                            src={chat[1].userInfo.photoURL}
+                            alt=""
+                          />
+                        </div>
+                        <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block text-left text-black text-[14px]">
+                          <p>{chat[1].userInfo.displayName}</p>
+                          <div className="flex items-center text-[12px] text-gray-500">
+                            <div className="min-w-0">
+                              {chat[1].lastMessage?.text === undefined ? (
+                                <p className="truncate">Tin nhắn mới</p>
+                              ) : (
+                                <p className="truncate">
+                                  {chat[1].lastMessage?.text}
+                                </p>
+                              )}
+                            </div>
+                            <span aria-hidden="true" className="mx-1">
+                              {" "}
+                              ·{" "}
+                            </span>
+                            <div className="min-w-0">
                               <p className="truncate">
-                                {chat[1].lastMessage?.text}
-                              </p>
-                            )}
-                          </div>
-                          <span aria-hidden="true" className="mx-1">
-                            {" "}
-                            ·{" "}
-                          </span>
-                          <div className="min-w-0">
-                            <p className="truncate">
-                              {/* {chat[1].lastMessage?.text} */}
+                                {/* {chat[1].lastMessage?.text} */}
 
-                              <p className="truncate">
-                                {TransTime(chat[1].date)}
+                                <p className="truncate">
+                                  {TransTime(chat[1].date)}
+                                </p>
                               </p>
-                            </p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                } else {
-                  return null; // or render a placeholder if necessary
-                }
-              })}
+                    );
+                  } else {
+                    return null; // or render a placeholder if necessary
+                  }
+                })}
             {isChat1 == false ? <BodyChatHome /> : <></>}
           </div>
         ) : (

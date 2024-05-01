@@ -130,12 +130,11 @@ const AddInfo = () => {
       console.log(dataAddInfo);
       localStorage.setItem("hasInfor", "true");
       dispatch(fetchInfo());
-      // setTimeout(() => {
-      toast.dismiss(); // Ẩn toast
+      setTimeout(() => {
+        toast.dismiss(); // Ẩn toast
 
-      navigate("/");
-
-      // }, 1000);
+        navigate("/");
+      }, 2000);
     }
     if (error == true && isFetching == false) {
       setIsLoading(false);

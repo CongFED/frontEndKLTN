@@ -218,11 +218,11 @@ const PersonalFriend = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
   useEffect(() => {
     loadDataInfo();
     // loadDataUserCmt();
-  }, []);
+  }, [id]);
   const { dispatch } = useContext(ChatContext);
   const handleMessage = async () => {
     const combinedId =

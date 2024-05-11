@@ -70,7 +70,7 @@ const ChatHome = () => {
       if (!res.exists()) {
         console.log(123);
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
-
+        console.log(user);
         await updateDoc(
           doc(db, "userChats", currentUser.data.firebaseData.uid),
           {
@@ -82,12 +82,16 @@ const ChatHome = () => {
             [combinedId + ".date"]: serverTimestamp(),
           }
         );
-
+        console.log(
+          user.Uid,
+          currentUser.data.firebaseData.uid,
+          currentUser.data.firebaseData.photoURL
+        );
         await updateDoc(doc(db, "userChats", user.Uid), {
           [combinedId + ".userInfo"]: {
             uid: currentUser.data.firebaseData.uid,
             displayName: currentUser.data.firebaseData.displayName,
-            photoURL: currentUser.data.firebaseData.photoUrl,
+            photoURL: currentUser.data.firebaseData.photoURL,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
@@ -170,7 +174,7 @@ const ChatHome = () => {
   };
   return (
     <div className="py-2">
-      <div className="bg-white w-[90%] rounded-[10px] px-2">
+      <div className="bg-white w-[100%] rounded-[10px] px-2 ">
         <div className="flex justify-between items-center">
           <p className="font-[600] text-[16px]">Message</p>
           <span

@@ -58,8 +58,8 @@
 
 
 .custum-file-upload {
-  height: 200px;
-  width: 300px;
+  /* height: 200px;
+  width: 300px; */
   display: flex;
   flex-direction: row;
   align-items: space-between;

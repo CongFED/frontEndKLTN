@@ -112,7 +112,7 @@ const PagePostSimp = () => {
   return (
     <>
       {loadData == false ? (
-        <div className="flex relative left-[28rem] top-[100px] w-[58vw]">
+        <div className="flex relative left-[11.5rem] top-[100px] w-[58vw]">
           <div className="w-[75vw] flex justify-center  items-center">
             {" "}
             <div className=" h-[600px] w-[500px]  ml-[0%] bg-white  rounded-[10px]">
@@ -150,7 +150,7 @@ const PagePostSimp = () => {
           </div>
         </div>
       ) : (
-        <div className="flex flex-row relative left-[23rem] top-[50px] w-[58vw]">
+        <div className="flex flex-row relative left-[11.5rem] top-[50px] w-[58vw]">
           <div className="  ">
             <div className="w-[75vw] flex justify-center mt-10">
               <CardPost data={data} cmtid={cmtid} />

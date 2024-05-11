@@ -58,7 +58,7 @@ const Chat = () => {
         : user.Uid + currentUser.data.firebaseData.uid;
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
-
+      console.log();
       if (!res.exists()) {
         console.log(123);
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
@@ -74,12 +74,16 @@ const Chat = () => {
             [combinedId + ".date"]: serverTimestamp(),
           }
         );
-
+        console.log(
+          user.Uid,
+          currentUser.data.firebaseData.uid,
+          currentUser.data.firebaseData.photoURL
+        );
         await updateDoc(doc(db, "userChats", user.Uid), {
           [combinedId + ".userInfo"]: {
             uid: currentUser.data.firebaseData.uid,
             displayName: currentUser.data.firebaseData.displayName,
-            photoURL: currentUser.data.firebaseData.photoUrl,
+            photoURL: currentUser.data.firebaseData.photoURL,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
@@ -96,7 +100,7 @@ const Chat = () => {
   const [chats, setChats] = useState([]);
 
   const { dispatch } = useContext(ChatContext);
-
+  console.log(chats);
   useEffect(() => {
     const getChats = () => {
       const unsub = onSnapshot(

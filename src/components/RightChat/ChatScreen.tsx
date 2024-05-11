@@ -11,7 +11,7 @@ const ChatScreen = () => {
   };
   console.log(searChChatR);
   return (
-    <div className="w-[80%] h-[vh] bg-white flex justify-center items-center">
+    <div className="w-[80%] h-[91vh] bg-white flex justify-center items-center">
       <div className="h-auto w-[30%] text-center ">
         <div className="mx-auto my-auto text-[150px] w-[50%] rounded-[50%] text-black border-solid p-7 flex justify-center items-center">
           <PiWechatLogoLight />

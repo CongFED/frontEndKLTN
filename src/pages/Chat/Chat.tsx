@@ -161,13 +161,8 @@ const Chat = () => {
   };
 
   return (
-    <div className="h-screen w-full flex antialiased text-gray-200 bg-white overflow-hidden">
+    <div className="top-[60px] w-full flex antialiased text-gray-200 bg-white overflow-hidden relative border-t">
       <div className="flex-1 flex flex-col">
-        <div className="border-b-[1px] p-2 flex flex-row z-20">
-          <div className="bg-red-600 w-3 h-3 rounded-full mr-2"></div>
-          <div className="bg-yellow-500 w-3 h-3 rounded-full mr-2"></div>
-          <div className="bg-green-500 w-3 h-3 rounded-full mr-2"></div>
-        </div>
         <main className="flex-grow flex flex-row min-h-0">
           <section className="flex flex-col flex-none overflow-auto w-24 group lg:max-w-sm md:w-2/5 transition-all duration-300 ease-in-out">
             <div className="header p-4 flex flex-row justify-between items-center flex-none">

@@ -177,7 +177,7 @@ const ListFriend = () => {
               ) : (
                 <>
                   {data.data.length == 0 ? (
-                    <div className="mt-6  w-[1000px] h-[500px] flex justify-center items-center border-[1px] border-dashed border-[#b4c7fa] rounded-[10px]">
+                    <div className="mt-6  w-[70vw] h-[500px] flex justify-center items-center border-[1px] border-dashed border-[#b4c7fa] rounded-[10px]">
                       <div className="cursor-pointer">
                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                       </div>

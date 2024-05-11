@@ -213,7 +213,7 @@ const RightChat = () => {
         <ChatScreen />
       ) : (
         <section className="flex flex-col flex-auto border-l  ">
-          <div className="chat-header px-6 py-4 flex flex-row flex-none justify-between items-center border-b-[1px]">
+          <div className="chat-header px-6 py-4 flex flex-row flex-none justify-between items-center border-b">
             <div className="flex justify-center items-center">
               <div className="w-12 h-12 mr-4 relative flex justify-center items-center">
                 <img

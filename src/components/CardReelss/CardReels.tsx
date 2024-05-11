@@ -9,6 +9,7 @@ interface Props {
 }
 const CardReels = ({ data }: Props) => {
   const [load, setLoad] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const navigate = useNavigate();
   useEffect(() => {
     setLoad(false); // Set load to false each time component renders
@@ -16,7 +17,25 @@ const CardReels = ({ data }: Props) => {
       setLoad(true);
     }
   }, [data]);
-  console.log(data);
+
+  const handleScroll = () => {
+    setScrollPosition(window.pageYOffset);
+  };
+
+  // Khi component được mount, thêm sự kiện lắng nghe cho việc cuộn trang
+  useEffect(() => {
+    window.scrollTo(0, scrollPosition);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // Xóa sự kiện lắng nghe khi component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // Hàm này được gọi khi chuyển tab
+
+  console.log(scrollPosition);
   return (
     <div className="w-[70%] py-6  ">
       <>

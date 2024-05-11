@@ -14,6 +14,11 @@ import { api, setAuthToken } from "../../utils/setAuthToken";
 import { fetchInfo } from "../../redux/features/info/infoSlice";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "../../recoil/initState";
+import moment from "moment";
+function disabledDate(current) {
+  // Disable all dates after today
+  return current && current > moment().endOf("day");
+}
 const AddInfo = () => {
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
@@ -269,6 +274,7 @@ const AddInfo = () => {
                 Date
               </label>
               <DatePicker
+                disabledDate={disabledDate}
                 onChange={onChange}
                 placeholder="Birth Day"
                 className="w-full pl-[4.5rem] pr-6  rounded-md border-[#cdcdcd] border-solid border-[1px]  outline-[#6eb7ed] px-2 py-1"

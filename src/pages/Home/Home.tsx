@@ -7,12 +7,13 @@ import {
   ReloadLike,
   ViewHome,
   isUpdatePost,
+  isSharePost,
 } from "../../recoil/initState";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import API from "../../services/API";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchPost, reloadPost } from "../../redux/features/post/postSlice";
 import CardPosts from "../../components/CardPosts/CardPosts";
 import home from "../../assets/home.svg";
@@ -28,10 +29,12 @@ const Home = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const currentUser1 = useSelector((state: RootState) => state.info.info);
   const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
+  const [isSharePostR, setIsSharePost] = useRecoilState(isSharePost);
   const ReloadLike1 = useRecoilValue(ReloadLike);
   const ViewHomeR = useRecoilValue(ViewHome);
   const [lastFetchTime, setLastFetchTime] = useState(0);
   const [allPostsLoaded, setAllPostsLoaded] = useState(false);
+
   const { info, isLoading, isError, error } = useSelector(
     (state: RootState) => state.info
   );
@@ -43,7 +46,7 @@ const Home = () => {
       navigate("/add-info");
     }
   }, []);
-  const [numberPost, setNumberPost] = useState(1);
+  const [numberPost, setNumberPost] = useState(5);
   const [post, setPost] = useState([]);
   const [reels, setReels] = useState([]);
   useEffect(() => {
@@ -55,6 +58,12 @@ const Home = () => {
       setSsUpdatePost(true);
     }
   }, [isUpdatePostR]);
+  useEffect(() => {
+    if (isSharePostR == false) {
+      setNumberPost((prevNumberPost) => prevNumberPost + 1);
+      setIsSharePost(true);
+    }
+  }, [isSharePostR]);
   useEffect(() => {
     getReels().then((data) => setReels(data));
   }, []);
@@ -73,7 +82,7 @@ const Home = () => {
 
   const handleIntersection: IntersectionObserverCallback = ([entry]) => {
     if (entry.isIntersecting) {
-      setNumberPost((prevNumberPost) => prevNumberPost + 1);
+      setNumberPost((prevNumberPost) => prevNumberPost + 2);
     } else {
       setIsEndOfPage(false);
     }
@@ -101,17 +110,35 @@ const Home = () => {
   }, []);
   useEffect(() => {
     if (post.length >= numberPost) {
-      console.log(123456);
       setAllPostsLoaded(false); // Nếu đã tải hết, set biến state allPostsLoaded thành true
     }
   }, [post, numberPost]);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const handleScroll = () => {
+    setScrollPosition(window.pageYOffset);
+  };
+
+  // Khi component được mount, thêm sự kiện lắng nghe cho việc cuộn trang
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // Xóa sự kiện lắng nghe khi component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <>
         {ViewHomeR == true ? (
           <div className=" overflow-y-auto relative left-[20.5rem] top-[50px] w-[58vw]">
             <div className="flex flex-col justify-center pl-16 items-center mt-6">
-              <div className="bg-white w-[61%] h-[45px] mr-[10%] rounded-[20px] flex justify-around items-center ">
+              <Link
+                to="/add-post"
+                className="bg-white w-[61%] h-[45px] mr-[10%] rounded-[20px] flex justify-around items-center "
+              >
                 <img
                   src={info?.data?.image}
                   alt=""
@@ -125,48 +152,45 @@ const Home = () => {
                 <div className="w-[15%]  bg-[#456fe6] py-1 text-white  rounded-[20px] cursor-pointer hover:bg-[#458be6]">
                   <p>Post</p>
                 </div>
-              </div>
+              </Link>
               <CardPosts data={post} />
             </div>
-            {allPostsLoaded == true ? (
-              <div className="">
-                {" "}
-                <div className=" h-[280px] w-[500px] ml-[21%] bg-white  rounded-[10px]">
-                  <div className="py-4 px-4 flex justify-between items-center">
-                    <div className="flex items-center">
-                      <Skeleton className="h-[45px] w-[45px] rounded-[50%]" />
-                      <div className=" ml-4 text-left">
-                        <Skeleton className="h-[10px] w-[70px]" />
-                        <div className="flex justify-start items-center ">
-                          <Skeleton className="h-[10px] w-[50px]" />
-                          <>
-                            <Skeleton className="ml-2 h-[13px] w-[13px] rounded-[50%]" />
-                          </>
-                        </div>
+
+            <div className="">
+              {" "}
+              <div className=" h-[280px] w-[500px] ml-[21%] bg-white  rounded-[10px]">
+                <div className="py-4 px-4 flex justify-between items-center">
+                  <div className="flex items-center">
+                    <Skeleton className="h-[45px] w-[45px] rounded-[50%]" />
+                    <div className=" ml-4 text-left">
+                      <Skeleton className="h-[10px] w-[70px]" />
+                      <div className="flex justify-start items-center ">
+                        <Skeleton className="h-[10px] w-[50px]" />
+                        <>
+                          <Skeleton className="ml-2 h-[13px] w-[13px] rounded-[50%]" />
+                        </>
                       </div>
                     </div>
-                    <div className="text-[25px] p-2 ">
-                      <Skeleton className="h-[30px] w-[30px] rounded-[50%]" />
-                    </div>
                   </div>
-                  <div>
-                    {" "}
-                    <Skeleton className=" h-[180px] w-[500px] mr-[30%] ml-[0%]" />
+                  <div className="text-[25px] p-2 ">
+                    <Skeleton className="h-[30px] w-[30px] rounded-[50%]" />
                   </div>
                 </div>
+                <div ref={bottomOfPageRef}>
+                  {" "}
+                  <Skeleton className=" h-[180px] w-[500px] mr-[30%] ml-[0%]" />
+                </div>
               </div>
-            ) : (
-              <></>
-            )}
+            </div>
 
-            <div
+            {/* <div
               className=" h-[10px] w-[500px] ml-[21%]  rounded-[10px]"
               ref={bottomOfPageRef}
-            ></div>
+            ></div> */}
           </div>
         ) : (
           <>
-            <div className=" overflow-y-auto relative left-[23rem] top-[50px] w-[58vw]">
+            <div className=" overflow-y-auto relative left-[20.5rem] top-[50px] w-[58vw]">
               {" "}
               <div className="flex justify-center pl-16">
                 <CardReels data={reels} />

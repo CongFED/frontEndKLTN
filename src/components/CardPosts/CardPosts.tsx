@@ -18,7 +18,7 @@ const CardPosts = ({ data }: Props) => {
       setLoad(true);
     }
   }, [data]);
-  console.log(data);
+
   return (
     <div className="w-[70%] py-6  ">
       <>

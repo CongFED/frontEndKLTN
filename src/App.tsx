@@ -92,7 +92,15 @@ function App() {
                       </PersonalPage>
                     }
                   />
-                  <Route path="/chat" element={<Chat />} />
+                  <Route
+                    path="/chat"
+                    element={
+                      <PersonalPage>
+                        <Chat />
+                      </PersonalPage>
+                    }
+                  />
+                  {/* <Route path="/chat" element={<Chat />} /> */}
                   <Route path="/add-info" element={<AddInfo />} />
                   <Route path="/bad-not-found" element={<BadNotFound />} />
 

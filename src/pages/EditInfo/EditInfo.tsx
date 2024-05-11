@@ -20,8 +20,13 @@ import {
 } from "../../recoil/initState";
 import { IoMdClose } from "react-icons/io";
 import API from "../../services/API";
+import moment from "moment";
 interface Props {
   info: any;
+}
+function disabledDate(current) {
+  // Disable all dates after today
+  return current && current > moment().endOf("day");
 }
 const EditInfo = ({ info }: Props) => {
   const navigate = useNavigate();
@@ -316,6 +321,7 @@ const EditInfo = ({ info }: Props) => {
                 Date
               </label>
               <DatePicker
+                disabledDate={disabledDate}
                 onChange={onChange}
                 placeholder="Birth Day"
                 className="w-full pl-[4.5rem] pr-6  rounded-md border-[#cdcdcd] border-solid border-[1px]  outline-[#6eb7ed] px-2 py-1"

@@ -6,7 +6,12 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import { api, setAuthToken } from "../../../utils/setAuthToken";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { fetchPost } from "../../../redux/features/post/postSlice";
-import { ReloadLike, tokenState, ShareS } from "../../../recoil/initState";
+import {
+  ReloadLike,
+  tokenState,
+  ShareS,
+  isUpdatePost,
+} from "../../../recoil/initState";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { HiOutlineMicrophone } from "react-icons/hi2";
@@ -364,7 +369,7 @@ const CardPostShare = ({ data }: Props) => {
   };
   const handleShare = () => {
     setIdShare(data.id);
-    setLoadShare(true);
+    setLoadShare("1");
   };
   useEffect(() => {
     loadData();
@@ -372,7 +377,21 @@ const CardPostShare = ({ data }: Props) => {
     // loadDataUserCmt();
   }, []);
   const [toggleShare, setToggleShare] = useState(false);
-
+  const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
+  const hanldDltPost = async () => {
+    setAuthToken(token);
+    console.log(data.id);
+    return api
+      .delete(`https://www.socialnetwork.somee.com/api/post/${postId}`)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 204) {
+          setSsUpdatePost(false);
+          toast.error("Đã xóa bài viết");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <>
       <div
@@ -410,9 +429,19 @@ const CardPostShare = ({ data }: Props) => {
               </div>
             </div>
           </div>
-          <div className="text-[25px] p-2 cursor-pointer hover:bg-[#f2f2f2] rounded-[50%] duration-500">
-            <IoMdClose />
-          </div>
+          <>
+            {info?.data?.userId === data.userId ? (
+              <div className="flex">
+                <div className="text-[25px] p-2 cursor-pointer hover:bg-[#f2f2f2] rounded-[50%] duration-500">
+                  <div onClick={hanldDltPost}>
+                    <IoMdClose />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+          </>
         </div>
         <div className="pb-4 px-4 flex justify-between items-center">
           <div className="flex items-center">
@@ -1256,7 +1285,9 @@ const CardPostShare = ({ data }: Props) => {
           </div>
         </div>
       )}
-      {loadShare && IdShare === data.id && <ShareLayout PostId={data.id} />}
+      {loadShare === "1" && IdShare === data.id && (
+        <ShareLayout PostId={data.id} />
+      )}
     </>
   );
 };

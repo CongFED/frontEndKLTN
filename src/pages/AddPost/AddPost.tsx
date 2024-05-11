@@ -228,10 +228,10 @@ const AddPost = () => {
                 <div>
                   <label
                     for="file"
-                    class="custum-file-upload w-[100%]  h-[320px] flex"
+                    class="custum-file-upload w-[100%]  h-[320px] flex "
                   >
                     {uploadedFiles.map((uploadedFile, index) => (
-                      <div key={index} className="relative">
+                      <div key={index} className="relative  w-[fit-content]">
                         {uploadedFiles[index]?.file.type === "video/mp4" ? (
                           <video
                             src={uploadedFile.preview}
@@ -252,7 +252,7 @@ const AddPost = () => {
                         >
                           <IoMdClose />
                         </button>
-                        {uploadedFile.file.name}
+                        {/* {uploadedFile.file.name} */}
                       </div>
                     ))}
                   </label>

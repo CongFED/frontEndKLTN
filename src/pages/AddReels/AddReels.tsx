@@ -94,22 +94,27 @@ const AddReels = () => {
 
   const handlePost = async () => {
     setIsLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("Content", Content);
-      formData.append("LevelVieW", isChecked);
-      formData.append("audioId", audioID);
-      formData.append("DisableVoice", disableVoice);
-      console.log(uploadedFiles[0]?.file.type);
-      if (uploadedFiles) {
-        // uploadedFiles.map((item, index) => {
-        formData.append("File", uploadedFiles[0]?.file);
-        // });
-      }
+    if (uploadedFiles === undefined) {
+      try {
+        const formData = new FormData();
+        formData.append("Content", Content);
+        formData.append("LevelVieW", isChecked);
+        formData.append("audioId", audioID);
+        formData.append("DisableVoice", disableVoice);
+        console.log(uploadedFiles[0]?.file.type);
+        if (uploadedFiles) {
+          // uploadedFiles.map((item, index) => {
+          formData.append("File", uploadedFiles[0]?.file);
+          // });
+        }
 
-      addReelss(dispatch, formData, uploadedFiles[0]?.file.type);
-    } catch (error) {
-      console.error("Add sai!", error);
+        addReelss(dispatch, formData, uploadedFiles[0]?.file.type);
+      } catch (error) {
+        console.error("Add sai!", error);
+      }
+    } else {
+      toast.error("Hãy thêm video cho Reels");
+      setIsLoading(false);
     }
   };
   const error = useSelector((state: RootState) => state.addReels.errorReels);
@@ -137,14 +142,14 @@ const AddReels = () => {
     console.log(dataAddReels);
     if (dataAddReels?.success === true) {
       setIsLoading(false);
-      toast.success("Thêm post thành công!");
+      toast.success("Thêm Reels thành công!");
       setContent("");
       setUploadedFiles([]);
     }
     if (error == true && isFetching == false) {
       setIsLoading(false);
       console.log(error);
-      toast.error("Thêm post thất bại!");
+      toast.error("Thêm Reels thất bại!");
     }
   }, [dataAddReels, isFetching]);
   const removeImage = (indexToRemove: number) => {

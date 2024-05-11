@@ -357,6 +357,23 @@ const CardPost = ({ data, cmtid }: Props) => {
       if (img) observer.unobserve(img);
     };
   }, []);
+  // const [days, setDays] = useState("hours");
+  // const [currentTime, setCurrentTime] = useState(new Date());
+  // const targetTime = new Date("2024-05-09T23:36:17.183");
+
+  // // Hàm để tính khoảng cách thời gian
+  // function calculateTimeDifference(currentTime, targetTime) {
+  //   const difference = targetTime.getTime() - currentTime.getTime();
+  //   const hoursDifference = difference / (1000 * 60 * 60); // Chuyển đổi sang giờ
+  //   const daysDifference = Math.ceil(Math.abs(hoursDifference) / 24); // Tính số ngày và làm tròn lên
+  //   if (daysDifference >= 1) {
+  //     setDays("days");
+  //   }
+  //   return daysDifference;
+  // }
+
+  // const hoursDifference = calculateTimeDifference(currentTime, targetTime);
+  // console.log(hoursDifference);
   return (
     <div
       className="w-[500px] h-auto bg-white  mb-10 rounded-[10px]"

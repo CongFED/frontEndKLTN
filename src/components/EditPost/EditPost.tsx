@@ -10,7 +10,7 @@ import { Button, Dropdown, Menu } from "antd";
 import Picker from "@emoji-mart/react";
 import { api } from "../../utils/setAuthToken";
 import { useRecoilState } from "recoil";
-import { ShareS, isUpdatePost } from "../../recoil/initState";
+import { ShareS, isUpdatePost, isSharePost } from "../../recoil/initState";
 import toast from "react-hot-toast";
 import { useDropzone } from "react-dropzone";
 
@@ -102,6 +102,7 @@ const EditPost = ({ data }: Props) => {
     setToggleEmj(!toggleEmj);
   };
   const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
+  const [isSharePostR, setIsSharePost] = useRecoilState(isSharePost);
   const handlePost = async () => {
     setLoad(false);
     try {
@@ -132,7 +133,7 @@ const EditPost = ({ data }: Props) => {
         })
         .then((response) => {
           // Cập nhật dữ liệu vào state
-          setSsUpdatePost(false);
+          setIsSharePost(false);
           setLoad(true);
           setLoadShare("0");
 
@@ -299,20 +300,34 @@ const EditPost = ({ data }: Props) => {
                       class="custum-file-upload w-[100%]  h-[auto] min-h-[300px] grid grid-cols-2 "
                     >
                       {uploadedFiles.map((uploadedFile, index) => (
-                        <div key={index} className="relative">
-                          <img
+                        <div key={index} className="relative w-[fit-content]">
+                          {/* <img
                             src={uploadedFile.preview}
                             alt="Uploaded Image"
                             className="max-w-[200px] max-h-[200px] rounded-[10px] cursor-pointer"
                             {...getRootProps()}
-                          />
+                          /> */}
+                          {uploadedFiles[index]?.file.type === "video/mp4" ? (
+                            <video
+                              src={uploadedFile.preview}
+                              className="max-w-[200px] max-h-[200px] rounded-[10px] cursor-pointer"
+                              {...getRootProps()}
+                            />
+                          ) : (
+                            <img
+                              src={uploadedFile.preview}
+                              alt="Uploaded Image"
+                              className="max-w-[200px] max-h-[200px] rounded-[10px] cursor-pointer"
+                              {...getRootProps()}
+                            />
+                          )}
                           <button
                             className="absolute top-[-10px] right-[-10px] p-2  rounded-full bg-gray-300 transition duration-300"
                             onClick={() => removeImage(index)}
                           >
                             <IoMdClose />
                           </button>
-                          {uploadedFile.file.name}
+                          {/* {uploadedFile.file.name} */}
                         </div>
                       ))}
 

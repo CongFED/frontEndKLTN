@@ -72,6 +72,10 @@ export const isUpdatePost = atom({
   key: "isUpdatePost",
   default: true,
 });
+export const isSharePost = atom({
+  key: "isSharePost",
+  default: true,
+});
 export const ismodalOpened = atom({
   key: "ismodalOpened",
   default: true,

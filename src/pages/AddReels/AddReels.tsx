@@ -94,7 +94,7 @@ const AddReels = () => {
 
   const handlePost = async () => {
     setIsLoading(true);
-    if (uploadedFiles === undefined) {
+    if (uploadedFiles.length == 1) {
       try {
         const formData = new FormData();
         formData.append("Content", Content);

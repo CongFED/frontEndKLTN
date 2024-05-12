@@ -578,10 +578,12 @@ const CardPost = ({ data, cmtid }: Props) => {
                 <HiOutlineMicrophone />{" "}
               </div>
               <div
-                className="cursor-pointer mr-1 bg-white p-2 rounded-[50%] hover:bg-[#456fe6] hover:text-white duration-500"
+                className={`cursor-pointer mr-1 bg-white p-2 rounded-[50%] hover:bg-[#456fe6] hover:text-white duration-500 ${
+                  Content ? "" : "opacity-50 pointer-events-none"
+                }`}
                 onClick={handleAddPostBig}
               >
-                <IoIosSend />{" "}
+                <IoIosSend />
               </div>
             </div>
           </div>

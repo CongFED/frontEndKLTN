@@ -19,6 +19,7 @@ import Personal from "./pages/Personal/Personal";
 import PersonalFriend from "./pages/PersonalFriend/PersonalFriend";
 const Register = React.lazy(() => import("./pages/Register/Register"));
 const Chat = React.lazy(() => import("./pages/Chat/Chat"));
+const Admin = React.lazy(() => import("./pages/Admin/Admin"));
 const VerifyCode = React.lazy(() => import("./pages/VerifyCode/VerifyCode"));
 const AddInfo = React.lazy(() => import("./pages/AddInfo/AddInfo"));
 // import { Toaster } from "react-hot-toast";
@@ -73,6 +74,11 @@ function App() {
                   <Route
                     path="/register"
                     element={<Register />}
+                    //  element={currentUser ? <Navigate to="/" /> : <Login />}
+                  />
+                  <Route
+                    path="/admin"
+                    element={<Admin />}
                     //  element={currentUser ? <Navigate to="/" /> : <Login />}
                   />
                   <Route path="/verify" element={<VerifyCode />} />

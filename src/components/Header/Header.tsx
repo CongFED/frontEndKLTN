@@ -22,6 +22,7 @@ import LogoF from "../../assets/icons/people.svg";
 import LogoCal from "../../assets/icons/file-upload.svg";
 import LogoP from "../../assets/icons/follow.svg";
 import Logobookmark from "../../assets/icons/bookmark.svg";
+import Admin from "../../assets/icons/follow.svg";
 import { Link } from "react-router-dom";
 import { logoutSuccess } from "../../redux/features/login/loginSlice";
 import LogoHome from "../../assets/icons/home.svg";
@@ -52,7 +53,7 @@ const Header = () => {
     dispatch(logoutSuccess());
     navigate("/login");
   };
-  console.log(info);
+
   const hanldeNaviHome = () => {
     navigate("/");
     setViewHomeR(true);
@@ -137,6 +138,19 @@ const Header = () => {
             <img src={LogoCal} alt="" className="tab-img12" />
             <p className=" text-[14px]  font-[600]">Call group</p>
           </Link>
+          {info.data.roleName[0] === "Admin" && (
+            <Link
+              to="/admin"
+              className={`w-full  h-[50px]  flex justify-start items-center  mb-2 hover:bg-slate-50  px-2 ${
+                isCG
+                  ? "border-l-[2px] border-solid border-[#456fe6] bg-slate-50"
+                  : ""
+              }`}
+            >
+              <img src={Admin} alt="" className="tab-img12" />
+              <p className=" text-[14px]  font-[600]">Management Admin</p>
+            </Link>
+          )}
           {/* <Link
             to="/create-reels"
             className="w-full  h-[50px] rounded-[6px] flex justify-start items-center mb-2 hover:bg-slate-50  px-2"

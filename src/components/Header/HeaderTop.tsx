@@ -139,7 +139,7 @@ const HeaderTop = () => {
           </div>
           <Link to="/personal">
             {" "}
-            <img src={info?.data?.image} alt="" className="tab-img" />
+            <img src={info?.data?.image} alt="" className="tab-img " />
           </Link>
         </div>
       </div>

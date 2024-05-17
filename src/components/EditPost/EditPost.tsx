@@ -300,7 +300,10 @@ const EditPost = ({ data }: Props) => {
                       class="custum-file-upload w-[100%]  h-[auto] min-h-[300px] grid grid-cols-2 "
                     >
                       {uploadedFiles.map((uploadedFile, index) => (
-                        <div key={index} className="relative w-[fit-content]">
+                        <div
+                          key={index}
+                          className="relative w-[fit-content] bg-black"
+                        >
                           {/* <img
                             src={uploadedFile.preview}
                             alt="Uploaded Image"

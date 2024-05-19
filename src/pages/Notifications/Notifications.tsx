@@ -6,6 +6,13 @@ import { api } from "../../utils/setAuthToken";
 import { Empty } from "antd";
 interface Comment {
   content: string;
+  // Đặt kiểu cho mảng images
+  userTo: string;
+  id: string;
+  islike: boolean;
+}
+interface CommentF {
+  content: string;
   images: { linkImage: string; createDate: string }[]; // Đặt kiểu cho mảng images
   linkImage?: string;
   image: string;
@@ -19,6 +26,11 @@ interface Comment {
   commentId: string;
 }
 interface ResponseData {
+  data: CommentF[];
+  success: boolean;
+  message: string;
+}
+interface ResponseDataF {
   data: Comment[];
   success: boolean;
   message: string;
@@ -36,7 +48,11 @@ const Notifications = () => {
     success: false,
     message: "",
   });
-
+  const [dataF, setDataF] = useState<ResponseDataF>({
+    data: [],
+    success: false,
+    message: "",
+  });
   const loadData = async () => {
     // Gọi API để lấy dữ liệu
     await api
@@ -73,7 +89,7 @@ const Notifications = () => {
           // setLoad(true);
           // setLoadSearch1(false);
           // setLoadSearch2(false);
-          // setData(response.data);
+          setDataF(response.data);
         }
       })
       .catch((error) => {
@@ -123,7 +139,7 @@ const Notifications = () => {
                   </span>
                 </div>
                 <>
-                  {data.data.length == 0 ? (
+                  {dataF.data.length === 0 ? (
                     <div className="mt-6  w-[100%] h-[100px] flex justify-center items-center">
                       <div className="cursor-pointer">
                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
@@ -131,6 +147,36 @@ const Notifications = () => {
                     </div>
                   ) : (
                     <>
+                      {dataF.data.map((item: Comment, index: number) => (
+                        <div
+                          id="notification-card-1"
+                          className="mt-3 bg-verylightgb  flex justify-between p-3  w-[100%] cursor-pointer hover:bg-[#f2f2f2] rounded-[10px]"
+                          // onClick={() => {
+                          //   handleGetPostNoti(item?.postId, item?.commentId);
+                          // }}
+                        >
+                          <div className=" text-sm flex-auto mx-6 text-left">
+                            <a
+                              href="#"
+                              className="font-bold hover:text-blue text-left"
+                            >
+                              {item.content}
+                            </a>
+
+                            <p className="text-gb mt-1 text-left text-[#b6b5b5]">
+                              1m ago
+                            </p>
+                          </div>
+                          <span id="notification-ping" className="ml-2">
+                            <span className="absolute inline-block rounded-full mt-2 ml-1 p-1 bg-red">
+                              {" "}
+                            </span>
+                            <span className="relative inline-block animate-ping rounded-full ml-1 p-1 bg-red">
+                              {" "}
+                            </span>
+                          </span>
+                        </div>
+                      ))}
                       {data.data.map((item: Comment, index: number) => (
                         <div
                           id="notification-card-1"
@@ -139,11 +185,6 @@ const Notifications = () => {
                             handleGetPostNoti(item?.postId, item?.commentId);
                           }}
                         >
-                          <img
-                            src={item.image}
-                            alt="notification user avatar"
-                            className="w-12 h-12 rounded-full"
-                          />
                           <div className=" text-sm flex-auto mx-6 text-left">
                             <a
                               href="#"

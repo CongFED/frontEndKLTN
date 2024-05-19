@@ -17,6 +17,8 @@ import React from "react";
 import PersonalPage from "./pages/PersonalPage";
 import Personal from "./pages/Personal/Personal";
 import PersonalFriend from "./pages/PersonalFriend/PersonalFriend";
+import ForgotPass from "./pages/ForgotPass/ForgotPass";
+import VerifyCodeOTP from "./pages/VerifyCodeOTP/VerifyCodeOTP";
 const Register = React.lazy(() => import("./pages/Register/Register"));
 const Chat = React.lazy(() => import("./pages/Chat/Chat"));
 const Admin = React.lazy(() => import("./pages/Admin/Admin"));
@@ -77,8 +79,18 @@ function App() {
                     //  element={currentUser ? <Navigate to="/" /> : <Login />}
                   />
                   <Route
+                    path="/verifyPinOTP"
+                    element={<VerifyCodeOTP />}
+                    //  element={currentUser ? <Navigate to="/" /> : <Login />}
+                  />
+                  <Route
                     path="/admin"
                     element={<Admin />}
+                    //  element={currentUser ? <Navigate to="/" /> : <Login />}
+                  />
+                  <Route
+                    path="/forgot-password"
+                    element={<ForgotPass />}
                     //  element={currentUser ? <Navigate to="/" /> : <Login />}
                   />
                   <Route path="/verify" element={<VerifyCode />} />

@@ -138,7 +138,7 @@ const Header = () => {
             <img src={LogoCal} alt="" className="tab-img12" />
             <p className=" text-[14px]  font-[600]">Call group</p>
           </Link>
-          {info.data.roleName[0] === "Admin" && (
+          {info?.data?.roleName[0] === "Admin" && (
             <Link
               to="/admin"
               className={`w-full  h-[50px]  flex justify-start items-center  mb-2 hover:bg-slate-50  px-2 ${

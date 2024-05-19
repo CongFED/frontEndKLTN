@@ -35,6 +35,7 @@ const publicRoutes = [
       layout: Public,
       sidebar: null,
     },
+   
     // {
     //   path: "/personal",
     //   component: Personal,

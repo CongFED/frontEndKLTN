@@ -31,6 +31,10 @@ export const EmailFP = atom({
   key: "EmailFP",
   default: "",
 });
+export const ModeChange = atom({
+  key: "ModeChange",
+  default: true,
+});
 export const ChatCheck = atom({
   key: "ChatCheck",
   default: "false",

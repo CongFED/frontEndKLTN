@@ -7,13 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import ImgA1 from "../../assets/login/img1.svg";
 import ImageMain1 from "../../assets/login/log.svg";
-import "./style.css";
+// import "./style.css";
 import toast, { Toaster } from "react-hot-toast";
 import {
   Email,
   EmailRegis,
   Password,
   tokenState,
+  EmailFP,
+  ModeChange,
 } from "../../recoil/initState";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -21,14 +23,14 @@ import * as yup from "yup";
 import API from "../../services/API";
 import { login } from "../../redux/features/login/loginAPI";
 import { fetchInfo } from "../../redux/features/info/infoSlice";
+import axios from "axios";
 
-const Login = () => {
+const ForgotPass = () => {
   const history = useNavigate();
   // const [signIn, toggle] = React.useState(true);
-  const [emailRecoil, setEmailRecoil] = useRecoilState(Email);
-  const [emailRegisRecoil, setEmailRegisRecoil] = useRecoilState(EmailRegis);
-  const [passwordRecoil, setPasswordRecoil] = useRecoilState(Password);
 
+  const [emailRegisRecoil, setEmailRegisRecoil] = useRecoilState(EmailFP);
+  const [ModeChangeRE, setModeChangeRE] = useRecoilState(ModeChange);
   // Register
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -41,48 +43,20 @@ const Login = () => {
 
     if (user) history("/");
   }, [history]);
-
-  const handleRegister = async () => {
+  const handleChange = async () => {
     try {
       setComFirmPass(true);
       setIsLoading(true);
       if (password1 === comFirmPassword) {
         const data = {
-          email: email,
+          email: emailRegisRecoil,
           password: password1,
         };
 
-        fetch(API.REGISTER, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Đặt cookie vào header
-            // Cookie: cookieJar.getCookieStringSync(API.REGISTER),
-          },
-          body: JSON.stringify(data),
+        const res = axios.post(API.CHANGE_PASSWORD, data);
+        toast.success("Đổi mật khẩu thành công!");
 
-          credentials: "include",
-        })
-          .then((response) => {
-            // Xử lý cookie từ response nếu cần thiết
-            console.log(response);
-            const cookies = response.headers.get("set-cookie");
-
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-            if (data?.message == "Email is exist") {
-              toast.error("Tài khoản đã được đăng ký!");
-              setIsLoading(false);
-            } else {
-              setEmailRegisRecoil(email);
-              navigate("/verify");
-            }
-          })
-          .catch((error) => {
-            // Xử lý lỗi ở đâ
-          });
+        navigate("/login");
       } else {
         setComFirmPass(false);
         setIsLoading(false);
@@ -90,59 +64,86 @@ const Login = () => {
     } catch (error) {
       setIsLoading(false);
       console.error("Login failed", error);
+      toast.success("Đổi mật khẩu thất bại!");
     }
   };
+  //   const handleChange = async () => {
+  //     try {
+  //       setComFirmPass(true);
+  //       setIsLoading(true);
+  //       if (password1 === comFirmPassword) {
+  //         const data = {
+  //           email: email,
+  //           password: password1,
+  //         };
+
+  //         fetch(API.REGISTER, {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             // Đặt cookie vào header
+  //             // Cookie: cookieJar.getCookieStringSync(API.REGISTER),
+  //           },
+  //           body: JSON.stringify(data),
+
+  //           credentials: "include",
+  //         })
+  //           .then((response) => {
+  //             // Xử lý cookie từ response nếu cần thiết
+  //             console.log(response);
+  //             const cookies = response.headers.get("set-cookie");
+
+  //             return response.json();
+  //           })
+  //           .then((data) => {
+  //             console.log(data);
+  //             if (data?.message == "Email is exist") {
+  //               toast.error("Tài khoản đã được đăng ký!");
+  //               setIsLoading(false);
+  //             } else {
+  //               setEmailRegisRecoil(email);
+  //               navigate("/verify");
+  //             }
+  //           })
+  //           .catch((error) => {
+  //             // Xử lý lỗi ở đâ
+  //           });
+  //       } else {
+  //         setComFirmPass(false);
+  //         setIsLoading(false);
+  //       }
+  //     } catch (error) {
+  //       setIsLoading(false);
+  //       console.error("Login failed", error);
+  //     }
+  //   };
   // Login
 
-  const dispatch = useDispatch();
-  const error = useSelector((state) => state.user.error);
-  const currentUser = useSelector((state: RootState) => state.user.currentUser);
-  const isFetching = useSelector((state: RootState) => state.user.isFetching);
-  useEffect(() => {
-    console.log(currentUser);
-    if (currentUser?.data.success === true) {
-      console.log(currentUser);
-      toast.success("Đăng nhập thành công!");
-      setToken(currentUser?.data?.data?.jwtToken);
-      localStorage.setItem("token", currentUser?.data?.data?.jwtToken);
-      localStorage.setItem("hasInfor", currentUser?.data?.data?.hasInfor);
-
-      // Ẩn toast
-      if (currentUser?.data?.data?.hasInfor == false) {
-        navigate("/add-info");
-      } else {
-        dispatch(fetchInfo());
-        navigate("/");
-      }
-    }
-    if (error == true && isFetching == false) {
-      setIsLoading(false);
-      toast.error("Đăng nhập thất bại!");
-    }
-  }, [currentUser, error, isFetching]);
-
-  const handleLogin = async () => {
+  const handleSendOTP = async () => {
     setIsLoading(true);
-    console.log(email, password1);
+
     try {
       const data = {
         email: email,
-        password: password1,
       };
-
-      login(dispatch, data);
+      const res = axios.post(API.SEND_OTP_CHANGE, data);
+      setEmailRegisRecoil(email);
+      toast.success("Gửi OTP thành công!");
+      navigate("/verifyPinOTP");
     } catch (error) {
       console.error("Login failed", error);
+      toast.error("Gửi OTP thất bại!");
     }
   };
-  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+
+  const handleKeyR = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
-      handleLogin();
+      handleSendOTP();
     }
   };
   const handleKeyRe = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
-      handleRegister();
+      handleChange();
     }
   };
   const [trans, setTrans] = useState(true);
@@ -169,10 +170,10 @@ const Login = () => {
           <img src={ImageMain1} className="button w-[60%]" />
         </div>
         <>
-          {trans ? (
+          {ModeChangeRE ? (
             <>
               <div className="container1">
-                <div className="heading">Sign In</div>
+                <div className="heading">Change PassWord</div>
                 <div action="" className="form">
                   <input
                     className="input"
@@ -180,41 +181,25 @@ const Login = () => {
                     name="email"
                     id="email"
                     placeholder="E-mail"
+                    onKeyDown={handleKeyR}
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  <input
-                    className="input"
-                    type="password"
-                    name="password"
-                    id="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    onKeyDown={handleKey}
-                  />
+
                   <div className="flex  justify-between">
-                    <span className="forgot-password">
-                      <a href="#">Don't have account ?</a>{" "}
-                      <span
-                        onClick={() => setTrans(false)}
-                        className="underline text-[#11a6d1]"
-                      >
-                        Sign Up
-                      </span>
-                    </span>
                     <span
-                      className="forgot-password"
-                      onClick={() => navigate("/forgot-password")}
+                      className="forgot-password text-[#11a6d1]"
+                      onClick={() => navigate("/login")}
                     >
-                      <p>Forgot Password ?</p>
+                      <p>Back to Login ?</p>
                     </span>
                   </div>
                   <div
                     className="login-button flex justify-center"
-                    onClick={handleLogin}
+                    onClick={handleSendOTP}
 
                     // disabled={isFetching}
                   >
-                    {isLoading ? <div className="loader"></div> : "Sign in"}
+                    {isLoading ? <div className="loader"></div> : "Send OTP"}
                   </div>
                 </div>
                 <div className="social-account-container">
@@ -264,16 +249,8 @@ const Login = () => {
             </>
           ) : (
             <div className="container1">
-              <div className="heading">Sign Up</div>
+              <div className="heading">Change Password</div>
               <div action="" className="form">
-                <input
-                  className="input"
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="E-mail"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
                 <input
                   className="input"
                   type="password"
@@ -308,22 +285,16 @@ const Login = () => {
                     <div></div>
                   )}
                 </>
-                <div className="flex  justify-between">
-                  <span className="forgot-password">
-                    <a href="#">Already have a password!</a>{" "}
-                    <span
-                      onClick={() => setTrans(true)}
-                      className="underline text-[#11a6d1]"
-                    >
-                      Sign up
-                    </span>
-                  </span>
-                </div>
+
                 <button
                   className="login-button flex justify-center"
-                  onClick={handleRegister}
+                  onClick={handleChange}
                 >
-                  {isLoading ? <div className="loader"></div> : "Sign up"}
+                  {isLoading ? (
+                    <div className="loader"></div>
+                  ) : (
+                    "  Change Password"
+                  )}
                 </button>
               </div>
               <div className="social-account-container">
@@ -380,4 +351,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPass;

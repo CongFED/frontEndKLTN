@@ -22,6 +22,7 @@ import { addCmt } from "../../../redux/features/Add-Cmt/addCmtAPI";
 import { IoTrashBinOutline } from "react-icons/io5";
 import CustomVideo from "../../CustomVideo/CustomVideo";
 import ShareLayout from "../../shareLayout/shareLayout";
+import { useNavigate } from "react-router-dom";
 interface Props {
   data: any;
 }
@@ -376,6 +377,7 @@ const CardPostShare = ({ data }: Props) => {
     loadDataShare();
     // loadDataUserCmt();
   }, []);
+  const navigate = useNavigate();
   const [toggleShare, setToggleShare] = useState(false);
   const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
   const hanldDltPost = async () => {
@@ -392,6 +394,7 @@ const CardPostShare = ({ data }: Props) => {
       })
       .catch((err) => console.log(err));
   };
+  console.log(data);
   return (
     <>
       <div
@@ -404,6 +407,11 @@ const CardPostShare = ({ data }: Props) => {
               src={data.avatarUrlShare}
               alt="avatar"
               className="h-[45px] w-[45px] rounded-[50%]"
+              onClick={() => {
+                info.data.userId == data.userIdSharePost
+                  ? navigate("/personal")
+                  : navigate(`/personal-user/${data.userIdSharePost}`);
+              }}
             />
             <div className=" ml-4 text-left">
               <span className="text-[18px] font-[500] ">

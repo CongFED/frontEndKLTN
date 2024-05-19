@@ -384,7 +384,7 @@ const CardPost = ({ data, cmtid }: Props) => {
           <img
             src={data.avatarUrl}
             alt="avatar"
-            className="h-[45px] w-[45px] rounded-[50%]"
+            className="h-[45px] w-[45px] rounded-[50%] cursor-pointer"
             onClick={() => {
               info.data.userId == data.userId
                 ? navigate("/personal")

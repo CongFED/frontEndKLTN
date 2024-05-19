@@ -22,7 +22,10 @@ const API = {
   GET_AUDIO: DOMAIN + "/api/audio",
   POST_REELS_IMAGE: DOMAIN + "/api/real/MergeImageWithAudio",
   POST_REELS_VIDEO: DOMAIN + "/api/real/MergeVideoWithAudio",
-  GET_ALL_REELS: DOMAIN + "/api/real"
+  GET_ALL_REELS: DOMAIN + "/api/real",
+  SEND_OTP_CHANGE: DOMAIN + "/api/auth/sendPinforgotPassword",
+  OTP_CHANGE: DOMAIN + "/api/auth/VerifyPinForgotPassword",
+  CHANGE_PASSWORD: DOMAIN + "/api/auth/changePasswordForgotPassword",
   // POST_LIKE:DOMAIN + "api/like/{id}"
 };
 export default API;

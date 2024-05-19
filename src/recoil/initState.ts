@@ -95,4 +95,12 @@ export const isLoadmodalOpened = atom({
 //     return currentInit.filter((init:any) => init.status === "new");
 //   },
 // });
+export const isSharePost1 = atom({
+  key: "isSharePost1",
+  default: true,
+});
+export const updateReels = atom({
+  key: "updateReels",
+  default: true,
+})
 export default initState;

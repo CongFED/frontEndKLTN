@@ -10,7 +10,7 @@ import { Button, Dropdown, Menu } from "antd";
 import Picker from "@emoji-mart/react";
 import { api } from "../../utils/setAuthToken";
 import { useRecoilState } from "recoil";
-import { ShareS } from "../../recoil/initState";
+import { ShareS, isSharePost1 } from "../../recoil/initState";
 import toast from "react-hot-toast";
 interface Props {
   PostId: string;
@@ -19,8 +19,8 @@ const ShareLayout = ({ PostId }: Props) => {
   const { info, isLoading, isError, error } = useSelector(
     (state: RootState) => state.info
   );
-  console.log(PostId);
   const [loadShare, setLoadShare] = useRecoilState(ShareS);
+  const [isSharePost1R, setIsSharePost1R] = useRecoilState(isSharePost1);
   const [toggleEmj, setToggleEmj] = useState(true);
   const [Content, setContent] = useState("");
   const items: MenuProps["items"] = [
@@ -91,6 +91,7 @@ const ShareLayout = ({ PostId }: Props) => {
           console.log(response);
           if (response.status == 200) {
             toast.success("Chia sẻ bài Post thành công!");
+            setIsSharePost1R(false);
             setLoadShare("0");
             // dispatch(fetchPost());
             // setLike(like + 1);

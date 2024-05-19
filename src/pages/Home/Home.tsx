@@ -8,6 +8,8 @@ import {
   ViewHome,
   isUpdatePost,
   isSharePost,
+  isSharePost1,
+  updateReels,
 } from "../../recoil/initState";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { api, setAuthToken } from "../../utils/setAuthToken";
@@ -34,10 +36,11 @@ const Home = () => {
   const ViewHomeR = useRecoilValue(ViewHome);
   const [lastFetchTime, setLastFetchTime] = useState(0);
   const [allPostsLoaded, setAllPostsLoaded] = useState(false);
-
+  const [isSharePost1R, setIsSharePost1R] = useRecoilState(isSharePost1);
   const { info, isLoading, isError, error } = useSelector(
     (state: RootState) => state.info
   );
+  const [updateReelsR, setUpdateReelsR] = useRecoilState(updateReels);
   const [loadChat, setLoadChat] = useState(true);
   useEffect(() => {
     const hasInfor = localStorage.getItem("hasInfor");
@@ -65,8 +68,21 @@ const Home = () => {
     }
   }, [isSharePostR]);
   useEffect(() => {
+    if (isSharePost1R == false) {
+      setNumberPost((prevNumberPost) => prevNumberPost + 1);
+      setIsSharePost1R(true);
+    }
+  }, [isSharePost1R]);
+  useEffect(() => {
     getReels().then((data) => setReels(data));
   }, []);
+  useEffect(() => {
+    if (updateReelsR === false) {
+      console.log(123456);
+      getReels().then((data) => setReels(data));
+      setUpdateReelsR(true);
+    }
+  }, [updateReelsR]);
   useEffect(() => {
     dispatch(fetchFriend());
   }, [dispatch]);

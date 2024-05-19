@@ -23,6 +23,7 @@ import { IoTrashBinOutline } from "react-icons/io5";
 import CustomVideo from "../../CustomVideo/CustomVideo";
 import ShareLayout from "../../shareLayout/shareLayout";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 interface Props {
   data: any;
 }
@@ -380,14 +381,16 @@ const CardPostShare = ({ data }: Props) => {
   const navigate = useNavigate();
   const [toggleShare, setToggleShare] = useState(false);
   const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
-  const hanldDltPost = async () => {
+  const hanldDltPost = async (idShare) => {
     setAuthToken(token);
-    console.log(data.id);
+    console.log(idShare);
     return api
-      .delete(`https://www.socialnetwork.somee.com/api/post/${postId}`)
+      .delete(
+        `https://www.socialnetwork.somee.com/api/post/share/delete?shareId=${idShare}`
+      )
       .then((res) => {
         console.log(res);
-        if (res.status === 204) {
+        if (res.status === 200) {
           setSsUpdatePost(false);
           toast.error("Đã xóa bài viết");
         }
@@ -438,10 +441,10 @@ const CardPostShare = ({ data }: Props) => {
             </div>
           </div>
           <>
-            {info?.data?.userId === data.userId ? (
+            {info?.data?.userId === data.userIdSharePost ? (
               <div className="flex">
                 <div className="text-[25px] p-2 cursor-pointer hover:bg-[#f2f2f2] rounded-[50%] duration-500">
-                  <div onClick={hanldDltPost}>
+                  <div onClick={() => hanldDltPost(data.idShare)}>
                     <IoMdClose />
                   </div>
                 </div>

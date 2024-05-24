@@ -12,22 +12,18 @@ import {
   serverTimestamp,
   getDoc,
   onSnapshot,
+  DocumentData,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { ChatContext } from "../../context/ChatContext";
-import RightChat from "../../components/RightChat/RightChat";
-import Logo from "../../assets/LogoLoad.png";
+
 import { useNavigate } from "react-router-dom";
-import { MdOutlineCancel } from "react-icons/md";
 import SearChChat, { isChatR } from "../../recoil/initState";
 import { useRecoilState } from "recoil";
 import BodyChatHome from "./BodyChatHome";
 import { FiSearch } from "react-icons/fi";
 
 const ChatHome = () => {
-  // const currentUser1 = useSelector(
-  //   (state: RootState) => state.user.currentUser
-  // );
   const currentUser = useSelector((state: RootState) => state.info.info);
   const navigate = useNavigate();
   console.log(currentUser);
@@ -35,7 +31,7 @@ const ChatHome = () => {
   const [username, setUsername] = useState<string>("");
   const [user, setUser] = useState<DocumentData | null>(null);
   const [err, setErr] = useState<boolean>(false);
-  const [searChChatR, setSearChChatR] = useRecoilState(SearChChat);
+  const [, setSearChChatR] = useRecoilState(SearChChat);
   const handleSearch = async () => {
     const q = query(
       collection(db, "users"),

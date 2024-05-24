@@ -99,7 +99,7 @@ const rootReducer = combineReducers({
   addReels: addReelsSlice,
 });
 
-type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof rootReducer>;
 
 const persistConfig = {
   key: "root",

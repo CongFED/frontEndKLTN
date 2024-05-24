@@ -1,4 +1,3 @@
-import React from "react";
 import { PiWechatLogoLight } from "react-icons/pi";
 import { SearChChat } from "../../recoil/initState";
 import { useRecoilState } from "recoil";

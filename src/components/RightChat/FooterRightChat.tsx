@@ -7,7 +7,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
-import { IoSendSharp } from "react-icons/io5";
 import { FaImages } from "react-icons/fa";
 import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -24,8 +23,11 @@ const FooterRightChat = () => {
   const [toggleEmj, setToggleEmj] = useState(true);
   const addEmoji = (e: any) => {
     const sym = e.unified.split("-");
-    const codesArray = [];
-    sym.forEach((el: any) => codesArray.push("0x" + el));
+    const codesArray: number[] = [];
+    sym.forEach((el: string) => {
+      const code = parseInt(el, 16); // Parse the hexadecimal string to a number
+      codesArray.push(code);
+    });
     const emoji = String.fromCodePoint(...codesArray);
     setText(text + emoji);
   };
@@ -115,15 +117,6 @@ const FooterRightChat = () => {
   return (
     <div className="chat-footer flex-none">
       <div className="flex flex-row items-center p-4">
-        {/* <button
-          type="button"
-          className="flex flex-shrink-0 focus:outline-none mx-2 block text-blue-600 hover:text-blue-700 w-6 h-6"
-        >
-          <svg viewBox="0 0 20 20" className="w-full h-full fill-current">
-            <path d="M10,1.6c-4.639,0-8.4,3.761-8.4,8.4s3.761,8.4,8.4,8.4s8.4-3.761,8.4-8.4S14.639,1.6,10,1.6z M15,11h-4v4H9  v-4H5V9h4V5h2v4h4V11z" />
-          </svg>
-        </button> */}
-
         <form className="flex justify-center items-center  focus:outline-none   text-blue-600 hover:text-blue-700 w-8 h-6 ">
           <input
             type="file"

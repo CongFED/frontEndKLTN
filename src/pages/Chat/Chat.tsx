@@ -1,6 +1,6 @@
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   collection,
   query,
@@ -12,9 +12,10 @@ import {
   serverTimestamp,
   getDoc,
   onSnapshot,
+  DocumentData,
 } from "firebase/firestore";
 import { db } from "../../firebase";
-import { ChatContext } from "../../context/ChatContext";
+import { useChatContext } from "../../context/ChatContext";
 import RightChat from "../../components/RightChat/RightChat";
 import Logo from "../../assets/LogoLoad.png";
 import { useNavigate } from "react-router-dom";
@@ -99,7 +100,7 @@ const Chat = () => {
   };
   const [chats, setChats] = useState([]);
 
-  const { dispatch } = useContext(ChatContext);
+  const { dispatch } = useChatContext();
   console.log(chats);
   useEffect(() => {
     const getChats = () => {

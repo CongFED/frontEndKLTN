@@ -85,8 +85,12 @@ const AddReels = () => {
   };
   const addEmoji = (e: any) => {
     const sym = e.unified.split("-");
-    const codesArray = [];
-    sym.forEach((el: any) => codesArray.push("0x" + el));
+    const codesArray: number[] = [];
+
+    sym.forEach((el: string) => {
+      const code = parseInt(el, 16); // Parse the hexadecimal string to a number
+      codesArray.push(code);
+    });
     const emoji = String.fromCodePoint(...codesArray);
     setContent(Content + emoji);
   };

@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import { RootState } from "../../redux/store";
 import {
-  tokenState,
-  ReloadLike,
   ViewHome,
   isUpdatePost,
   isSharePost,
@@ -12,34 +10,26 @@ import {
   updateReels,
 } from "../../recoil/initState";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { api, setAuthToken } from "../../utils/setAuthToken";
-import API from "../../services/API";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchPost, reloadPost } from "../../redux/features/post/postSlice";
 import CardPosts from "../../components/CardPosts/CardPosts";
-import home from "../../assets/home.svg";
-import RightHome from "../../components/RightHome/RightHome";
 import { fetchFriend } from "../../redux/features/Not-Friend/friendSlice";
 import getPost from "../../redux/features/post/getPostAPI";
 import getReels from "../../redux/features/reels/getReelsAPI";
 import ChatHome from "./ChatHome";
 import CardReels from "../../components/CardReelss/CardReels";
+import { useAppDispatch } from "../../hook/hook";
 const Home = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const dispatch = useAppDispatch();
   const currentUser1 = useSelector((state: RootState) => state.info.info);
   const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
   const [isSharePostR, setIsSharePost] = useRecoilState(isSharePost);
-  const ReloadLike1 = useRecoilValue(ReloadLike);
+
   const ViewHomeR = useRecoilValue(ViewHome);
-  const [lastFetchTime, setLastFetchTime] = useState(0);
-  const [allPostsLoaded, setAllPostsLoaded] = useState(false);
+  const [, setAllPostsLoaded] = useState(false);
   const [isSharePost1R, setIsSharePost1R] = useRecoilState(isSharePost1);
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
+  const { info } = useSelector((state: RootState) => state.info);
   const [updateReelsR, setUpdateReelsR] = useRecoilState(updateReels);
   const [loadChat, setLoadChat] = useState(true);
   useEffect(() => {
@@ -53,11 +43,12 @@ const Home = () => {
   const [post, setPost] = useState([]);
   const [reels, setReels] = useState([]);
   useEffect(() => {
-    getPost(numberPost).then((data) => setPost(data));
+    getPost(numberPost.toString()).then((data) => setPost(data));
   }, [numberPost]);
   useEffect(() => {
     if (isUpdatePostR == false) {
-      getPost(numberPost).then((data) => setPost(data));
+      getPost(numberPost.toString()).then((data) => setPost(data));
+
       setSsUpdatePost(true);
     }
   }, [isUpdatePostR]);
@@ -94,7 +85,7 @@ const Home = () => {
     }
   }, [currentUser1.success]);
 
-  const [isEndOfPage, setIsEndOfPage] = useState(false);
+  const [, setIsEndOfPage] = useState(false);
 
   const handleIntersection: IntersectionObserverCallback = ([entry]) => {
     if (entry.isIntersecting) {
@@ -129,7 +120,7 @@ const Home = () => {
       setAllPostsLoaded(false); // Nếu đã tải hết, set biến state allPostsLoaded thành true
     }
   }, [post, numberPost]);
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [, setScrollPosition] = useState(0);
 
   const handleScroll = () => {
     setScrollPosition(window.pageYOffset);

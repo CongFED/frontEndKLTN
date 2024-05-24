@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ChatContext } from "../../context/ChatContext";
 import BodyRightChat from "./BodyRightChat";
 import FooterRightChat from "./FooterRightChat";
@@ -135,7 +135,10 @@ const RightChat = () => {
       ỵ: "y",
     };
 
-    return str.replace(/[^A-Za-z0-9]/g, (char) => diacriticsMap[char] || char);
+    return str.replace(
+      /[^A-Za-z0-9]/g,
+      (char: any) => diacriticsMap[char] || char
+    );
   };
   const removeSpaces = (str: string) => {
     return str.replace(/\s+/g, "");
@@ -150,8 +153,7 @@ const RightChat = () => {
       name;
 
     const appID = 722062014; // fill your appID here
-    const serverSecret = "28e8f45315c65c6ece66781503e4946e"; // fill your serverSecret here
-    console.log("ban dau", userId, userName);
+    const serverSecret = "28e8f45315c65c6ece66781503e4946e";
     const KitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,

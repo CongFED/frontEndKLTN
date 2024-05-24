@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { tokenState } from "../../recoil/initState";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import { IoTrashBinOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";

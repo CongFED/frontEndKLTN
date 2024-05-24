@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "../../recoil/initState";
@@ -8,7 +8,6 @@ import { RootState } from "../../redux/store";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChatContext } from "../../context/ChatContext";
 import { IoChatbubblesOutline } from "react-icons/io5";
-
 import {
   doc,
   getDoc,
@@ -29,6 +28,12 @@ interface Comment {
   islike: boolean;
   videos: { link: string; createDate: string }[]; //
 }
+interface FirebaseData {
+  uid: string;
+  displayName: string;
+  photoURL: string;
+}
+
 interface Info {
   content: string;
   images: { linkImage: string; createDate: string }[]; // Đặt kiểu cho mảng images
@@ -38,8 +43,10 @@ interface Info {
   id: string;
   countLike: any;
   islike: boolean;
-  firebaseData: [];
+  firebaseData: FirebaseData;
   address: string;
+  fullName: string;
+  background: string;
 }
 interface ResponseData {
   data: Comment[];
@@ -140,7 +147,6 @@ const PersonalFriend = () => {
     // setLoadSearch1(true);
     // setAuthToken(token);
     try {
-      const id = idfriend;
       console.log(1);
       const response = await api.post(
         `https://www.socialnetwork.somee.com/api/Friend/updateFriendLevel`,

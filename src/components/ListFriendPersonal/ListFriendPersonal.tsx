@@ -1,12 +1,14 @@
-import { tokenState } from "../../recoil/initState";
-import Skeleton from "react-loading-skeleton";
-
 import { Link, useNavigate } from "react-router-dom";
-import { Empty } from "antd";
 import { api } from "../../utils/setAuthToken";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
 // import { Skeleton } from "react-loading-skeleton";
+interface Comment {
+  nickname: string;
+  fullName: string;
+  userId: string;
+  image: string;
+  levelFriend: any;
+}
 interface ResponseData {
   data: Comment[];
   success: boolean;
@@ -19,12 +21,10 @@ interface ResponseDataRQ {
 }
 const ListFriendPersonal = () => {
   const navigate = useNavigate();
-  const [loadInfo, setLoadCmt1] = useState(false);
-  const [loadSearch, setLoadSearch] = useState(false);
-  const [loadSearch1, setLoadSearch1] = useState(false);
-  const [loadSearch2, setLoadSearch2] = useState(false);
-  const [load, setLoad] = useState(false);
-  const token = useRecoilValue(tokenState);
+  const [, setLoadCmt1] = useState(false);
+  const [, setLoadSearch1] = useState(false);
+  const [, setLoadSearch2] = useState(false);
+  const [, setLoad] = useState(false);
   const [data, setData] = useState<ResponseData>({
     data: [],
     success: false,
@@ -66,11 +66,6 @@ const ListFriendPersonal = () => {
       .then((response) => {
         // Cập nhật dữ liệu vào state
         if (response.status === 200) {
-          // setLoadCmt1(true);
-          // setLoad(true);
-          // setLoadSearch1(false);
-          // setLoadSearch2(false);
-
           setDataRQ(response.data);
         }
       })
@@ -115,15 +110,13 @@ const ListFriendPersonal = () => {
     loadData();
     loadDataRQ(); // loadDataUserCmt();
   }, []);
-  const myArray = [1, 2, 3, 4, 5, 6, 7, 8];
-  console.log(data, dataRQ);
   return (
     <div className=" w-[20%] h-[fit-content] mt-4 flex justify-end px-4 ">
       <div className="w-full">
         <div className="bg-white w-[100%]  rounded-lg py-2">
           <div>
             <p className="font-[600]">List Friend</p>
-            {data.data.map((item: Comment, index: number) => (
+            {data.data.map((_, index: number) => (
               <Link
                 to={`/personal-user/${data.data[index].userId}`}
                 className="w-[100%] h-auto rounded-[10px] flex justify-between items-center mb-2 bg-white  hover:bg-slate-50 px-2"
@@ -160,7 +153,7 @@ const ListFriendPersonal = () => {
         {dataRQ?.data.length !== 0 && (
           <div className="bg-white w-[100%]  rounded-lg py-2 mt-6">
             <div>
-              {dataRQ.data.map((item: Comment, index: number) => (
+              {dataRQ.data.map((_, index: number) => (
                 <div className="w-[100%] h-auto rounded-[10px] flex justify-start items-center mb-2 bg-white py-2 hover:bg-slate-50">
                   <img
                     src={dataRQ.data[index].image}

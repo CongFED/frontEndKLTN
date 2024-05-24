@@ -13,6 +13,7 @@ const initialState: FriendState = {
   isErrorfriend: false,
   errorfriend: "",
   reloadTrigger: false, 
+  
 };
 
 // async thunk
@@ -33,19 +34,19 @@ const friendSlice = createSlice({
   extraReducers: (builder: ActionReducerMapBuilder<FriendState>) => {
     builder
       .addCase(fetchFriend.pending, (state) => {
-        state.isError = false;
-        state.isLoading = true;
+        state.isErrorfriend = false;
+        state.isLoadingfriend = true;
         state.friend =  [];
       })
       .addCase(fetchFriend.fulfilled, (state, action: PayloadAction<any>) => {
-        state.isLoading = false;
+        state.isLoadingfriend = false;
         state.friend = action.payload;
       })
-      .addCase(fetchFriend.rejected, (state, action) => { // Kiểu dữ liệu của action được xác định tự động
-        state.isLoading = false;
+      .addCase(fetchFriend.rejected, (state) => { // Kiểu dữ liệu của action được xác định tự động
+        state.isLoadingfriend = false;
         state.friend =  [];
-        state.isError = true;
-        state.error = action.error?.message || ""; // Kiểm tra action.error?.message có thể là undefined
+        state.isErrorfriend = true;
+      // Kiểm tra action.error?.message có thể là undefined
       });
   },
 });

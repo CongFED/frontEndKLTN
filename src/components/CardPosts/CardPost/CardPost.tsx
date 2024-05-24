@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaEarthAmericas } from "react-icons/fa6";
 import { FaUserFriends } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -21,6 +21,13 @@ import { MdOutlineEdit } from "react-icons/md";
 import toast from "react-hot-toast";
 import EditPost from "../../EditPost/EditPost";
 import LazyLoadImg from "../../common/LazyLoadImg/LazyLoadImg";
+interface Comment {
+  childrenComment: [];
+  id: string;
+  content: string;
+  fullName: string;
+  image: string;
+}
 interface Props {
   data: any;
   cmtid: string;
@@ -30,6 +37,9 @@ interface ResponseData {
   success: boolean;
   message: string;
 }
+interface YourExistingDataType {
+  data: any;
+}
 const CardPost = ({ data, cmtid }: Props) => {
   const navigate = useNavigate();
   const wowRef = useRef<HTMLDivElement>(null);
@@ -38,8 +48,9 @@ const CardPost = ({ data, cmtid }: Props) => {
       wowRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-  const [images, setImages] = useState(data.images);
-  const [videos, setVideos] = useState(data.videos);
+  type DataType = YourExistingDataType | null;
+  const [images] = useState(data.images);
+  const [videos] = useState(data.videos);
   const token = useRecoilValue(tokenState);
   // const [like, setLike] = useRecoilState(ReloadLike);
   const [toggleEmj, setToggleEmj] = useState(true);
@@ -62,21 +73,21 @@ const CardPost = ({ data, cmtid }: Props) => {
     success: false,
     message: "",
   });
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
-  const dataAddCmt = useSelector((state: RootState) => state.addCmt.dataAddCmt);
+  const { info } = useSelector((state: RootState) => state.info);
+  const dataAddCmt = useSelector(
+    (state: RootState) => state.addCmt.dataAddCmt
+  ) as DataType;
   const handleSeeMore = () => {
     setVisibleComments(visibleComments + 2);
   };
   const handleSeeLess = () => {
     setVisibleComments(2);
   };
-  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.code === "Enter") {
-      handleAddPostBig();
-    }
-  };
+  // const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.code === "Enter") {
+  //     handleAddPostBig();
+  //   }
+  // };
   useEffect(() => {
     if (dataAddCmt?.data.success == true) {
       // setLoadCmt1(false);
@@ -87,7 +98,7 @@ const CardPost = ({ data, cmtid }: Props) => {
       loadData();
     }
   }, [dataAddCmt]);
-  const [postId, setPostId] = useState(data.id);
+  const [postId] = useState(data.id);
   const dispatch = useDispatch();
   const handleLike = async () => {
     setAuthToken(token);
@@ -214,15 +225,23 @@ const CardPost = ({ data, cmtid }: Props) => {
   };
   const addEmoji = (e: any) => {
     const sym = e.unified.split("-");
-    const codesArray = [];
-    sym.forEach((el: any) => codesArray.push("0x" + el));
+    const codesArray: number[] = [];
+
+    sym.forEach((el: string) => {
+      const code = parseInt(el, 16); // Parse the hexadecimal string to a number
+      codesArray.push(code);
+    });
     const emoji = String.fromCodePoint(...codesArray);
     setContent(Content + emoji);
   };
   const addEmojiChild = (e: any) => {
     const sym = e.unified.split("-");
-    const codesArray = [];
-    sym.forEach((el: any) => codesArray.push("0x" + el));
+    const codesArray: number[] = [];
+
+    sym.forEach((el: string) => {
+      const code = parseInt(el, 16); // Parse the hexadecimal string to a number
+      codesArray.push(code);
+    });
     const emoji = String.fromCodePoint(...codesArray);
     setContentChild(ContentChild + emoji);
   };
@@ -305,7 +324,7 @@ const CardPost = ({ data, cmtid }: Props) => {
       })
       .catch((err) => console.log(err));
   };
-  const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
+  const [, setSsUpdatePost] = useRecoilState(isUpdatePost);
   const hanldDltPost = async () => {
     setAuthToken(token);
     console.log(data.id);
@@ -334,39 +353,7 @@ const CardPost = ({ data, cmtid }: Props) => {
   useEffect(() => {
     scrollToWow(); // Scroll sau khi dữ liệu đã được tải
   }, [dataCmt]);
-  const imgRef = useRef();
-  useEffect(() => {
-    const img = imgRef.current;
-    // if (!img) return;
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        console.log(entries[0].isIntersecting);
-        img.setAttribute("src", img.alt);
-      }
-    });
-    if (img) observer.observe(img);
 
-    return () => {
-      if (img) observer.unobserve(img);
-    };
-  }, []);
-  // const [days, setDays] = useState("hours");
-  // const [currentTime, setCurrentTime] = useState(new Date());
-  // const targetTime = new Date("2024-05-09T23:36:17.183");
-
-  // // Hàm để tính khoảng cách thời gian
-  // function calculateTimeDifference(currentTime, targetTime) {
-  //   const difference = targetTime.getTime() - currentTime.getTime();
-  //   const hoursDifference = difference / (1000 * 60 * 60); // Chuyển đổi sang giờ
-  //   const daysDifference = Math.ceil(Math.abs(hoursDifference) / 24); // Tính số ngày và làm tròn lên
-  //   if (daysDifference >= 1) {
-  //     setDays("days");
-  //   }
-  //   return daysDifference;
-  // }
-
-  // const hoursDifference = calculateTimeDifference(currentTime, targetTime);
-  // console.log(hoursDifference);
   return (
     <div
       className="w-[500px] h-auto bg-white  mb-10 rounded-[10px]"
@@ -436,7 +423,7 @@ const CardPost = ({ data, cmtid }: Props) => {
           <>
             {images.length === 2 ? (
               <div className="flex">
-                {images?.map((index, item) => (
+                {images?.map((index: number, item: number) => (
                   <LazyLoadImg
                     index={index}
                     images={images[item]?.linkImage}
@@ -446,7 +433,7 @@ const CardPost = ({ data, cmtid }: Props) => {
               </div>
             ) : images.length === 3 ? (
               <div className="flex">
-                {images?.map((index, item) => (
+                {images?.map((index: number, item: number) => (
                   <LazyLoadImg
                     index={index}
                     images={images[item]?.linkImage}
@@ -456,14 +443,14 @@ const CardPost = ({ data, cmtid }: Props) => {
               </div>
             ) : images.length === 1 && videos.length === 1 ? (
               <div className="flex flex-col">
-                {images?.map((index, item) => (
+                {images?.map((index: number, item: number) => (
                   <LazyLoadImg
                     index={index}
                     images={images[item]?.linkImage}
                     className="w-[100%]"
                   />
                 ))}
-                {videos?.map((index, item) => (
+                {videos?.map((item: number) => (
                   <div className="mt-2 p-3">
                     {" "}
                     <div className=" border-[5px] border-[#456fe6] border-solid">
@@ -474,7 +461,7 @@ const CardPost = ({ data, cmtid }: Props) => {
               </div>
             ) : images.length === 1 ? (
               <div className="flex">
-                {images?.map((index, item) => (
+                {images?.map((index: number, item: number) => (
                   <LazyLoadImg
                     index={index}
                     images={images[item]?.linkImage}
@@ -484,7 +471,7 @@ const CardPost = ({ data, cmtid }: Props) => {
               </div>
             ) : (
               <>
-                {videos?.map((index, item) => (
+                {videos?.map((item: number) => (
                   <div className="">
                     <CustomVideo src={videos[item]?.link} />
                   </div>
@@ -552,7 +539,7 @@ const CardPost = ({ data, cmtid }: Props) => {
               value={Content}
               className={`${isInputFocused ? "inputCmt1" : "inputCmt"}`}
               onFocus={handleFocus}
-              onKeyDown={handleKey}
+              // onKeyDown={handleKey}
             ></textarea>
             <div className={`${isInputFocused ? "iconCmt1" : "iconCmt"}`}>
               {" "}
@@ -665,7 +652,7 @@ const CardPost = ({ data, cmtid }: Props) => {
 
                 {item.childrenComment
                   .slice(0, visibleComments)
-                  .map((childComment: any, index1: any) => (
+                  .map((childComment: any) => (
                     <div className="flex justify-start items-top px-6 mt-2 mb-2">
                       <img
                         src={childComment.image}

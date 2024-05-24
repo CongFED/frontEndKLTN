@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
-import ImageMain2 from "../../assets/login/ImgMain.png";
+import { useEffect, useState } from "react";
 import "./style.css";
 import type { RadioChangeEvent, DatePickerProps } from "antd";
 import { DatePicker, Space } from "antd";
 import { Radio } from "antd";
-// import { UserId } from "../../utils/getUserIdd";
-import { useDispatch, useSelector } from "react-redux";
-import { addInfo } from "../../redux/features/Add-Info/addInfoAPI";
-import { useNavigate } from "react-router";
-import { RootState } from "../../redux/store";
-import toast, { Toaster } from "react-hot-toast";
+import { useAppDispatch } from "../../hook/hook";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import { fetchInfo } from "../../redux/features/info/infoSlice";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -24,15 +18,28 @@ import moment from "moment";
 interface Props {
   info: any;
 }
-function disabledDate(current) {
+interface DataItem {
+  code: string;
+  fullName: string;
+  // Add other properties as necessary
+}
+
+interface DataProvide {
+  data: DataItem[];
+}
+interface DataDistrict {
+  data: DataItem[];
+}
+interface DataWar {
+  data: DataItem[];
+}
+function disabledDate(current: any) {
   // Disable all dates after today
   return current && current > moment().endOf("day");
 }
 const EditInfo = ({ info }: Props) => {
-  const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
 
-  console.log(info);
   const [isLoading, setIsLoading] = useState(false);
   const [FullName, setFullName] = useState(info?.data?.fullName);
   const [NickName, setNickName] = useState(info?.data?.nickname);
@@ -47,11 +54,8 @@ const EditInfo = ({ info }: Props) => {
   const [Gender, setGender] = useState(info?.data?.gender);
   const [value, setValue] = useState(info?.data?.gender);
   const [Address, setAddress] = useState("");
-  const dispatch = useDispatch();
-  const [modalOpened, setModalOpened] = useRecoilState(ismodalOpened);
-  // const onHandleFormSubmit = (data: TFormValues) => {
-  //   onHandleNext();
-  // };
+  const dispatch = useAppDispatch();
+  const [, setModalOpened] = useRecoilState(ismodalOpened);
   const onChange: DatePickerProps["onChange"] = (date, dateString) => {
     setDateOfBirth(dateString);
     console.log(date, dateString);
@@ -90,16 +94,21 @@ const EditInfo = ({ info }: Props) => {
   const idToken = decodeToken(tokenDecode);
   const UserId = idToken.payload.id;
   //
-  const [Loamodal, setLoadModalOpened] = useRecoilState(isLoadmodalOpened);
+  const [, setLoadModalOpened] = useRecoilState(isLoadmodalOpened);
   const handleLUpdate = async () => {
     setIsLoading(true);
     try {
       // Tạo formData để chứa dữ liệu và file
       const File1 = new FormData();
-      File1.append("File", File);
-
       const File2 = new FormData();
-      File2.append("File", FileBackground);
+      if (File) {
+        File1.append("File", File);
+      }
+
+      if (FileBackground) {
+        File2.append("File", FileBackground);
+      }
+
       const data = {
         UserId: UserId,
         FullName: FullName,
@@ -142,37 +151,10 @@ const EditInfo = ({ info }: Props) => {
     }
   };
   //
-  const currentUser1 = useSelector((state: RootState) => state.info.info);
-  const error = useSelector((state) => state.addInfo.error);
-  const dataAddInfo = useSelector(
-    (state: RootState) => state.addInfo.dataAddInfo
-  );
-  const isFetching = useSelector(
-    (state: RootState) => state.addInfo.isFetching
-  );
-  // useEffect(() => {
-  //   if (dataAddInfo?.data.success === true) {
-  //     toast.success("Thêm thông tin thành công!");
-  //     console.log(dataAddInfo);
-  //     localStorage.setItem("hasInfor", "true");
-  //     dispatch(fetchInfo());
-  //     // setTimeout(() => {
-  //     toast.dismiss(); // Ẩn toast
-  //     if (currentUser1.success == 200) {
-  //       navigate("/");
-  //     }
 
-  //     // }, 1000);
-  //   }
-  //   if (error == true && isFetching == false) {
-  //     setIsLoading(false);
-  //     console.log(error);
-  //     toast.error("Thêm thông tin thất bại!");
-  //   }
-  // }, [dataAddInfo, error, isFetching]);
-  const [dataProvide, setDataProvide] = useState([]);
-  const [dataDistrict, setDataDistrict] = useState([]);
-  const [dataWard, setDataWard] = useState([]);
+  const [dataProvide, setDataProvide] = useState<DataProvide | null>(null);
+  const [dataDistrict, setDataDistrict] = useState<DataDistrict | null>(null);
+  const [dataWard, setDataWard] = useState<DataWar | null>(null);
 
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedDistrict1, setSelectedDistrict1] = useState("01");
@@ -361,7 +343,8 @@ const EditInfo = ({ info }: Props) => {
               </div>
 
               <form className="file-upload-form mt-1 pl-6">
-                <label for="file" className="file-upload-label">
+                {/* <label for="file" className="file-upload-label"> */}
+                <label className="file-upload-label">
                   <div className="file-upload-design">
                     <div className="loader1"></div>
                   </div>
@@ -378,7 +361,8 @@ const EditInfo = ({ info }: Props) => {
               </div>
 
               <form className="file-upload-form mt-1 pl-6">
-                <label for="filebg" className="file-upload-label">
+                {/* <label for="filebg" className="file-upload-label"> */}
+                <label className="file-upload-label">
                   <div className="file-upload-design">
                     <div className="loader1"></div>
                   </div>
@@ -438,9 +422,9 @@ const EditInfo = ({ info }: Props) => {
                   value={selectedCity}
                 >
                   <option selected>Choose a provides</option>
-                  {dataProvide?.data?.map((item: any, index: any) => (
-                    <option value={dataProvide.data[index]?.code} key={index}>
-                      {dataProvide.data[index]?.fullName}
+                  {dataProvide?.data?.map((item: DataItem, index: number) => (
+                    <option value={item.code} key={index}>
+                      {item.fullName}
                     </option>
                   ))}
                 </select>
@@ -461,7 +445,7 @@ const EditInfo = ({ info }: Props) => {
                   value={selectedDistrict1}
                 >
                   <option selected>Choose a district</option>
-                  {dataDistrict?.data?.map((item: any, index: any) => (
+                  {dataDistrict?.data?.map((_, index: any) => (
                     <option value={dataDistrict.data[index]?.code} key={index}>
                       {dataDistrict.data[index]?.fullName}
                     </option>
@@ -487,7 +471,7 @@ const EditInfo = ({ info }: Props) => {
                   <option selected className="w-[200px]">
                     Choose a district
                   </option>
-                  {dataWard?.data?.map((item: any, index: any) => (
+                  {dataWard?.data?.map((_, index: any) => (
                     <option value={dataWard.data[index]?.code} key={index}>
                       {dataWard.data[index]?.fullName}
                     </option>
@@ -533,7 +517,6 @@ const EditInfo = ({ info }: Props) => {
           </div>
         </form>
       </div>
-      <Toaster />
     </div>
   );
 };

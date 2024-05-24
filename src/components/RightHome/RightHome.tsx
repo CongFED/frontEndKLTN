@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CardFriend from "./CardFriend/CardFriend";
 import Skeleton from "react-loading-skeleton";
 import { Empty } from "antd";
@@ -97,7 +97,7 @@ const RightHome = ({ data }: Props) => {
               </div>
             ) : (
               <div className=" flex  flex-wrap h-auto justify-between">
-                {data?.data?.slice(0, 6).map((index, item) => (
+                {data?.data?.slice(0, 6).map((index: any) => (
                   <CardFriend data={index} />
                 ))}{" "}
               </div>

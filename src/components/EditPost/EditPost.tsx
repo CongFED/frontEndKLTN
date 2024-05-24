@@ -1,8 +1,7 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
-import { FaEarthAmericas } from "react-icons/fa6";
 import { HiOutlineMicrophone } from "react-icons/hi2";
-import { IoIosSend, IoMdClose } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import type { MenuProps } from "antd";
@@ -10,8 +9,8 @@ import { Button, Dropdown, Menu } from "antd";
 import Picker from "@emoji-mart/react";
 import { api } from "../../utils/setAuthToken";
 import { useRecoilState } from "recoil";
-import { ShareS, isUpdatePost, isSharePost } from "../../recoil/initState";
-import toast from "react-hot-toast";
+import { ShareS, isSharePost } from "../../recoil/initState";
+
 import { useDropzone } from "react-dropzone";
 
 interface UploadedFile {
@@ -22,9 +21,7 @@ interface Props {
   data: any;
 }
 const EditPost = ({ data }: Props) => {
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
+  const { info } = useSelector((state: RootState) => state.info);
   const [lengthAI, setLengthAI] = useState(data.images.length);
   const [stringArray, setStringArray] = useState([""]);
   const [hiddenIds, setHiddenIds] = useState<string[]>([]);
@@ -43,7 +40,7 @@ const EditPost = ({ data }: Props) => {
     setHiddenIds([...hiddenIds, id]);
   };
   console.log(data, stringArray);
-  const [loadShare, setLoadShare] = useRecoilState(ShareS);
+  const [, setLoadShare] = useRecoilState(ShareS);
   const [toggleEmj, setToggleEmj] = useState(true);
   const [load, setLoad] = useState(true);
   const [Content, setContent] = useState(data.content);
@@ -72,11 +69,15 @@ const EditPost = ({ data }: Props) => {
     );
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
   const addEmoji = (e: any) => {
     const sym = e.unified.split("-");
-    const codesArray = [];
-    sym.forEach((el: any) => codesArray.push("0x" + el));
+    const codesArray: number[] = [];
+
+    sym.forEach((el: string) => {
+      const code = parseInt(el, 16); // Parse the hexadecimal string to a number
+      codesArray.push(code);
+    });
     const emoji = String.fromCodePoint(...codesArray);
     setContent(Content + emoji);
   };
@@ -101,8 +102,8 @@ const EditPost = ({ data }: Props) => {
   const handleBlur = () => {
     setToggleEmj(!toggleEmj);
   };
-  const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
-  const [isSharePostR, setIsSharePost] = useRecoilState(isSharePost);
+
+  const [, setIsSharePost] = useRecoilState(isSharePost);
   const handlePost = async () => {
     setLoad(false);
     try {

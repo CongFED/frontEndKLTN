@@ -1,27 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { api, setAuthToken } from "../../utils/setAuthToken";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { fetchPost } from "../../../redux/features/post/postSlice";
+import { useRecoilValue } from "recoil";
 import { tokenState } from "../../recoil/initState";
 import Skeleton from "react-loading-skeleton";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { ChatContext } from "../../context/ChatContext";
-// import { Skeleton } from "react-loading-skeleton";
-import { CiMap } from "react-icons/ci";
+import { useParams } from "react-router-dom";
 import CardPost from "../../components/CardPosts/CardPost/CardPost";
-interface Comment {
-  content: string;
-  images: { linkImage: string; createDate: string }[]; // Đặt kiểu cho mảng images
-  linkImage?: string;
-  createDate: string;
-  userId: string;
-  id: string;
-  countLike: any;
-  islike: boolean;
-  videos: { link: string; createDate: string }[]; //
-}
+
 interface Info {
   content: string;
   images: { linkImage: string; createDate: string }[]; // Đặt kiểu cho mảng images
@@ -35,21 +19,15 @@ interface Info {
   address: string;
   length: number;
 }
-interface ResponseData {
-  data: Comment[];
-  success: boolean;
-  message: string;
-}
 interface ResponseDataInfo {
   data: Info[];
   success: boolean;
   message: string;
 }
 const PagePostSimp = () => {
-  const navigate = useNavigate();
   const [, setLoadCmt1] = useState(false);
-  const [loadSearch1, setLoadSearch1] = useState(false);
-  const [loadSearch2, setLoadSearch2] = useState(false);
+  const [, setLoadSearch1] = useState(false);
+  const [, setLoadSearch2] = useState(false);
   const [loadData, setLoadData] = useState(false);
   const token = useRecoilValue(tokenState);
   const [data, setData] = useState<ResponseDataInfo>({
@@ -66,21 +44,7 @@ const PagePostSimp = () => {
     id = path.id || "";
     cmtid = path.cmtid || "";
   }
-  console.log(id, cmtid);
-  //   const pathname = url.split("/");
 
-  // Lấy phần cuối cùng của mảng parts
-  // const lastPart = pathname[pathname.length - 1];
-
-  // // Sử dụng method split() lần nữa để tách lastPart thành hai phần bằng dấu "="
-  // const ids = lastPart.split("=");
-
-  // // Lấy phần đầu tiên và phần thứ hai của mảng ids
-  // const postId = ids[1];
-  // const commentId = ids[2];
-
-  // console.log("Post ID:", postId);
-  // console.log("Comment ID:", commentId);
   console.log(data.data);
   const loadDataInfo = async () => {
     // Gọi API để lấy dữ liệu

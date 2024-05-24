@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEarthAmericas } from "react-icons/fa6";
 import { FaUserFriends } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { api, setAuthToken } from "../../../utils/setAuthToken";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { fetchPost } from "../../../redux/features/post/postSlice";
-import {
-  ReloadLike,
-  tokenState,
-  ShareS,
-  isUpdatePost,
-} from "../../../recoil/initState";
+import { tokenState, ShareS, isUpdatePost } from "../../../recoil/initState";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { HiOutlineMicrophone } from "react-icons/hi2";
@@ -24,6 +18,14 @@ import CustomVideo from "../../CustomVideo/CustomVideo";
 import ShareLayout from "../../shareLayout/shareLayout";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+interface Comment {
+  childrenComment: any;
+  id: string;
+  content: string;
+  fullName: string;
+  image: string;
+  number: string;
+}
 interface Props {
   data: any;
 }
@@ -32,9 +34,13 @@ interface ResponseData {
   success: boolean;
   message: string;
 }
+
+interface YourExistingDataType {
+  data: any;
+}
 const CardPostShare = ({ data }: Props) => {
-  const [images, setImages] = useState(data.images);
-  const [videos, setVideos] = useState(data.videos);
+  const [images] = useState(data.images);
+  const [videos] = useState(data.videos);
   const token = useRecoilValue(tokenState);
   const [toggleEmj, setToggleEmj] = useState(true);
   const [Content, setContent] = useState("");
@@ -63,11 +69,11 @@ const CardPostShare = ({ data }: Props) => {
     success: false,
     message: "",
   });
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
-
-  const dataAddCmt = useSelector((state: RootState) => state.addCmt.dataAddCmt);
+  const { info } = useSelector((state: RootState) => state.info);
+  type DataType = YourExistingDataType | null;
+  const dataAddCmt = useSelector(
+    (state: RootState) => state.addCmt.dataAddCmt
+  ) as DataType;
   const handleSeeMore = () => {
     setVisibleComments(visibleComments + 2);
   };
@@ -75,7 +81,7 @@ const CardPostShare = ({ data }: Props) => {
     setVisibleComments(2);
   };
   useEffect(() => {
-    if (dataAddCmt?.data.success == true) {
+    if (dataAddCmt && dataAddCmt.data && dataAddCmt.data.success === true) {
       // setLoadCmt1(false);
       setLoadCmt(false);
       setLoadCmtChild(false);
@@ -84,8 +90,8 @@ const CardPostShare = ({ data }: Props) => {
       loadData();
     }
   }, [dataAddCmt]);
-  const [postId, setPostId] = useState(data.id);
-  const [postIdShare, setPostIdShare] = useState(data.idShare);
+  const [postId] = useState(data.id);
+  const [postIdShare] = useState(data.idShare);
   const dispatch = useDispatch();
   const handleLike = async () => {
     setAuthToken(token);
@@ -227,15 +233,22 @@ const CardPostShare = ({ data }: Props) => {
   };
   const addEmoji = (e: any) => {
     const sym = e.unified.split("-");
-    const codesArray = [];
-    sym.forEach((el: any) => codesArray.push("0x" + el));
+    const codesArray: number[] = [];
+
+    sym.forEach((el: string) => {
+      const code = parseInt(el, 16); // Parse the hexadecimal string to a number
+      codesArray.push(code);
+    });
     const emoji = String.fromCodePoint(...codesArray);
     setContent(Content + emoji);
   };
   const addEmojiChild = (e: any) => {
     const sym = e.unified.split("-");
-    const codesArray = [];
-    sym.forEach((el: any) => codesArray.push("0x" + el));
+    const codesArray: number[] = [];
+    sym.forEach((el: string) => {
+      const code = parseInt(el, 16); // Parse the hexadecimal string to a number
+      codesArray.push(code);
+    });
     const emoji = String.fromCodePoint(...codesArray);
     setContentChild(ContentChild + emoji);
   };
@@ -316,7 +329,6 @@ const CardPostShare = ({ data }: Props) => {
 
   const loadData = async () => {
     // Gọi API để lấy dữ liệu
-    const id = data.id;
     await api
       .get<ResponseData>(
         `https://www.socialnetwork.somee.com/api/cmt/getcmtPost/${data.id}`
@@ -335,7 +347,7 @@ const CardPostShare = ({ data }: Props) => {
   };
   const loadDataShare = async () => {
     // Gọi API để lấy dữ liệu
-    const id = data.id;
+
     await api
       .get<ResponseData>(
         `https://www.socialnetwork.somee.com/api/cmt/getcmtPost/${data.idShare}`
@@ -380,8 +392,8 @@ const CardPostShare = ({ data }: Props) => {
   }, []);
   const navigate = useNavigate();
   const [toggleShare, setToggleShare] = useState(false);
-  const [isUpdatePostR, setSsUpdatePost] = useRecoilState(isUpdatePost);
-  const hanldDltPost = async (idShare) => {
+  const [, setSsUpdatePost] = useRecoilState(isUpdatePost);
+  const hanldDltPost = async (idShare: string) => {
     setAuthToken(token);
     console.log(idShare);
     return api
@@ -478,10 +490,10 @@ const CardPostShare = ({ data }: Props) => {
                   <>
                     {images.length === 2 ? (
                       <div className="flex">
-                        {images?.map((index, item) => (
+                        {images?.map((index: number) => (
                           <img
                             key={index}
-                            src={images[item]?.linkImage}
+                            src={images[index]?.linkImage}
                             alt=""
                             className="max-h-[300px] w-[50%] mx-[2px]"
                           />
@@ -489,10 +501,10 @@ const CardPostShare = ({ data }: Props) => {
                       </div>
                     ) : images.length === 3 ? (
                       <div className="flex">
-                        {images?.map((index, item) => (
+                        {images?.map((index: number) => (
                           <img
                             key={index}
-                            src={images[item]?.linkImage}
+                            src={images[index]?.linkImage}
                             alt=""
                             className="max-h-[300px] w-[50%] mx-[2px]"
                           />
@@ -500,26 +512,26 @@ const CardPostShare = ({ data }: Props) => {
                       </div>
                     ) : images.length === 1 && videos.length === 1 ? (
                       <div className="flex flex-col">
-                        {images?.map((index, item) => (
+                        {images?.map((index: number) => (
                           <img
                             key={index}
-                            src={images[item]?.linkImage}
+                            src={images[index]?.linkImage}
                             alt=""
                             className=" w-[100%]"
                           />
                         ))}
-                        {videos?.map((index, item) => (
+                        {videos?.map((index: number) => (
                           <div className="mt-2 p-3">
                             {" "}
                             <div className=" border-[5px] border-[#456fe6] border-solid">
-                              <CustomVideo src={videos[item]?.link} />
+                              <CustomVideo src={videos[index]?.link} />
                             </div>
                           </div>
                         ))}
                       </div>
                     ) : images.length === 1 ? (
                       <div className="flex">
-                        {images?.map((index, item) => (
+                        {images?.map((index: number, item: number) => (
                           <img
                             key={index}
                             src={images[item]?.linkImage}
@@ -530,7 +542,7 @@ const CardPostShare = ({ data }: Props) => {
                       </div>
                     ) : (
                       <>
-                        {videos?.map((index, item) => (
+                        {videos?.map((item: number) => (
                           <div className="">
                             <CustomVideo src={videos[item]?.link} />
                           </div>
@@ -742,7 +754,7 @@ const CardPostShare = ({ data }: Props) => {
 
                   {item.childrenComment
                     .slice(0, visibleComments)
-                    .map((childComment: any, index1: any) => (
+                    .map((childComment: any) => (
                       <div className="flex justify-start items-top px-6 mt-2 mb-2">
                         <img
                           src={childComment.image}
@@ -845,7 +857,7 @@ const CardPostShare = ({ data }: Props) => {
           style={{
             display: toggleEmj ? "none" : "block",
             position: "fixed",
-            right: 0,
+            right: 1000,
             top: 0,
           }}
         >
@@ -942,7 +954,7 @@ const CardPostShare = ({ data }: Props) => {
                   <>
                     {images.length === 2 ? (
                       <div className="flex">
-                        {images?.map((index, item) => (
+                        {images?.map((index: number, item: number) => (
                           <img
                             key={index}
                             src={images[item]?.linkImage}
@@ -953,7 +965,7 @@ const CardPostShare = ({ data }: Props) => {
                       </div>
                     ) : images.length === 3 ? (
                       <div className="flex">
-                        {images?.map((index, item) => (
+                        {images?.map((index: number, item: number) => (
                           <img
                             key={index}
                             src={images[item]?.linkImage}
@@ -964,7 +976,7 @@ const CardPostShare = ({ data }: Props) => {
                       </div>
                     ) : images.length === 1 && videos.length === 1 ? (
                       <div className="flex flex-col">
-                        {images?.map((index, item) => (
+                        {images?.map((index: number, item: number) => (
                           <img
                             key={index}
                             src={images[item]?.linkImage}
@@ -972,7 +984,7 @@ const CardPostShare = ({ data }: Props) => {
                             className=" w-[100%]"
                           />
                         ))}
-                        {videos?.map((index, item) => (
+                        {videos?.map((item: number) => (
                           <div className="mt-2 p-3">
                             {" "}
                             <div className=" border-[5px] border-[#456fe6] border-solid">
@@ -983,7 +995,7 @@ const CardPostShare = ({ data }: Props) => {
                       </div>
                     ) : images.length === 1 ? (
                       <div className="flex">
-                        {images?.map((index, item) => (
+                        {images?.map((index: number, item: number) => (
                           <img
                             key={index}
                             src={images[item]?.linkImage}
@@ -994,7 +1006,7 @@ const CardPostShare = ({ data }: Props) => {
                       </div>
                     ) : (
                       <>
-                        {videos?.map((index, item) => (
+                        {videos?.map((item: number) => (
                           <div className="">
                             <CustomVideo src={videos[item]?.link} />
                           </div>
@@ -1123,7 +1135,7 @@ const CardPostShare = ({ data }: Props) => {
 
                         {item.childrenComment
                           .slice(0, visibleComments)
-                          .map((childComment: any, index1: any) => (
+                          .map((childComment: any) => (
                             <div className="flex justify-start items-top px-6 mt-2 mb-2">
                               <img
                                 src={childComment.image}

@@ -1,34 +1,21 @@
 import React, { useState } from "react";
-import Logo from "../../assets/LogoIcon.png";
-import { logoutSuccess } from "../../redux/features/login/loginSlice";
+
 import { RootState } from "../../redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import ButtonHeader from "../Button/ButtonHeader";
-import { CiChat2, CiHeart } from "react-icons/ci";
-import LogoHome from "../../assets/icons/home.svg";
-import LogoWa from "../../assets/icons/wallpaper.svg";
-import LogoCreate from "../../assets/icons/gallery-add.svg";
-import { ViewHome } from "../../recoil/initState";
-import { useRecoilValue, useRecoilState } from "recoil";
+
 import { FiSearch } from "react-icons/fi";
 
 const HeaderTop = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   const [nameSearch, setNameSearch] = useState("");
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
-  const [viewHomeR, setViewHomeR] = useRecoilState(ViewHome);
+  const { info } = useSelector((state: RootState) => state.info);
+
   // useEffect(() => {
   //   dispatch(fetchInfo());
   // }, []);
-  const isHome = location.pathname === "/";
-  const isS = location.pathname === "/add-post";
-  const isR = location.pathname === "/";
-  const isHomeR = true;
-  const isRR = false;
+
   const handleSend = () => {
     navigate(`/search/${nameSearch}`);
   };
@@ -37,14 +24,7 @@ const HeaderTop = () => {
       handleSend();
     }
   };
-  const hanldeNaviHome = () => {
-    navigate("/");
-    setViewHomeR(true);
-  };
-  const hanldeNaviReels = () => {
-    navigate("/");
-    setViewHomeR(false);
-  };
+
   return (
     <div className="w-full bg-white h-[60px] fixed z-10">
       <div className="flex justify-between my-auto items-center">

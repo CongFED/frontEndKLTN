@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
-import Message from "./Message/Message";
-import { ChatContext } from "../../context/ChatContext";
+import { useEffect, useState } from "react";
+import { useChatContext } from "../../context/ChatContext";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 import MessageChatHome from "./Message/MessageChatHome";
 const BodyRightChatHome = () => {
   const [messages, setMessages] = useState([]);
-  const { data } = useContext(ChatContext);
+  const { data } = useChatContext();
 
   useEffect(() => {
     console.log(data.chatId);

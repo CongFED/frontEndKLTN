@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import { useRecoilValue, useRecoilState } from "recoil";
 import {

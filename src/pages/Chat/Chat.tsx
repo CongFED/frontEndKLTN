@@ -142,7 +142,7 @@ const Chat = () => {
   //   setUsername("");
   //   setSearChChatR("false");
   // };
-  const [chats, setChats] = useState([]);
+  const [chats, setChats] = useState<any>([]);
 
   const { dispatch } = useChatContext();
   console.log(chats);
@@ -238,7 +238,7 @@ const Chat = () => {
 
             <div className="contacts p-2 flex-1 overflow-y-scroll">
               {Object.entries(chats)
-                ?.sort((a, b) => b[1].date - a[1].date)
+                ?.sort((a: any, b: any) => b[1].date - a[1].date)
                 .map((chat: any) => {
                   if (
                     chat[1].userInfo &&

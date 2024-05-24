@@ -290,7 +290,7 @@ const PersonalFriend = () => {
             <div className="bg-white w-[100%]  rounded-lg py-2">
               <div className="px-2">
                 <p className="font-[600] text-start mb-2">
-                  Info's {data.data.fullName}
+                  Info's {data.data?.fullName}
                 </p>
 
                 <div className="w-[100%] h-auto rounded-[10px] flex justify-between items-center mb-2  px-2">

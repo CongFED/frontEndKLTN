@@ -53,7 +53,11 @@ const FooterRightChat = () => {
       const uploadTask = uploadBytesResumable(storageRef, img);
 
       uploadTask.on(
-        (error: any) => {
+        "state_changed",
+        (snapshot) => {
+          console.log(snapshot);
+        },
+        (error) => {
           console.log(error);
         },
         () => {

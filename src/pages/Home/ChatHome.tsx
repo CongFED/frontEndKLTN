@@ -145,7 +145,7 @@ const ChatHome = () => {
   //   setUsername("");
   //   setSearChChatR("false");
   // };
-  const [chats, setChats] = useState([]);
+  const [chats, setChats] = useState<any>([]);
 
   const { dispatch } = useChatContext();
 
@@ -276,7 +276,7 @@ const ChatHome = () => {
           <div className="contacts py-2 flex-1">
             {chats &&
               Object.entries(chats)
-                ?.sort((a, b) => b[1].date - a[1].date)
+                ?.sort((a: any, b: any) => b[1].date - a[1].date)
                 .map((chat: any) => {
                   if (
                     chat[1].userInfo &&

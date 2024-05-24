@@ -5,13 +5,7 @@ import { IoMdClose } from "react-icons/io";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { api, setAuthToken } from "../../../utils/setAuthToken";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { fetchPost } from "../../../redux/features/post/postSlice";
-import {
-  ReloadLike,
-  tokenState,
-  ShareS,
-  isUpdatePost,
-} from "../../../recoil/initState";
+import { tokenState, ShareS, isUpdatePost } from "../../../recoil/initState";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { HiOutlineMicrophone } from "react-icons/hi2";
@@ -71,7 +65,6 @@ const CardPost = ({ data, cmtid }: Props) => {
   const { info, isLoading, isError, error } = useSelector(
     (state: RootState) => state.info
   );
-  const commentIdLo = localStorage.getItem("cmtId");
   const dataAddCmt = useSelector((state: RootState) => state.addCmt.dataAddCmt);
   const handleSeeMore = () => {
     setVisibleComments(visibleComments + 2);

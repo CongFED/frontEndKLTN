@@ -1,18 +1,10 @@
 import { Suspense, useEffect, useState } from "react";
-import {
-  Navigate,
-  Route,
-  BrowserRouter as Router,
-  Routes,
-} from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/Login/Login";
 import { publicRoutes } from "./routes";
 import Logo2 from "../src/assets/LogoLoad.png";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../src/redux/store";
 import { Toaster } from "react-hot-toast";
-import BadNotFound from "./components/BadNotFound/BadNotFound";
 import React from "react";
 import PersonalPage from "./pages/PersonalPage";
 import Personal from "./pages/Personal/Personal";
@@ -28,9 +20,7 @@ const AddInfo = React.lazy(() => import("./pages/AddInfo/AddInfo"));
 // import { successToast } from "./utils/getToast";
 function App() {
   const [loading, setLoading] = useState(true);
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false); // Kết thúc trạng thái loading
@@ -120,7 +110,6 @@ function App() {
                   />
                   {/* <Route path="/chat" element={<Chat />} /> */}
                   <Route path="/add-info" element={<AddInfo />} />
-                  <Route path="/bad-not-found" element={<BadNotFound />} />
 
                   {publicRoutes.map((publicRoute, index) => {
                     const Layout = publicRoute.layout;

@@ -35,7 +35,7 @@ export const schemaRegister = yup.object({
       .max(120),
     [REGISTER.CONFIRM_PASSWORD]: yup
       .string()
-      .oneOf([yup.ref(REGISTER.PASSWORD), null], 'Mật khẩu không khớp')
+      .oneOf([yup.ref(REGISTER.PASSWORD)], 'Mật khẩu không khớp')
       .required("Vui lòng nhập mật khẩu.")
       .min(8, "Mật khẩu phải chứa ít nhất 8 ký tự")
       .max(120),

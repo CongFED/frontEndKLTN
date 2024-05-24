@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   arrayUnion,
   doc,
@@ -12,14 +12,14 @@ import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { ChatContext } from "../../context/ChatContext";
+import { useChatContext } from "../../context/ChatContext";
 import Picker from "@emoji-mart/react";
 const FooterRightChat = () => {
   const [text, setText] = useState("");
   const [img, setImg] = useState<File | null>(null);
 
   const currentUser = useSelector((state: RootState) => state.info.info);
-  const { data } = useContext(ChatContext);
+  const { data } = useChatContext();
   const [toggleEmj, setToggleEmj] = useState(true);
   const addEmoji = (e: any) => {
     const sym = e.unified.split("-");
@@ -53,8 +53,8 @@ const FooterRightChat = () => {
       const uploadTask = uploadBytesResumable(storageRef, img);
 
       uploadTask.on(
-        (error) => {
-          //TODO:Handle Error
+        (error: any) => {
+          console.log(error);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -129,14 +129,6 @@ const FooterRightChat = () => {
           </label>
         </form>
 
-        {/* <button
-          type="button"
-          className="flex flex-shrink-0 focus:outline-none mx-2 block text-blue-600 hover:text-blue-700 w-6 h-6"
-        >
-          <svg viewBox="0 0 20 20" className="w-full h-full fill-current">
-            <path d="M0,6.00585866 C0,4.89805351 0.893899798,4 2.0048815,4 L5,4 L7,2 L13,2 L15,4 L17.9951185,4 C19.102384,4 20,4.89706013 20,6.00585866 L20,15.9941413 C20,17.1019465 19.1017876,18 18.0092049,18 L1.99079514,18 C0.891309342,18 0,17.1029399 0,15.9941413 L0,6.00585866 Z M10,16 C12.7614237,16 15,13.7614237 15,11 C15,8.23857625 12.7614237,6 10,6 C7.23857625,6 5,8.23857625 5,11 C5,13.7614237 7.23857625,16 10,16 Z M10,14 C11.6568542,14 13,12.6568542 13,11 C13,9.34314575 11.6568542,8 10,8 C8.34314575,8 7,9.34314575 7,11 C7,12.6568542 8.34314575,14 10,14 Z" />
-          </svg>
-        </button> */}
         <button
           type="button"
           onClick={handleVoiceClick}
@@ -167,13 +159,6 @@ const FooterRightChat = () => {
             </button>
           </label>
         </div>
-        {/* <button
-          type="button"
-          onClick={handleSend}
-          className="flex focus:outline-none mx-2  text-blue-600 hover:text-blue-700 w-6 h-6 justify-center items-center"
-        >
-          <IoSendSharp />
-        </button> */}
       </div>
       <div
         className="w-full h-[100px] absolute bottom-[600px] right-16"

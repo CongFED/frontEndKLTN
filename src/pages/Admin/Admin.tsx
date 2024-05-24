@@ -10,11 +10,36 @@ import localStorage from "redux-persist/es/storage";
 import { logoutSuccess } from "../../redux/features/login/loginSlice";
 import { FiSearch } from "react-icons/fi";
 import { IoReloadOutline } from "react-icons/io5";
+interface Comment {
+  userId: string;
+  fullName: string;
+  image: string; // Assuming image is a string representing the URL
+  levelFriend: any;
+  career: string;
+  id: string;
+  phoneNumber: string;
+  images: any;
+  content: string;
+  // Other prope  rties...
+}
+interface ResponseData {
+  data: Comment[];
+  success: boolean;
+  message: string;
+}
 const Admin = () => {
   const { info } = useSelector((state: RootState) => state.info);
 
-  const [dataUser, setDataUser] = useState([]);
-  const [dataPost, setData] = useState([]);
+  const [dataUser, setDataUser] = useState<ResponseData>({
+    data: [],
+    success: false,
+    message: "",
+  });
+  const [dataPost, setData] = useState<ResponseData>({
+    data: [],
+    success: false,
+    message: "",
+  });
   const [to] = useRecoilValue(tokenState);
   const [loadUser, setLoadUser] = useState(false);
   const [loadPost, setLoadPost] = useState(false);
@@ -29,7 +54,7 @@ const Admin = () => {
         `https://www.socialnetwork.somee.com/api/admin/user/getAll`
       );
       console.log(response.data.data.images?.[0].linkImage);
-      setDataUser(response.data.data);
+      setDataUser(response.data);
       setLoadUser(true);
       //   setLoadData(true);
     } catch (error) {
@@ -64,7 +89,7 @@ const Admin = () => {
         `https://www.socialnetwork.somee.com/api/admin/user/GetAllPostsAdmin`
       );
       console.log(response.data.data.images?.[0].linkImage);
-      setData(response.data.data);
+      setData(response.data);
       setLoadPost(true);
     } catch (error) {
       console.error("Get post failed", error);
@@ -389,39 +414,39 @@ const Admin = () => {
                     </div>
                   ) : (
                     <tbody>
-                      {dataUser.map((item, index) => (
-                        <tr>
+                      {dataUser.data.map((_, index: number) => (
+                        <tr key={index}>
                           <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <div className="flex items-center">
                               <div className="flex-shrink-0 w-10 h-10">
                                 <img
                                   className="w-full h-full rounded-full"
-                                  src={dataUser[index]?.image}
+                                  src={dataUser.data[index]?.image}
                                   alt=""
                                 />
                               </div>
                               <div className="ml-3">
                                 <p className="text-gray-900 whitespace-no-wrap">
-                                  {dataUser[index]?.fullName}
+                                  {dataUser.data[index]?.fullName}
                                 </p>
                               </div>
                             </div>
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200  text-sm bg-white text-left">
                             <p className="text-gray-900 whitespace-no-wrap">
-                              {dataUser[index]?.career}
+                              {dataUser.data[index]?.career}
                             </p>
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-left">
                             <p className="text-gray-900 whitespace-no-wrap">
-                              {dataUser[index]?.phoneNumber}
+                              {dataUser.data[index]?.phoneNumber}
                             </p>
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm  ">
                             <span
                               className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
                               onClick={() =>
-                                hanldeDelete(dataUser[index]?.userId)
+                                hanldeDelete(dataUser.data[index]?.userId)
                               }
                             >
                               <span
@@ -472,27 +497,27 @@ const Admin = () => {
                     </div>
                   ) : (
                     <tbody>
-                      {dataPost.map((item, index) => (
+                      {dataPost.data.map((_, index) => (
                         <tr>
                           <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <div className="flex items-center">
                               <div className="ml-3">
                                 <p className="text-gray-900 whitespace-no-wrap">
-                                  {dataPost[index]?.fullName}
+                                  {dataPost.data[index]?.fullName}
                                 </p>
                               </div>
                             </div>
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200  text-sm bg-white text-left">
                             <p className="text-gray-900 whitespace-no-wrap">
-                              {dataPost[index]?.content}
+                              {dataPost.data[index]?.content}
                             </p>
                           </td>
                           <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
                             <div className="flex-shrink-0 w-[60px] h-[60px] ml-8">
                               <img
                                 className="w-full h-full "
-                                src={dataPost[index]?.images[0].linkImage}
+                                src={dataPost.data[index]?.images[0].linkImage}
                                 alt=""
                               />
                             </div>
@@ -501,7 +526,7 @@ const Admin = () => {
                             <span
                               className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
                               onClick={() =>
-                                hanldeDeletePost(dataPost[index]?.id)
+                                hanldeDeletePost(dataPost.data[index]?.id)
                               }
                             >
                               <span

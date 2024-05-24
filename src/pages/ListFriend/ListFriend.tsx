@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { api, setAuthToken } from "../../utils/setAuthToken";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { fetchPost } from "../../../redux/features/post/postSlice";
+import { useRecoilValue } from "recoil";
 import { tokenState } from "../../recoil/initState";
 import Skeleton from "react-loading-skeleton";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import addPosts from "../../assets/";
 import { useNavigate, useParams } from "react-router-dom";
 import { Empty } from "antd";
 // import { Skeleton } from "react-loading-skeleton";
+
+interface Comment {
+  userId: string;
+  fullName: string;
+  image: string; // Assuming image is a string representing the URL
+  levelFriend: any;
+  // Other properties...
+}
 interface ResponseData {
   data: Comment[];
   success: boolean;
@@ -18,10 +22,10 @@ interface ResponseData {
 const ListFriend = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [loadInfo, setLoadCmt1] = useState(false);
-  const [loadSearch, setLoadSearch] = useState(false);
-  const [loadSearch1, setLoadSearch1] = useState(false);
-  const [loadSearch2, setLoadSearch2] = useState(false);
+  const [, setLoadCmt1] = useState(false);
+
+  const [, setLoadSearch1] = useState(false);
+  const [, setLoadSearch2] = useState(false);
   const [load, setLoad] = useState(false);
   const token = useRecoilValue(tokenState);
   const [data, setData] = useState<ResponseData>({
@@ -51,55 +55,7 @@ const ListFriend = () => {
         console.error("Error fetching data:", error);
       });
   };
-  const handleAddF = async (idfriend: any) => {
-    setAuthToken(token);
-    try {
-      const id = idfriend;
-      const response = await api.post(
-        `https://www.socialnetwork.somee.com/api/Friend/send/${id}`
-      );
-      console.log(response);
-      if (response.status == 200) {
-        loadData();
-      }
-    } catch (error) {
-      console.error("Login failed", error);
-    }
-  };
-  const handleAcceptF = async (idfriend: any) => {
-    // setLoadSearch1(true);
-    // setAuthToken(token);
-    try {
-      const id = idfriend;
-      console.log(1);
-      const response = await api.post(
-        `https://www.socialnetwork.somee.com/api/Friend/accept/${id}`
-      );
-      console.log(2);
-      console.log(response);
-      if (response.status == 200) {
-        loadData();
-      }
-    } catch (error) {
-      console.log("Login failed", error);
-    }
-  };
-  const handleRemoveF = async (idfriend: any) => {
-    setLoadSearch2(true);
-    setAuthToken(token);
-    try {
-      const id = idfriend;
-      const response = await api.post(
-        `https://www.socialnetwork.somee.com/api/Friend/refuseFriend/${id}`
-      );
-      console.log(response);
-      if (response.status == 200) {
-        loadData();
-      }
-    } catch (error) {
-      console.error("Login failed", error);
-    }
-  };
+
   const [sb, setSb] = useState(false);
   const handleConfirm = async () => {
     setAuthToken(token);
@@ -155,7 +111,7 @@ const ListFriend = () => {
             <div className=" mt-2 grid grid-cols-4">
               {load == false ? (
                 <>
-                  {myArray.slice(0, 10).map((item, index) => (
+                  {myArray.slice(0, 10).map(() => (
                     <div className="card mb-8">
                       <div className="tools flex">
                         <Skeleton className="h-[10px] w-[10px] rounded-[50%] mr-2" />
@@ -184,7 +140,7 @@ const ListFriend = () => {
                     </div>
                   ) : (
                     <>
-                      {data.data.map((item: Comment, index: number) => (
+                      {data.data.map((_, index: number) => (
                         <div className="card mb-8">
                           <div className="tools">
                             <div className="circle">

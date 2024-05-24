@@ -1,34 +1,34 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../redux/store";
-import { tokenState } from "../../recoil/initState";
-import { useRecoilValue } from "recoil";
-import { api, setAuthToken } from "../../utils/setAuthToken";
-import API from "../../services/API";
-import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { BsEmojiSmile } from "react-icons/bs";
 import addPosts from "../../assets/add-post.svg";
 import { MdOutlineClose } from "react-icons/md";
 import { HiOutlineMicrophone } from "react-icons/hi2";
-import ButtonHeader from "../../components/Button/ButtonHeader";
-import Dropzone from "react-dropzone";
+
 import Picker from "@emoji-mart/react";
-import { addInfo, addPost } from "../../redux/features/Add-Post/addPostAPI";
+import { addPost } from "../../redux/features/Add-Post/addPostAPI";
 import { useDropzone } from "react-dropzone";
-import { IoIosSend, IoMdClose } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 interface UploadedFile {
   file: File;
   preview: string;
 }
+
+interface YourExistingDataType {
+  data: any;
+  success: any;
+}
 const AddPost = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [toggleEmj, setToggleEmj] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   //
+  type DataType = YourExistingDataType | null;
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const filesWithPreview = acceptedFiles.map((file) => ({
       file,
@@ -40,14 +40,13 @@ const AddPost = () => {
     setContent("");
     setUploadedFiles([]);
   };
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   // Biến cho formData
   const [isChecked, setIsChecked] = useState("1");
   const [Content, setContent] = useState("");
-  const [isImage, setIsImage] = useState(false);
+
   // const [File, setSelectedFile] = useState<File | null>(null);
-  const [VideoFile, setVideoFile] = useState<File | null>(null);
   const handleVoiceClick = () => {
     const recognition = new ((window as any).SpeechRecognition ||
       (window as any).webkitSpeechRecognition)();
@@ -84,7 +83,7 @@ const AddPost = () => {
       formData.append("LevelVieW", isChecked);
       console.log(uploadedFiles);
       if (uploadedFiles) {
-        uploadedFiles.map((item, index) => {
+        uploadedFiles.map((_, index) => {
           formData.append("File", uploadedFiles[index]?.file);
         });
       }
@@ -94,10 +93,10 @@ const AddPost = () => {
       console.error("Add sai!", error);
     }
   };
-  const error = useSelector((state) => state.addPost.error);
+  const error = useSelector((state: RootState) => state.addPost.error);
   const dataAddPost = useSelector(
     (state: RootState) => state.addPost.dataAddPost
-  );
+  ) as DataType;
   const isFetching = useSelector(
     (state: RootState) => state.addPost.isFetching
   );
@@ -195,8 +194,7 @@ const AddPost = () => {
               <label className="text-[#456fe6] font-medium">Add Post</label>
               {uploadedFiles.length < 1 && (
                 <label
-                  for="file"
-                  class="custum-file-upload w-[100%]  h-[320px]"
+                  className="custum-file-upload w-[100%]  h-[320px]"
                   {...getRootProps()}
                 >
                   <div className="icon">
@@ -230,10 +228,7 @@ const AddPost = () => {
               )}
               {uploadedFiles.length > 0 && (
                 <div>
-                  <label
-                    for="file"
-                    class="custum-file-upload w-[100%]  h-[320px] flex "
-                  >
+                  <label className="custum-file-upload w-[100%]  h-[320px] flex ">
                     {uploadedFiles.map((uploadedFile, index) => (
                       <div key={index} className="relative  w-[fit-content]">
                         {uploadedFiles[index]?.file.type === "video/mp4" ? (

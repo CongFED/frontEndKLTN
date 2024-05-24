@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { ChatContext } from "../../../context/ChatContext";
+import { useChatContext } from "../../../context/ChatContext";
 
 interface Props {
   message: any;
 }
 const MessageChatHome = ({ message }: Props) => {
   const currentUser = useSelector((state: RootState) => state.info.info);
-  const { data } = useContext(ChatContext);
+  const { data } = useChatContext();
 
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>(null); // Explicitly define the type of the referenced element
 
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });

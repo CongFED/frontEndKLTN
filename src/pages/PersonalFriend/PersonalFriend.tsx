@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "../../recoil/initState";
@@ -6,7 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChatContext } from "../../context/ChatContext";
+import { useChatContext } from "../../context/ChatContext";
 import { IoChatbubblesOutline } from "react-icons/io5";
 import {
   doc,
@@ -28,11 +28,6 @@ interface Comment {
   islike: boolean;
   videos: { link: string; createDate: string }[]; //
 }
-interface FirebaseData {
-  uid: string;
-  displayName: string;
-  photoURL: string;
-}
 
 interface Info {
   content: string;
@@ -43,7 +38,7 @@ interface Info {
   id: string;
   countLike: any;
   islike: boolean;
-  firebaseData: FirebaseData;
+  firebaseData: any;
   address: string;
   fullName: string;
   background: string;
@@ -225,7 +220,7 @@ const PersonalFriend = () => {
     loadDataInfo();
     // loadDataUserCmt();
   }, [id]);
-  const { dispatch } = useContext(ChatContext);
+  const { dispatch } = useChatContext();
   const handleMessage = async () => {
     const combinedId =
       currentUser.data.firebaseData.uid > data.data.firebaseData.uid
@@ -281,7 +276,6 @@ const PersonalFriend = () => {
     dispatch({ type: "CHANGE_USER", payload: data.data.firebaseData });
     navigate("/chat");
   };
-  console.log(data.data, currentUser.data);
 
   return (
     <>

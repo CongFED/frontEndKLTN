@@ -1,5 +1,5 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { ChatContext } from "../../context/ChatContext";
+import { useEffect, useRef, useState } from "react";
+import { useChatContext } from "../../context/ChatContext";
 import BodyRightChat from "./BodyRightChat";
 import FooterRightChat from "./FooterRightChat";
 import { useRecoilValue } from "recoil";
@@ -9,7 +9,7 @@ import { ZIM } from "zego-zim-web";
 import { tokenState } from "../../recoil/initState";
 import ChatScreen from "./ChatScreen";
 const RightChat = () => {
-  const { data } = useContext(ChatContext);
+  const { data } = useChatContext();
   console.log(data);
   const [name, setName] = useState("");
   const [username, setUserName] = useState("");
@@ -64,8 +64,84 @@ const RightChat = () => {
     }
   }, [name, name2]);
   ///
-  const removeVietnameseDiacritics = (str: string) => {
-    const diacriticsMap = {
+  // const removeVietnameseDiacritics = (str: string) => {
+  //   const diacriticsMap = {
+  //     á: "a",
+  //     à: "a",
+  //     ả: "a",
+  //     ã: "a",
+  //     ạ: "a",
+  //     ă: "a",
+  //     ắ: "a",
+  //     ằ: "a",
+  //     ẳ: "a",
+  //     ẵ: "a",
+  //     ặ: "a",
+  //     â: "a",
+  //     ấ: "a",
+  //     ầ: "a",
+  //     ẩ: "a",
+  //     ẫ: "a",
+  //     ậ: "a",
+  //     đ: "d",
+  //     é: "e",
+  //     è: "e",
+  //     ẻ: "e",
+  //     ẽ: "e",
+  //     ẹ: "e",
+  //     ê: "e",
+  //     ế: "e",
+  //     ề: "e",
+  //     ể: "e",
+  //     ễ: "e",
+  //     ệ: "e",
+  //     í: "i",
+  //     ì: "i",
+  //     ỉ: "i",
+  //     ĩ: "i",
+  //     ị: "i",
+  //     ó: "o",
+  //     ò: "o",
+  //     ỏ: "o",
+  //     õ: "o",
+  //     ọ: "o",
+  //     ô: "o",
+  //     ố: "o",
+  //     ồ: "o",
+  //     ổ: "o",
+  //     ỗ: "o",
+  //     ộ: "o",
+  //     ơ: "o",
+  //     ớ: "o",
+  //     ờ: "o",
+  //     ở: "o",
+  //     ỡ: "o",
+  //     ợ: "o",
+  //     ú: "u",
+  //     ù: "u",
+  //     ủ: "u",
+  //     ũ: "u",
+  //     ụ: "u",
+  //     ư: "u",
+  //     ứ: "u",
+  //     ừ: "u",
+  //     ử: "u",
+  //     ữ: "u",
+  //     ự: "u",
+  //     ý: "y",
+  //     ỳ: "y",
+  //     ỷ: "y",
+  //     ỹ: "y",
+  //     ỵ: "y",
+  //   };
+
+  //   return str.replace(
+  //     /[^A-Za-z0-9]/g,
+  //     (char: any) => diacriticsMap[char] || char
+  //   );
+  // };
+  const removeVietnameseDiacritics = (str: string): string => {
+    const diacriticsMap: { [key: string]: string } = {
       á: "a",
       à: "a",
       ả: "a",
@@ -137,9 +213,10 @@ const RightChat = () => {
 
     return str.replace(
       /[^A-Za-z0-9]/g,
-      (char: any) => diacriticsMap[char] || char
+      (char: string) => diacriticsMap[char] || char
     );
   };
+
   const removeSpaces = (str: string) => {
     return str.replace(/\s+/g, "");
   };

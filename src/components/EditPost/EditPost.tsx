@@ -4,7 +4,6 @@ import { HiOutlineMicrophone } from "react-icons/hi2";
 import { IoMdClose } from "react-icons/io";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
-import type { MenuProps } from "antd";
 import { Button, Dropdown, Menu } from "antd";
 import Picker from "@emoji-mart/react";
 import { api } from "../../utils/setAuthToken";
@@ -19,6 +18,11 @@ interface UploadedFile {
 }
 interface Props {
   data: any;
+}
+
+interface MenuItem {
+  key: string;
+  label: string;
 }
 const EditPost = ({ data }: Props) => {
   const { info } = useSelector((state: RootState) => state.info);
@@ -44,7 +48,7 @@ const EditPost = ({ data }: Props) => {
   const [toggleEmj, setToggleEmj] = useState(true);
   const [load, setLoad] = useState(true);
   const [Content, setContent] = useState(data.content);
-  const items: MenuProps["items"] = [
+  const items: MenuItem[] = [
     {
       key: "1",
       label: "Công khai",
@@ -54,7 +58,7 @@ const EditPost = ({ data }: Props) => {
       label: "Bạn bè",
     },
   ];
-  const [selectedItem, setSelectedItem] = useState(items[0]);
+  const [selectedItem, setSelectedItem] = useState<MenuItem>(items[0]);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const filesWithPreview = acceptedFiles.map((file) => ({
@@ -96,7 +100,7 @@ const EditPost = ({ data }: Props) => {
 
     recognition.start();
   };
-  const handleMenuClick = (item: MenuProps["items"][0]) => {
+  const handleMenuClick = (item: MenuItem) => {
     setSelectedItem(item);
   };
   const handleBlur = () => {
@@ -121,7 +125,7 @@ const EditPost = ({ data }: Props) => {
         });
       }
       if (uploadedFiles) {
-        uploadedFiles.map((item, index) => {
+        uploadedFiles.map((index: any) => {
           formData.append("File", uploadedFiles[index]?.file);
         });
       }
@@ -261,8 +265,7 @@ const EditPost = ({ data }: Props) => {
                 <label className="text-[#456fe6] font-medium">Image Post</label>
                 {lengthAI <= 0 && uploadedFiles.length <= 0 && (
                   <label
-                    for="file"
-                    class="custum-file-upload w-[100%]  h-[300px]"
+                    className="custum-file-upload w-[100%]  h-[300px]"
                     {...getRootProps()}
                   >
                     <div className="icon">
@@ -296,21 +299,12 @@ const EditPost = ({ data }: Props) => {
                 )}
                 {(lengthAI > 0 || uploadedFiles.length > 0) && (
                   <div>
-                    <label
-                      for="file"
-                      class="custum-file-upload w-[100%]  h-[auto] min-h-[300px] grid grid-cols-2 "
-                    >
+                    <label className="custum-file-upload w-[100%]  h-[auto] min-h-[300px] grid grid-cols-2 ">
                       {uploadedFiles.map((uploadedFile, index) => (
                         <div
                           key={index}
                           className="relative w-[fit-content] bg-black"
                         >
-                          {/* <img
-                            src={uploadedFile.preview}
-                            alt="Uploaded Image"
-                            className="max-w-[200px] max-h-[200px] rounded-[10px] cursor-pointer"
-                            {...getRootProps()}
-                          /> */}
                           {uploadedFiles[index]?.file.type === "video/mp4" ? (
                             <video
                               src={uploadedFile.preview}
@@ -335,7 +329,7 @@ const EditPost = ({ data }: Props) => {
                         </div>
                       ))}
 
-                      {data.images.map((item: any, index: number) => (
+                      {data.images.map((index: number) => (
                         <div className="relative" key={index}>
                           {hiddenIds.includes(data.images[index].id) ? (
                             <></>

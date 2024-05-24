@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ImageMain2 from "../../assets/login/ImgMain.png";
 import "./style.css";
 import type { RadioChangeEvent, DatePickerProps } from "antd";
 import { DatePicker, Space } from "antd";
 import { Radio } from "antd";
 // import { UserId } from "../../utils/getUserIdd";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { addInfo } from "../../redux/features/Add-Info/addInfoAPI";
 import { useNavigate } from "react-router";
 import { RootState } from "../../redux/store";
@@ -15,9 +15,28 @@ import { fetchInfo } from "../../redux/features/info/infoSlice";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "../../recoil/initState";
 import moment from "moment";
-function disabledDate(current) {
+import { useAppDispatch } from "../../hook/hook";
+function disabledDate(current: any) {
   // Disable all dates after today
   return current && current > moment().endOf("day");
+}
+interface DataItem {
+  code: string;
+  fullName: string;
+  // Add other properties as necessary
+}
+
+interface DataProvide {
+  data: DataItem[];
+}
+interface DataDistrict {
+  data: DataItem[];
+}
+interface DataWar {
+  data: DataItem[];
+}
+interface YourExistingDataType {
+  data: any;
 }
 const AddInfo = () => {
   const navigate = useNavigate();
@@ -34,22 +53,25 @@ const AddInfo = () => {
   const [NickName, setNickName] = useState("");
   const [Career, setCareer] = useState("");
   const [WorkPlace, setWorkPlace] = useState("");
-  const [DateOfBirth, setDateOfBirth] = useState("");
+  const [DateOfBirth, setDateOfBirth] = useState<string>("");
   const [PhoneNumber, setPhoneNumber] = useState("");
   const [File, setSelectedFile] = useState<File | null>(null);
   const [FileBackground, setSelectedFileBackground] = useState<File | null>(
     null
   );
+  type DataType = YourExistingDataType | null;
   const [Gender, setGender] = useState(false);
   const [value, setValue] = useState(false);
   const [Address, setAddress] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   // const onHandleFormSubmit = (data: TFormValues) => {
   //   onHandleNext();
   // };
   const onChange: DatePickerProps["onChange"] = (date, dateString) => {
-    setDateOfBirth(dateString);
-    console.log(date, dateString);
+    if (typeof dateString === "string") {
+      setDateOfBirth(dateString);
+      console.log(date, dateString);
+    }
   };
 
   const onChangeR = (e: RadioChangeEvent) => {
@@ -121,16 +143,15 @@ const AddInfo = () => {
     }
   };
   //
-  const currentUser1 = useSelector((state: RootState) => state.info.info);
-  const error = useSelector((state) => state.addInfo.error);
+  const error = useSelector((state: RootState) => state.addInfo.error);
   const dataAddInfo = useSelector(
     (state: RootState) => state.addInfo.dataAddInfo
-  );
+  ) as DataType;
   const isFetching = useSelector(
     (state: RootState) => state.addInfo.isFetching
   );
   useEffect(() => {
-    if (dataAddInfo?.data.success === true) {
+    if (dataAddInfo && dataAddInfo.data && dataAddInfo.data.success === true) {
       toast.success("Thêm thông tin thành công!");
       console.log(dataAddInfo);
       localStorage.setItem("hasInfor", "true");
@@ -147,9 +168,9 @@ const AddInfo = () => {
       toast.error("Thêm thông tin thất bại!");
     }
   }, [dataAddInfo, error, isFetching]);
-  const [dataProvide, setDataProvide] = useState([]);
-  const [dataDistrict, setDataDistrict] = useState([]);
-  const [dataWard, setDataWard] = useState([]);
+  const [dataProvide, setDataProvide] = useState<DataProvide | null>(null);
+  const [dataDistrict, setDataDistrict] = useState<DataDistrict | null>(null);
+  const [dataWard, setDataWard] = useState<DataWar | null>(null);
 
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedDistrict1, setSelectedDistrict1] = useState("01");
@@ -312,7 +333,7 @@ const AddInfo = () => {
               </div>
 
               <form className="file-upload-form mt-1 pl-6">
-                <label for="file" className="file-upload-label">
+                <label className="file-upload-label">
                   <div className="file-upload-design">
                     <div className="loader1"></div>
                   </div>
@@ -329,7 +350,7 @@ const AddInfo = () => {
               </div>
 
               <form className="file-upload-form mt-1 pl-6">
-                <label for="filebg" className="file-upload-label">
+                <label className="file-upload-label">
                   <div className="file-upload-design">
                     <div className="loader1"></div>
                   </div>
@@ -389,7 +410,7 @@ const AddInfo = () => {
                   value={selectedCity}
                 >
                   <option selected>Choose a provides</option>
-                  {dataProvide?.data?.map((item: any, index: any) => (
+                  {dataProvide?.data?.map((index: any) => (
                     <option value={dataProvide.data[index]?.code} key={index}>
                       {dataProvide.data[index]?.fullName}
                     </option>
@@ -412,7 +433,7 @@ const AddInfo = () => {
                   value={selectedDistrict1}
                 >
                   <option selected>Choose a district</option>
-                  {dataDistrict?.data?.map((item: any, index: any) => (
+                  {dataDistrict?.data?.map((index: any) => (
                     <option value={dataDistrict.data[index]?.code} key={index}>
                       {dataDistrict.data[index]?.fullName}
                     </option>
@@ -438,7 +459,7 @@ const AddInfo = () => {
                   <option selected className="w-[200px]">
                     Choose a district
                   </option>
-                  {dataWard?.data?.map((item: any, index: any) => (
+                  {dataWard?.data?.map((index: any) => (
                     <option value={dataWard.data[index]?.code} key={index}>
                       {dataWard.data[index]?.fullName}
                     </option>

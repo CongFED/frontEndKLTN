@@ -1,6 +1,6 @@
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   collection,
   query,
@@ -15,7 +15,7 @@ import {
   DocumentData,
 } from "firebase/firestore";
 import { db } from "../../firebase";
-import { ChatContext } from "../../context/ChatContext";
+import { useChatContext } from "../../context/ChatContext";
 
 import { useNavigate } from "react-router-dom";
 import SearChChat, { isChatR } from "../../recoil/initState";
@@ -54,19 +54,21 @@ const ChatHome = () => {
       handleSearch();
     }
   };
-
   const handleSelect = async () => {
+    if (!user) {
+      console.error("User is null.");
+      return;
+    }
+
     const combinedId =
       currentUser.data.firebaseData.uid > user.Uid
         ? currentUser.data.firebaseData.uid + user.Uid
         : user.Uid + currentUser.data.firebaseData.uid;
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
-
       if (!res.exists()) {
-        console.log(123);
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
-        console.log(user);
+
         await updateDoc(
           doc(db, "userChats", currentUser.data.firebaseData.uid),
           {
@@ -78,11 +80,7 @@ const ChatHome = () => {
             [combinedId + ".date"]: serverTimestamp(),
           }
         );
-        console.log(
-          user.Uid,
-          currentUser.data.firebaseData.uid,
-          currentUser.data.firebaseData.photoURL
-        );
+
         await updateDoc(doc(db, "userChats", user.Uid), {
           [combinedId + ".userInfo"]: {
             uid: currentUser.data.firebaseData.uid,
@@ -91,19 +89,65 @@ const ChatHome = () => {
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
-        console.log(456);
       }
     } catch (error) {
-      console.log("Loi r");
+      console.error("Error:", error);
     }
 
     setUser(null);
     setUsername("");
     setSearChChatR("false");
   };
+
+  // const handleSelect = async () => {
+  //   const combinedId =
+  //     currentUser.data.firebaseData.uid > user.Uid
+  //       ? currentUser.data.firebaseData.uid + user.Uid
+  //       : user.Uid + currentUser.data.firebaseData.uid;
+  //   try {
+  //     const res = await getDoc(doc(db, "chats", combinedId));
+
+  //     if (!res.exists()) {
+  //       console.log(123);
+  //       await setDoc(doc(db, "chats", combinedId), { messages: [] });
+  //       console.log(user);
+  //       await updateDoc(
+  //         doc(db, "userChats", currentUser.data.firebaseData.uid),
+  //         {
+  //           [combinedId + ".userInfo"]: {
+  //             uid: user.Uid,
+  //             displayName: user.DisplayName,
+  //             photoURL: user.PhotoUrl,
+  //           },
+  //           [combinedId + ".date"]: serverTimestamp(),
+  //         }
+  //       );
+  //       console.log(
+  //         user.Uid,
+  //         currentUser.data.firebaseData.uid,
+  //         currentUser.data.firebaseData.photoURL
+  //       );
+  //       await updateDoc(doc(db, "userChats", user.Uid), {
+  //         [combinedId + ".userInfo"]: {
+  //           uid: currentUser.data.firebaseData.uid,
+  //           displayName: currentUser.data.firebaseData.displayName,
+  //           photoURL: currentUser.data.firebaseData.photoURL,
+  //         },
+  //         [combinedId + ".date"]: serverTimestamp(),
+  //       });
+  //       console.log(456);
+  //     }
+  //   } catch (error) {
+  //     console.log("Loi r");
+  //   }
+
+  //   setUser(null);
+  //   setUsername("");
+  //   setSearChChatR("false");
+  // };
   const [chats, setChats] = useState([]);
 
-  const { dispatch } = useContext(ChatContext);
+  const { dispatch } = useChatContext();
 
   useEffect(() => {
     const getChats = () => {

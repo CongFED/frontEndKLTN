@@ -1,28 +1,16 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { schemaLogin } from "../../schema/schemaLogin";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { useRecoilState } from "recoil";
+
 import ImgA1 from "../../assets/login/img1.svg";
 import ImageMain1 from "../../assets/login/log.svg";
 // import "./style.css";
 import toast, { Toaster } from "react-hot-toast";
-import {
-  Email,
-  EmailRegis,
-  Password,
-  tokenState,
-  EmailFP,
-  ModeChange,
-} from "../../recoil/initState";
-import { FormProvider, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { EmailFP, ModeChange } from "../../recoil/initState";
+
 import API from "../../services/API";
-import { login } from "../../redux/features/login/loginAPI";
-import { fetchInfo } from "../../redux/features/info/infoSlice";
+
 import axios from "axios";
 
 const ForgotPass = () => {
@@ -30,14 +18,14 @@ const ForgotPass = () => {
   // const [signIn, toggle] = React.useState(true);
 
   const [emailRegisRecoil, setEmailRegisRecoil] = useRecoilState(EmailFP);
-  const [ModeChangeRE, setModeChangeRE] = useRecoilState(ModeChange);
+  const [ModeChangeRE] = useRecoilState(ModeChange);
   // Register
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password1, setPassword] = useState("");
   const [comFirmPassword, setComFirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [, setToken] = useRecoilState(tokenState);
+
   useEffect(() => {
     const user = localStorage.getItem("token");
 
@@ -53,7 +41,7 @@ const ForgotPass = () => {
           password: password1,
         };
 
-        const res = axios.post(API.CHANGE_PASSWORD, data);
+        axios.post(API.CHANGE_PASSWORD, data);
         toast.success("Đổi mật khẩu thành công!");
 
         navigate("/login");
@@ -67,57 +55,6 @@ const ForgotPass = () => {
       toast.success("Đổi mật khẩu thất bại!");
     }
   };
-  //   const handleChange = async () => {
-  //     try {
-  //       setComFirmPass(true);
-  //       setIsLoading(true);
-  //       if (password1 === comFirmPassword) {
-  //         const data = {
-  //           email: email,
-  //           password: password1,
-  //         };
-
-  //         fetch(API.REGISTER, {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             // Đặt cookie vào header
-  //             // Cookie: cookieJar.getCookieStringSync(API.REGISTER),
-  //           },
-  //           body: JSON.stringify(data),
-
-  //           credentials: "include",
-  //         })
-  //           .then((response) => {
-  //             // Xử lý cookie từ response nếu cần thiết
-  //             console.log(response);
-  //             const cookies = response.headers.get("set-cookie");
-
-  //             return response.json();
-  //           })
-  //           .then((data) => {
-  //             console.log(data);
-  //             if (data?.message == "Email is exist") {
-  //               toast.error("Tài khoản đã được đăng ký!");
-  //               setIsLoading(false);
-  //             } else {
-  //               setEmailRegisRecoil(email);
-  //               navigate("/verify");
-  //             }
-  //           })
-  //           .catch((error) => {
-  //             // Xử lý lỗi ở đâ
-  //           });
-  //       } else {
-  //         setComFirmPass(false);
-  //         setIsLoading(false);
-  //       }
-  //     } catch (error) {
-  //       setIsLoading(false);
-  //       console.error("Login failed", error);
-  //     }
-  //   };
-  // Login
 
   const handleSendOTP = async () => {
     setIsLoading(true);
@@ -126,7 +63,7 @@ const ForgotPass = () => {
       const data = {
         email: email,
       };
-      const res = axios.post(API.SEND_OTP_CHANGE, data);
+      axios.post(API.SEND_OTP_CHANGE, data);
       setEmailRegisRecoil(email);
       toast.success("Gửi OTP thành công!");
       navigate("/verifyPinOTP");
@@ -146,7 +83,7 @@ const ForgotPass = () => {
       handleChange();
     }
   };
-  const [trans, setTrans] = useState(true);
+  const [, setTrans] = useState(true);
   const [comFirmPass, setComFirmPass] = useState(true);
 
   return (
@@ -174,7 +111,7 @@ const ForgotPass = () => {
             <>
               <div className="container1">
                 <div className="heading">Change PassWord</div>
-                <div action="" className="form">
+                <div className="form">
                   <input
                     className="input"
                     type="email"
@@ -250,7 +187,7 @@ const ForgotPass = () => {
           ) : (
             <div className="container1">
               <div className="heading">Change Password</div>
-              <div action="" className="form">
+              <div className="form">
                 <input
                   className="input"
                   type="password"

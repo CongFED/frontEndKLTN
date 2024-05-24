@@ -1,22 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../redux/store";
-import { tokenState } from "../../recoil/initState";
-import { useRecoilValue } from "recoil";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import API from "../../services/API";
-import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { BsEmojiSmile } from "react-icons/bs";
 import addPosts from "../../assets/add-post.svg";
 import { MdOutlineClose } from "react-icons/md";
 import { HiOutlineMicrophone } from "react-icons/hi2";
 import Picker from "@emoji-mart/react";
-import { addInfo, addPost } from "../../redux/features/Add-Post/addPostAPI";
-import { addReels } from "../../redux/features/Add-Reels/addReelsAPI";
 import { useDropzone } from "react-dropzone";
-import { IoIosSend, IoMdClose } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 import { Button, Dropdown, Menu } from "antd";
 import { addReelss } from "./../../redux/features/Add-Reels/addReelsAPI";
 import { Checkbox } from "antd";
@@ -25,20 +20,17 @@ interface UploadedFile {
   file: File;
   preview: string;
 }
+
+interface YourExistingDataType {
+  data: any;
+  success: any;
+}
 const AddReels = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [toggleEmj, setToggleEmj] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  //
-  //   const onDrop = useCallback((acceptedFiles: File[]) => {
-  //     const filesWithPreview = acceptedFiles.map((file) => ({
-  //       file,
-  //       preview: URL.createObjectURL(file),
-  //     }));
-  //     setUploadedFiles((prevState) => [...prevState, ...filesWithPreview]);
-  //   }, []);
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     // Chỉ lấy tệp đầu tiên từ danh sách acceptedFiles
     const file = acceptedFiles[0];
@@ -55,19 +47,16 @@ const AddReels = () => {
     setContent("");
     setUploadedFiles([]);
   };
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   // Biến cho formData
   const [isChecked, setIsChecked] = useState("1");
   const [Content, setContent] = useState("");
-  const [isImage, setIsImage] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const [audioSrc, setAudioSrc] = useState("");
   const [audioID, setAudioID] = useState("");
   const [disableVoice, setDisableVoice] = useState(true);
   const [audio, setAudio] = useState([]);
-  // const [File, setSelectedFile] = useState<File | null>(null);
-  const [VideoFile, setVideoFile] = useState<File | null>(null);
   const handleVoiceClick = () => {
     const recognition = new ((window as any).SpeechRecognition ||
       (window as any).webkitSpeechRecognition)();
@@ -104,8 +93,8 @@ const AddReels = () => {
         formData.append("Content", Content);
         formData.append("LevelVieW", isChecked);
         formData.append("audioId", audioID);
-        formData.append("DisableVoice", disableVoice);
-        console.log(uploadedFiles[0]?.file.type);
+        formData.append("DisableVoice", disableVoice.toString());
+
         if (uploadedFiles) {
           // uploadedFiles.map((item, index) => {
           formData.append("File", uploadedFiles[0]?.file);
@@ -122,9 +111,10 @@ const AddReels = () => {
     }
   };
   const error = useSelector((state: RootState) => state.addReels.errorReels);
+  type DataType = YourExistingDataType | null;
   const dataAddReels = useSelector(
     (state: RootState) => state.addReels.dataAddReels
-  );
+  ) as DataType;
   const isFetching = useSelector(
     (state: RootState) => state.addPost.isFetching
   );
@@ -279,7 +269,7 @@ const AddReels = () => {
               <Dropdown
                 overlay={
                   <Menu>
-                    {audio.map((item: any, index: number) => (
+                    {audio.map((item: any) => (
                       <Menu.Item
                         key={item.key}
                         onClick={() => handleMenuClick(item)}
@@ -309,8 +299,7 @@ const AddReels = () => {
               <label className="text-[#456fe6] font-medium">Add Reels</label>
               {uploadedFiles.length < 1 && (
                 <label
-                  for="file"
-                  class="custum-file-upload w-[100%]  h-[320px]"
+                  className="custum-file-upload w-[100%]  h-[320px]"
                   {...getRootProps()}
                 >
                   <div className="icon">
@@ -344,10 +333,7 @@ const AddReels = () => {
               )}
               {uploadedFiles.length > 0 && (
                 <div>
-                  <label
-                    for="file"
-                    class="custum-file-upload w-[100%]  h-[320px] flex"
-                  >
+                  <label className="custum-file-upload w-[100%]  h-[320px] flex">
                     {uploadedFiles.map((uploadedFile, index) => (
                       <div key={index} className="relative">
                         {uploadedFiles[0]?.file.type === "video/mp4" ? (

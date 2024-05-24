@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { ChatContext } from "../../context/ChatContext";
-import BodyRightChat from "./BodyRightChat";
+import { useEffect, useRef, useState } from "react";
+import { useChatContext } from "../../context/ChatContext";
 import FooterRightChat from "./FooterRightChat";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { api, setAuthToken } from "../../utils/setAuthToken";
@@ -8,12 +7,11 @@ import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 import { ZIM } from "zego-zim-web";
 import { isChatR, tokenState } from "../../recoil/initState";
 import ChatScreen from "./ChatScreen";
-import { IoIosVideocam, IoMdClose } from "react-icons/io";
-import { FaPhone } from "react-icons/fa6";
+import { IoMdClose } from "react-icons/io";
 import BodyRightChatHome from "./BodyRightChatHome";
 
 const RightChatHome = () => {
-  const { data } = useContext(ChatContext);
+  const { data } = useChatContext();
   console.log(data);
   const [name, setName] = useState("");
   const [username, setUserName] = useState("");
@@ -68,8 +66,81 @@ const RightChatHome = () => {
     }
   }, [name, name2]);
   ///
-  const removeVietnameseDiacritics = (str: string) => {
-    const diacriticsMap = {
+  // const removeVietnameseDiacritics = (str: string) => {
+  //   const diacriticsMap = {
+  //     á: "a",
+  //     à: "a",
+  //     ả: "a",
+  //     ã: "a",
+  //     ạ: "a",
+  //     ă: "a",
+  //     ắ: "a",
+  //     ằ: "a",
+  //     ẳ: "a",
+  //     ẵ: "a",
+  //     ặ: "a",
+  //     â: "a",
+  //     ấ: "a",
+  //     ầ: "a",
+  //     ẩ: "a",
+  //     ẫ: "a",
+  //     ậ: "a",
+  //     đ: "d",
+  //     é: "e",
+  //     è: "e",
+  //     ẻ: "e",
+  //     ẽ: "e",
+  //     ẹ: "e",
+  //     ê: "e",
+  //     ế: "e",
+  //     ề: "e",
+  //     ể: "e",
+  //     ễ: "e",
+  //     ệ: "e",
+  //     í: "i",
+  //     ì: "i",
+  //     ỉ: "i",
+  //     ĩ: "i",
+  //     ị: "i",
+  //     ó: "o",
+  //     ò: "o",
+  //     ỏ: "o",
+  //     õ: "o",
+  //     ọ: "o",
+  //     ô: "o",
+  //     ố: "o",
+  //     ồ: "o",
+  //     ổ: "o",
+  //     ỗ: "o",
+  //     ộ: "o",
+  //     ơ: "o",
+  //     ớ: "o",
+  //     ờ: "o",
+  //     ở: "o",
+  //     ỡ: "o",
+  //     ợ: "o",
+  //     ú: "u",
+  //     ù: "u",
+  //     ủ: "u",
+  //     ũ: "u",
+  //     ụ: "u",
+  //     ư: "u",
+  //     ứ: "u",
+  //     ừ: "u",
+  //     ử: "u",
+  //     ữ: "u",
+  //     ự: "u",
+  //     ý: "y",
+  //     ỳ: "y",
+  //     ỷ: "y",
+  //     ỹ: "y",
+  //     ỵ: "y",
+  //   };
+
+  //   return str.replace(/[^A-Za-z0-9]/g, (char) => diacriticsMap[char] || char);
+  // };
+  const removeVietnameseDiacritics = (str: string): string => {
+    const diacriticsMap: { [key: string]: string } = {
       á: "a",
       à: "a",
       ả: "a",
@@ -139,8 +210,12 @@ const RightChatHome = () => {
       ỵ: "y",
     };
 
-    return str.replace(/[^A-Za-z0-9]/g, (char) => diacriticsMap[char] || char);
+    return str.replace(
+      /[^A-Za-z0-9]/g,
+      (char: string) => diacriticsMap[char] || char
+    );
   };
+
   const removeSpaces = (str: string) => {
     return str.replace(/\s+/g, "");
   };
@@ -210,7 +285,7 @@ const RightChatHome = () => {
       console.error("zeroCloudInstance.current is null");
     }
   };
-  const [isChat1, setIsChat1] = useRecoilState(isChatR);
+  const [, setIsChat1] = useRecoilState(isChatR);
   return (
     <>
       {data.chatId === "null" ? (
@@ -267,47 +342,6 @@ const RightChatHome = () => {
                 className="block rounded-full  w-8 h-8 p-2  cursor-pointer"
                 onClick={() => setIsChat1(true)}
               >
-                {/* <svg
-                  aria-label="Thông tin về cuộc trò chuyện"
-                  className="x1lliihq x1n2onr6 x5n08af"
-                  fill="currentColor"
-                  height="24"
-                  role="img"
-                  viewBox="0 0 24 24"
-                  width="24"
-                >
-                  <title>Thông tin về cuộc trò chuyện</title>
-                  <circle
-                    cx="12.001"
-                    cy="12.005"
-                    fill="none"
-                    r="10.5"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                  ></circle>
-                  <circle cx="11.819" cy="7.709" r="1.25"></circle>
-                  <line
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    x1="10.569"
-                    x2="13.432"
-                    y1="16.777"
-                    y2="16.777"
-                  ></line>
-                  <polyline
-                    fill="none"
-                    points="10.569 11.05 12 11.05 12 16.777"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                  ></polyline>
-                </svg> */}
                 <IoMdClose />
               </div>
             </div>

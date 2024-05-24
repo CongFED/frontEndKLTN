@@ -1,34 +1,27 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { schemaLogin } from "../../schema/schemaLogin";
-import { useDispatch, useSelector } from "react-redux";
+import { useRecoilState } from "recoil";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import ImgA1 from "../../assets/login/img1.svg";
 import ImageMain1 from "../../assets/login/log.svg";
 import "./style.css";
 import toast, { Toaster } from "react-hot-toast";
-import {
-  Email,
-  EmailRegis,
-  Password,
-  tokenState,
-} from "../../recoil/initState";
-import { FormProvider, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { EmailRegis, tokenState } from "../../recoil/initState";
 import API from "../../services/API";
 import { login } from "../../redux/features/login/loginAPI";
 import { fetchInfo } from "../../redux/features/info/infoSlice";
-
+import { useAppDispatch } from "../../hook/hook";
+interface YourExistingDataType {
+  data: any;
+  success: any;
+}
 const Login = () => {
   const history = useNavigate();
   // const [signIn, toggle] = React.useState(true);
-  const [emailRecoil, setEmailRecoil] = useRecoilState(Email);
-  const [emailRegisRecoil, setEmailRegisRecoil] = useRecoilState(EmailRegis);
-  const [passwordRecoil, setPasswordRecoil] = useRecoilState(Password);
-
+  const [, setEmailRegisRecoil] = useRecoilState(EmailRegis);
+  type DataType = YourExistingDataType | null;
   // Register
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -66,7 +59,6 @@ const Login = () => {
           .then((response) => {
             // Xử lý cookie từ response nếu cần thiết
             console.log(response);
-            const cookies = response.headers.get("set-cookie");
 
             return response.json();
           })
@@ -80,8 +72,8 @@ const Login = () => {
               navigate("/verify");
             }
           })
-          .catch((error) => {
-            // Xử lý lỗi ở đâ
+          .catch((error: any) => {
+            console.log(error);
           });
       } else {
         setComFirmPass(false);
@@ -94,14 +86,14 @@ const Login = () => {
   };
   // Login
 
-  const dispatch = useDispatch();
-  const error = useSelector((state) => state.user.error);
-  const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const dispatch = useAppDispatch();
+  const error = useSelector((state: RootState) => state.user.error);
+  const currentUser = useSelector(
+    (state: RootState) => state.user.currentUser
+  ) as DataType;
   const isFetching = useSelector((state: RootState) => state.user.isFetching);
   useEffect(() => {
-    console.log(currentUser);
     if (currentUser?.data.success === true) {
-      console.log(currentUser);
       toast.success("Đăng nhập thành công!");
       setToken(currentUser?.data?.data?.jwtToken);
       localStorage.setItem("token", currentUser?.data?.data?.jwtToken);
@@ -173,7 +165,7 @@ const Login = () => {
             <>
               <div className="container1">
                 <div className="heading">Sign In</div>
-                <div action="" className="form">
+                <div className="form">
                   <input
                     className="input"
                     type="email"
@@ -265,7 +257,7 @@ const Login = () => {
           ) : (
             <div className="container1">
               <div className="heading">Sign Up</div>
-              <div action="" className="form">
+              <div className="form">
                 <input
                   className="input"
                   type="email"

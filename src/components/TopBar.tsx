@@ -1,11 +1,10 @@
 import React from "react";
 import { TbSocial } from "react-icons/tb";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import TextInput from "./TextInput";
 import CustomButton from "./CustomButton";
 import { useForm } from "react-hook-form";
-import { BsMoon, BsSunFill } from "react-icons/bs";
+import { BsSunFill } from "react-icons/bs";
 import { IoMdNotificationsOutline } from "react-icons/io";
 // import { SetTheme } from "../redux/theme";
 // import { Logout } from "../redux/userSlice";
@@ -13,9 +12,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 const TopBar = () => {
   // const { theme } = useSelector((state) => state.theme);
   // const { user } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   const {
-    register,
     handleSubmit,
     formState: { errors },
   } = useForm();

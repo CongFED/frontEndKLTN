@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { BsEmojiSmile } from "react-icons/bs";
+
 import { FaUserFriends } from "react-icons/fa";
 import { FaEarthAmericas } from "react-icons/fa6";
-import { IoIosSend, IoMdClose } from "react-icons/io";
-import CustomVideo from "../CustomVideo/CustomVideo";
+import { IoMdClose } from "react-icons/io";
 import CustomVideoReels from "../CustomVideo/CustomVideoReels";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -16,12 +15,10 @@ interface Props {
 }
 const CardReelsSimple = ({ data }: Props) => {
   console.log(data);
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
-  const [videos, setVideos] = useState(data.videos);
+  const { info } = useSelector((state: RootState) => state.info);
+  const [videos] = useState(data.videos);
   const token = useRecoilValue(tokenState);
-  const [updateReelsR, setUpdateReelsR] = useRecoilState(updateReels);
+  const [, setUpdateReelsR] = useRecoilState(updateReels);
   const hanldDltReels = async () => {
     setAuthToken(token);
     console.log(data.id);

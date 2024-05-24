@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { tokenState } from "../../recoil/initState";
-import { useRecoilValue } from "recoil";
 import { api } from "../../utils/setAuthToken";
 import { Empty } from "antd";
 interface Comment {
@@ -10,6 +8,8 @@ interface Comment {
   userTo: string;
   id: string;
   islike: boolean;
+  postId: string;
+  commentId: string;
 }
 interface CommentF {
   content: string;
@@ -37,12 +37,11 @@ interface ResponseDataF {
 }
 const Notifications = () => {
   const navigate = useNavigate();
-  const [loadInfo, setLoadCmt1] = useState(false);
-  const [loadSearch, setLoadSearch] = useState(false);
-  const [loadSearch1, setLoadSearch1] = useState(false);
-  const [loadSearch2, setLoadSearch2] = useState(false);
-  const [load, setLoad] = useState(false);
-  const token = useRecoilValue(tokenState);
+  const [, setLoadCmt1] = useState(false);
+  const [, setLoadSearch1] = useState(false);
+  const [, setLoadSearch2] = useState(false);
+  const [, setLoad] = useState(false);
+
   const [data, setData] = useState<ResponseData>({
     data: [],
     success: false,
@@ -147,7 +146,7 @@ const Notifications = () => {
                     </div>
                   ) : (
                     <>
-                      {dataF.data.map((item: Comment, index: number) => (
+                      {dataF.data.map((item: Comment) => (
                         <div
                           id="notification-card-1"
                           className="mt-3 bg-verylightgb  flex justify-between p-3  w-[100%] cursor-pointer hover:bg-[#f2f2f2] rounded-[10px]"
@@ -177,7 +176,7 @@ const Notifications = () => {
                           </span>
                         </div>
                       ))}
-                      {data.data.map((item: Comment, index: number) => (
+                      {data.data.map((item: Comment) => (
                         <div
                           id="notification-card-1"
                           className="mt-3 bg-verylightgb  flex justify-between p-3  w-[100%] cursor-pointer hover:bg-[#f2f2f2] rounded-[10px]"

@@ -7,7 +7,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import { RecoilRoot } from "recoil";
 import { AuthContextProvider } from "./context/AuthContext";
 import { ChatContextProvider } from "./context/ChatContext";
-import { MantineProvider } from "@mantine/core";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

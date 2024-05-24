@@ -30,18 +30,19 @@ interface Comment {
 }
 
 interface Info {
-  content: string;
-  images: { linkImage: string; createDate: string }[]; // Đặt kiểu cho mảng images
   linkImage?: string;
-  createDate: string;
+  statusFriend: string;
   userId: string;
-  id: string;
-  countLike: any;
   islike: boolean;
   firebaseData: any;
   address: string;
   fullName: string;
   background: string;
+  image: any;
+  nickname: any;
+  career: any;
+  workPlace: any;
+  provinces: any;
 }
 interface ResponseData {
   data: Comment[];
@@ -49,7 +50,7 @@ interface ResponseData {
   message: string;
 }
 interface ResponseDataInfo {
-  data: Info[];
+  data: Info;
   success: boolean;
   message: string;
 }
@@ -63,7 +64,21 @@ const PersonalFriend = () => {
   const [loadData, setLoadData] = useState(false);
   const token = useRecoilValue(tokenState);
   const [data, setData] = useState<ResponseDataInfo>({
-    data: [],
+    data: {
+      linkImage: "",
+      statusFriend: "",
+      userId: "",
+      islike: false,
+      firebaseData: null,
+      address: "",
+      fullName: "",
+      background: "",
+      image: null,
+      nickname: null,
+      career: null,
+      workPlace: null,
+      provinces: null,
+    },
     success: false,
     message: "",
   });
@@ -512,7 +527,7 @@ const PersonalFriend = () => {
                                 <>
                                   <label className="popup ml-6 bg-[#456fe6] text-white px-4 py-2 rounded-[8px] min-w-[100px]">
                                     <input type="checkbox" />
-                                    <div className="burger" tabindex="0">
+                                    <div className="burger">
                                       <>
                                         {data.data.statusFriend ==
                                         "Bạn thường" ? (

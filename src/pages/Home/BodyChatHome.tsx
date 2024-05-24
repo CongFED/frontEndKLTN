@@ -1,6 +1,3 @@
-import React from "react";
-import FooterRightChat from "../../components/RightChat/FooterRightChat";
-import BodyRightChat from "../../components/RightChat/BodyRightChat";
 import RightChatHome from "../../components/RightChat/RightChatHome";
 
 const BodyChatHome = () => {

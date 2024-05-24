@@ -1,18 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { api, setAuthToken } from "../../utils/setAuthToken";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { fetchPost } from "../../../redux/features/post/postSlice";
+import { useRecoilValue } from "recoil";
 import { tokenState } from "../../recoil/initState";
 import Skeleton from "react-loading-skeleton";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChatContext } from "../../context/ChatContext";
 import { IoChatbubblesOutline } from "react-icons/io5";
 
-// import { Skeleton } from "react-loading-skeleton";
-import { CiMap } from "react-icons/ci";
-import { CgWorkAlt } from "react-icons/cg";
 import {
   doc,
   getDoc,

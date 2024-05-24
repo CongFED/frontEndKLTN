@@ -4,7 +4,7 @@ import CardPostShare from "./CardPostShare/CardPostShare";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Empty } from "antd";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 interface Props {
   data: any;
 }
@@ -18,7 +18,7 @@ const CardPosts = ({ data }: Props) => {
       setLoad(true);
     }
   }, [data]);
-
+  console.log(data);
   return (
     <div className="w-[70%] py-6  ">
       <>
@@ -69,7 +69,7 @@ const CardPosts = ({ data }: Props) => {
             ) : (
               <>
                 {/* map data và render các CardPost hoặc CardPostShare */}
-                {data?.data?.map((item, index) => (
+                {data?.data?.map((item: any, index: number) => (
                   <React.Fragment key={index}>
                     {item.idShare === undefined ? (
                       <CardPost data={item} cmtid="" />

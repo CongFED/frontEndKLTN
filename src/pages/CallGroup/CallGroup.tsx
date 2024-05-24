@@ -1,26 +1,24 @@
-import React, { useRef } from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
-import { useParams } from "react-router-dom";
 function randomID(len: any) {
   let result = "";
   if (result) return result;
-  var chars = "12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP",
-    maxPos = chars.length,
-    i;
+  const chars =
+    "12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP";
+  const maxPos = chars.length;
   len = len || 5;
-  for (i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
     result += chars.charAt(Math.floor(Math.random() * maxPos));
   }
   return result;
 }
 
 export function getUrlParams(url = window.location.href) {
-  let urlStr = url.split("?")[1];
+  const urlStr = url.split("?")[1];
   return new URLSearchParams(urlStr);
 }
 const CallGroup = () => {
   const roomID = getUrlParams().get("roomID") || randomID(5);
-  let myMeeting = async (element: any) => {
+  const myMeeting = async (element: any) => {
     // generate Kit Token
     const appID = 722062014;
     const serverSecret = "28e8f45315c65c6ece66781503e4946e";

@@ -3,44 +3,27 @@ import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Logo2 from "../../assets/LogoLoad.png";
-import { fetchInfo } from "../../redux/features/info/infoSlice";
 import { useNavigate } from "react-router-dom";
-import {
-  CiChat2,
-  CiHeart,
-  CiSearch,
-  CiSquarePlus,
-  CiUser,
-  CiVideoOn,
-  CiLogout,
-} from "react-icons/ci";
-import { GoHome } from "react-icons/go";
-import ButtonHeader from "../Button/ButtonHeader";
-import { IoLogOutOutline } from "react-icons/io5";
+
 import LogoLog from "../../assets/icons/logout.svg";
 import LogoF from "../../assets/icons/people.svg";
 import LogoCal from "../../assets/icons/file-upload.svg";
-import LogoP from "../../assets/icons/follow.svg";
 import Logobookmark from "../../assets/icons/bookmark.svg";
 import Admin from "../../assets/icons/follow.svg";
 import { Link } from "react-router-dom";
 import { logoutSuccess } from "../../redux/features/login/loginSlice";
 import LogoHome from "../../assets/icons/home.svg";
 import LogoWa from "../../assets/icons/wallpaper.svg";
-import LogoCreate from "../../assets/icons/gallery-add.svg";
 import { useRecoilState } from "recoil";
 import { ViewHome } from "../../recoil/initState";
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
+  const { info } = useSelector((state: RootState) => state.info);
   // useEffect(() => {
   //   dispatch(fetchInfo());
   // }, []);
   const isHome = location.pathname === "/";
-  const isS = location.pathname === "/add-post";
   const isNo = location.pathname === "/notification";
   const isHomeR = true;
   const isRR = false;

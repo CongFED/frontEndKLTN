@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { fetchPost } from "../../../redux/features/post/postSlice";
 import {
   isLoadmodalOpened,
   ismodalOpened,
   tokenState,
 } from "../../recoil/initState";
 import Skeleton from "react-loading-skeleton";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { CiMap } from "react-icons/ci";
-import CustomVideo from "../../components/CustomVideo/CustomVideo";
-import { fetchInfo } from "../../redux/features/info/infoSlice";
 import Logo2 from "../../assets/LogoLoad.png";
 import { useNavigate } from "react-router-dom";
 import ListFriendPersonal from "../../components/ListFriendPersonal/ListFriendPersonal";
-import ListFriendPersonalRQ from "../../components/ListFriendPersonalRQ/ListFriendPersonalRQ";
 // import { Skeleton } from "react-loading-skeleton";
 import ImgEdit from "../../assets/icons/edit.svg";
-import ProfileModal from "../../components/ProfileModal/ProfileModal";
 import EditInfo from "../EditInfo/EditInfo";
 interface Comment {
   content: string;
@@ -38,15 +32,13 @@ interface ResponseData {
   message: string;
 }
 const Personal = () => {
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
+  const { info } = useSelector((state: RootState) => state.info);
   console.log(info);
   const token = useRecoilValue(tokenState);
   const navigate = useNavigate();
   const [loadData, setLoadData] = useState(false);
-  const [lengthFriend, setLengthFriend] = useState(0);
-  const [lengthPost, setLengthPost] = useState(0);
+  const [, setLengthFriend] = useState(0);
+  const [, setLengthPost] = useState(0);
   const [dataPost, setData] = useState<ResponseData>({
     data: [],
     success: false,
@@ -96,7 +88,7 @@ const Personal = () => {
   }, []);
   const [modalOpened, setModalOpened] = useRecoilState(ismodalOpened);
   const [Loamodal, setLoadModalOpened] = useRecoilState(isLoadmodalOpened);
-  const [loadEditInfo, setLoadEditInfo] = useState(true);
+  const [, setLoadEditInfo] = useState(true);
   useEffect(() => {
     if (info.length === 0) {
       setLoadEditInfo(false);

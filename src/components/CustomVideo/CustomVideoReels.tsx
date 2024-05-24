@@ -8,10 +8,10 @@ interface Props {
 function CustomVideoReels({ src }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPaused, setIsPaused] = useState(true);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [isSeeking, setIsSeeking] = useState(false);
-  const [playbackRate, setPlaybackRate] = useState(1);
+  const [, setCurrentTime] = useState(0);
+  const [, setDuration] = useState(0);
+  const [isSeeking] = useState(false);
+
   const [isMuted, setIsMuted] = useState(false);
   useEffect(() => {
     if (videoRef.current) {
@@ -54,28 +54,6 @@ function CustomVideoReels({ src }: Props) {
     togglePlayPause();
   };
 
-  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseFloat(event.target.value);
-    setCurrentTime(newValue);
-    if (videoRef.current) {
-      videoRef.current.currentTime = newValue;
-    }
-  };
-
-  const handleSliderMouseDown = () => {
-    setIsSeeking(true);
-  };
-
-  const handleSliderMouseUp = () => {
-    setIsSeeking(false);
-  };
-
-  const handlePlaybackRateChange = (rate: number) => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = rate;
-      setPlaybackRate(rate);
-    }
-  };
   const toggleMute = () => {
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
@@ -140,14 +118,6 @@ function CustomVideoReels({ src }: Props) {
       </div>
     </div>
   );
-}
-
-function formatTime(time: number): string {
-  const minutes = Math.floor(time / 60);
-  const seconds = Math.floor(time % 60);
-  return `${minutes < 10 ? "0" : ""}${minutes}:${
-    seconds < 10 ? "0" : ""
-  }${seconds}`;
 }
 
 export default CustomVideoReels;

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { colors } from "../../configs/Colors";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { tokenState } from "../../recoil/initState";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { api, setAuthToken } from "../../utils/setAuthToken";
 import { IoTrashBinOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,13 +11,11 @@ import { logoutSuccess } from "../../redux/features/login/loginSlice";
 import { FiSearch } from "react-icons/fi";
 import { IoReloadOutline } from "react-icons/io5";
 const Admin = () => {
-  const { info, isLoading, isError, error } = useSelector(
-    (state: RootState) => state.info
-  );
+  const { info } = useSelector((state: RootState) => state.info);
 
   const [dataUser, setDataUser] = useState([]);
   const [dataPost, setData] = useState([]);
-  const [to, setToken] = useRecoilState(tokenState);
+  const [to] = useRecoilValue(tokenState);
   const [loadUser, setLoadUser] = useState(false);
   const [loadPost, setLoadPost] = useState(false);
   const [active, setActive] = useState(false);

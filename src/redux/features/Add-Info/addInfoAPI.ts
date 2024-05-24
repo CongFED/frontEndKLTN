@@ -1,4 +1,4 @@
-import publicAxios from "../../../services/requestMethods";
+
 import API from "../../../services/API";
 import {
     addInfoStart,

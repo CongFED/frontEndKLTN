@@ -1,18 +1,15 @@
-import React, { FC, useState, useEffect, useRef } from "react";
+import React, { FC, useState, useRef } from "react";
 import { useNavigate } from "react-router";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import API from "../../services/API";
 // Import Recoil atom
-import { tokenState } from "../../recoil/initState";
 import "./style.css";
 import { EmailRegis } from "../../recoil/initState";
 interface Props {}
 
 const VerifyCode: FC<Props> = () => {
-  const history = useNavigate();
-  const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
   const inputRefs = [
     useRef<HTMLInputElement>(),
     useRef<HTMLInputElement>(),
@@ -29,8 +26,7 @@ const VerifyCode: FC<Props> = () => {
   const [pin5, setPin5] = useState("");
   const [pin6, setPin6] = useState("");
   // const [pin, setPin] = useState("0");
-  const [emailRegisRecoil, setEmailRegisRecoil] = useRecoilState(EmailRegis);
-  const [, setToken] = useRecoilState(tokenState);
+  const [emailRegisRecoil] = useRecoilValue(EmailRegis);
   const handleInputChange = (index: number, value: string) => {
     value = value.replace(/[^0-9]/g, "");
     switch (index) {

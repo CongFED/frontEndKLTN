@@ -1,19 +1,17 @@
-import React, { FC, useState, useEffect, useRef } from "react";
+import React, { FC, useState, useRef } from "react";
 import { useNavigate } from "react-router";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import API from "../../services/API";
 // Import Recoil atom
-import { tokenState, ModeChange } from "../../recoil/initState";
+import { ModeChange } from "../../recoil/initState";
 import "./style.css";
 import { EmailFP } from "../../recoil/initState";
 interface Props {}
 
 const VerifyCodeOTP: FC<Props> = () => {
-  const history = useNavigate();
-  const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
-  const [ModeChangeRE, setModeChangeRE] = useRecoilState(ModeChange);
+  // const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
+  const [, setModeChangeRE] = useRecoilState(ModeChange);
   const inputRefs = [
     useRef<HTMLInputElement>(),
     useRef<HTMLInputElement>(),
@@ -30,8 +28,7 @@ const VerifyCodeOTP: FC<Props> = () => {
   const [pin5, setPin5] = useState("");
   const [pin6, setPin6] = useState("");
   // const [pin, setPin] = useState("0");
-  const [emailFP, setEmailFP] = useRecoilState(EmailFP);
-  const [, setToken] = useRecoilState(tokenState);
+  const [emailFP] = useRecoilValue(EmailFP);
   const handleInputChange = (index: number, value: string) => {
     value = value.replace(/[^0-9]/g, "");
     switch (index) {
